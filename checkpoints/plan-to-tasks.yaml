@@ -16,7 +16,7 @@ phases:
     phase_name: "Common decisions and foundation"
     items:
       - item_id: "1.1"
-        description: "Team work selection and demo scope"
+        description: "Record agreed ownership, create feature branches and define demo scope"
         tasks: [{task_id: "T001"}, {task_id: "T005"}]
       - item_id: "1.2"
         description: "Shared design and sample data"

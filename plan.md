@@ -1,6 +1,6 @@
 # Kế hoạch thực hiện đồ án: Website bán sách
 
-**Cập nhật:** 01/11/2026  
+**Cập nhật:** 02/11/2026
 **Hạn nộp:** 05/11/2026  
 **Repo:** https://github.com/ngtuankiet241-cmd/web-ban-sach  
 **Nhóm:** Kiệt, Lượng, Luân, Kha  
@@ -16,6 +16,7 @@ Hạn nộp chỉ còn vài ngày. Nhóm nên chốt phạm vi/phân công ngay,
 
 - Tối đa **4 file HTML**: `index.html`, `admin.html`, `cart.html`, `account.html`. Chi tiết sách, đăng nhập, xác nhận đơn và các mục quản trị dùng modal/tab/section trong bốn trang này, không tạo thêm trang HTML.
 - Dùng JavaScript thuần. Tách dữ liệu mẫu và logic thành các file JS trong `js/`; dùng `localStorage` để mô phỏng trạng thái giữa các trang trên cùng trình duyệt.
+- Dùng giao diện sáng, dễ đọc dựa trên bộ khung hiện có: xanh lá đậm `#345b45`, nền kem `#f6f5f0`, thẻ trắng; tham khảo Newshop ở cách sắp xếp cửa hàng, không sao chép nhận diện.
 - Đây là prototype phía trình duyệt, **không phải xác thực hay lưu trữ an toàn**. Chỉ dùng tài khoản, sách, địa chỉ và đơn hàng giả lập; không thu thập thông tin thật, không lưu mật khẩu thật, không kết nối thanh toán.
 - Giữ bốn trang và các đường dẫn tương đối để có thể mở `index.html` trực tiếp bằng Chrome. Kiểm tra kỹ ảnh, font và dữ liệu khi không có Internet.
 - Không sao chép logo, hình sách, nội dung, mã nguồn hoặc nguyên bố cục của Newshop. Dùng Newshop.vn để tham khảo ở mức ý tưởng: thanh tìm kiếm dễ thấy, điều hướng danh mục, khu vực sách nổi bật/khuyến mãi, lưới sản phẩm và thông tin sản phẩm rõ ràng. Thiết kế nhận diện riêng cho nhóm.
@@ -37,35 +38,53 @@ web-ban-sach/
 │   ├── storefront.js
 │   ├── account.js
 │   ├── cart.js
-│   └── admin.js
+│   ├── admin.js
+│   └── admin-catalog.js
 └── assets/
     └── books/
 ```
 
 Chỉ tạo các module JS cần thiết; không thêm framework/dependency mới trong giai đoạn gấp này. Hiện repo đã có bốn trang HTML, CSS và `js/app.js` ở dạng khung.
 
-## Phân công
+## Phân công đã thống nhất
 
-Không gán việc theo tên trong kế hoạch. Kiệt tạo bình chọn để từng thành viên tự chọn một mảng: **cửa hàng**, **tài khoản**, **giỏ hàng/đặt hàng**, **admin**, hoặc **tích hợp/kiểm thử**. Sau bình chọn:
+- **Kiệt và Lượng — cùng chịu trách nhiệm `index.html` và `admin.html`:** cùng thống nhất bố cục, luồng chức năng và kiểm tra hai trang. Kiệt tập trung cửa hàng, dữ liệu/CSS dùng chung và module admin danh mục/sách/giá/tồn kho (`js/admin-catalog.js`). Lượng tập trung khung/tab admin và module quản lý khách hàng, phiếu nhập, đơn hàng (`js/admin.js`). Đây là chia đầu mối để làm song song; cả hai cùng review và hỗ trợ hoàn thiện cả hai trang.
+- **Kha — chính `cart.html`:** giỏ hàng, địa chỉ nhận, thanh toán mô phỏng và xác nhận đơn.
+- **Luân — chính `account.html`:** đăng ký/đăng nhập/đăng xuất khách hàng, hồ sơ và lịch sử đơn.
 
-- Ghi người nhận và phạm vi cụ thể trong issue hoặc project board của GitHub.
-- Mỗi mảng có một người chịu trách nhiệm chính; người khác có thể hỗ trợ nhưng báo trước khi sửa cùng file.
-- Phần admin khá rộng (5 điểm), nếu ít người chọn thì nhóm cần chủ động chia module bên trong admin sau khi trao đổi, không để hạng mục bị bỏ trống.
-- Kiệt điều phối tích hợp, nhưng nhiệm vụ lập trình cũng được chọn qua bình chọn như các thành viên khác.
+Kiệt và Lượng cùng sở hữu chức năng của `index.html` và `admin.html`, nhưng không cùng sửa một file đồng thời. Lượng làm đầu mối dựng khung/tab trong `admin.html`; Kiệt làm đầu mối khu vực cửa hàng trong `index.html` và module `js/admin-catalog.js`. Hai bạn thống nhất vùng HTML và selector trước khi nối module, rồi cùng review/test. Nếu cần sửa file của đầu mối kia, trao đổi trước và chỉ một người chỉnh tại một thời điểm. Kha phụ trách `cart.html`, Luân phụ trách `account.html`. Ghi nhận đóng góp theo công việc thực tế, không chỉ theo tên file.
+
+## Quy ước dữ liệu và tích hợp
+
+- Dùng chung một `js/storage.js` và cùng các khóa localStorage có tiền tố `bookstore.`. Không tự đặt khóa riêng theo từng trang.
+- Tên khóa và cấu trúc thống nhất: `bookstore.categories` = `{id,name,active,marginPercent}[]`; `bookstore.books` = `{id,categoryId,code,title,author,image,description,costPrice,sellingPrice,stock,active,marginPercent?}[]`; `bookstore.customers` = `{id,name,email,phone,addresses,status}[]`; `bookstore.currentCustomerId` = ID khách hoặc `null`; `bookstore.cart` = `{bookId,quantity}[]`; `bookstore.orders` = `{id,customerId,items,deliveryAddress,paymentMethod,status,orderedAt,total}[]`; `bookstore.receipts` = `{id,receivedAt,status,items}[]`; `bookstore.stockMovements` = `{id,bookId,direction,quantity,occurredAt,referenceId}[]`.
+- Dùng chung một `js/storage.js` để parse/ghi các khóa trên và tạo dữ liệu mẫu khi chưa có; không tự đặt khóa hay cấu trúc riêng. Giá bán ưu tiên margin riêng của sách, nếu không có thì dùng margin loại. Order item lưu lại tên/giá tại thời điểm đặt.
+- Thống nhất `direction` kho là `in`/`out`; phiếu nhập hoàn tất tạo biến động `in`, đơn mới tạo biến động `out`, đơn hủy tạo biến động hoàn kho. Cảnh báo sắp hết hàng khi tồn không quá 5 cuốn. Admin session chỉ là trạng thái mô phỏng riêng, không dùng chung tài khoản khách.
+- Kiệt tạo bộ dữ liệu mẫu theo contract này và gửi nhóm; mọi người không tự đổi tên khóa/trường. Kha và Luân dùng cùng ID tài khoản để liên kết giỏ/đơn; các module admin cập nhật đúng cùng sách/đơn/phiếu.
+- Chỉ dùng dữ liệu giả. Đây là prototype phía trình duyệt, không lưu mật khẩu thật và không xử lý thanh toán thật.
+- Do hành vi `localStorage` với `file://` có thể khác theo trình duyệt, dùng Live Server/localhost khi cần kiểm tra luồng dữ liệu xuyên trang; đồng thời mở từng HTML bằng đường dẫn local trên Chrome để xác nhận trang/tài nguyên vẫn hiển thị và không lỗi. Nếu giảng viên bắt buộc toàn bộ luồng phải chạy khi mở file trực tiếp, báo nhóm để kiểm tra riêng trên đúng Chrome máy chấm.
+
+## Quy ước GitHub
+
+- Nhánh hiện tại là `main`; giữ `main` làm bản tích hợp, không sửa trực tiếp sau khi bắt đầu làm tính năng.
+- Kiệt và Lượng cùng làm trên nhánh `feature/store-admin` cho `index.html`, `admin.html`, `js/admin.js`, `js/admin-catalog.js`; hai người thay phiên commit, không cùng chỉnh một file đồng thời. Kha tạo `feature/cart`, Luân tạo `feature/account`; tất cả nhánh bắt đầu từ `main`.
+- Mở Pull Request từ từng nhánh về `main`; Kiệt và Lượng cùng review phần cửa hàng/admin, sau đó Kiệt merge khi luồng liên quan chạy thử. Không force-push, không đưa tài liệu môn học, thông tin cá nhân hay mật khẩu lên repo.
+- Kiệt là đầu mối các file dùng chung `css/styles.css`, `js/data.js`, `js/storage.js`; cả nhóm thống nhất trước khi đổi contract. Lượng là đầu mối `admin.html`/`js/admin.js`; Kiệt là đầu mối `index.html`/`js/admin-catalog.js`. Đây là đầu mối để tránh xung đột, không có nghĩa chỉ người đó được góp ý hay làm cùng tính năng. Nếu lỡ sửa chung, báo ngay trước merge để chọn một bản tích hợp.
+- Trước khi bắt đầu mỗi buổi, cập nhật nhánh bằng `main`; sau khi merge, mọi người cập nhật lại nhánh của mình. Nếu nhóm chưa quen Pull Request, dùng GitHub Desktop/VS Code Source Control và nhờ Kiệt hỗ trợ, nhưng vẫn giữ nguyên tắc mỗi người làm nhánh riêng.
 
 ## Các giai đoạn và checklist thực hiện
 
-### Giai đoạn 1 — Chốt chung và nền tảng (01/11)
+### Giai đoạn 1 — Chốt chung và nền tảng (02/11)
 
 **Mục tiêu:** mỗi người biết phần mình chọn; các trang dùng chung một kiểu giao diện và cùng một nguồn dữ liệu.
 
-- [ ] T001 [Plan:1.1] Tạo GitHub Project/issue để bình chọn phần việc, ghi người phụ trách, tiêu chí hoàn thành và trạng thái cho từng mảng.
+- [ ] T001 [Plan:1.1] Tạo nhánh chung `feature/store-admin` cho Kiệt và Lượng, cùng các nhánh `feature/cart` và `feature/account` từ `main`; ghi cặp phụ trách, đầu mối từng module và checklist trong GitHub issues.
 - [ ] T002 [P] [Plan:1.2] Thống nhất tên hiệu sách, màu sắc, kiểu chữ, trường dữ liệu sách và bộ dữ liệu giả lập trong `js/data.js`.
 - [ ] T003 [P] [Plan:1.2] Hoàn thiện thành phần dùng chung và responsive cơ bản trong `css/styles.css` và `js/app.js`.
 - [ ] T004 [Plan:1.3] Tạo/chuẩn hóa `js/storage.js` để đọc ghi JSON an toàn cho dữ liệu demo (sách, tài khoản giả lập, giỏ hàng, đơn hàng, loại sách, phiếu nhập), với giá trị khởi tạo khi chưa có dữ liệu.
 - [ ] T005 [Plan:1.1] Chốt kịch bản demo xuyên suốt: khách xem/tìm sách → đăng nhập → thêm giỏ → đặt hàng → xem đơn; admin cập nhật một thao tác quản lý.
 
-### Giai đoạn 2 — Hành trình khách hàng (02/11)
+### Giai đoạn 2 — Hành trình khách hàng (02–03/11)
 
 **Mục tiêu:** bao phủ hiển thị/tìm sách, tài khoản, mua hàng và xem lại đơn.
 
@@ -85,15 +104,15 @@ Không gán việc theo tên trong kế hoạch. Kiệt tạo bình chọn để
 
 - [ ] T015 [US4] [Plan:3.1] Tạo màn hình đăng nhập admin riêng với khách hàng và danh mục điều hướng quản trị trong `admin.html` và `js/admin.js`.
 - [ ] T016 [US4] [Plan:3.2] Hiển thị danh sách khách hàng mẫu; mô phỏng reset mật khẩu và khóa/mở khóa tài khoản với trạng thái nhìn thấy được trong `js/admin.js`.
-- [ ] T017 [US4] [Plan:3.3] Thực hiện thêm/sửa/xóa/ẩn loại sách; đảm bảo thao tác có xác nhận/thông báo và cập nhật danh sách trong `js/admin.js`.
-- [ ] T018 [US4] [Plan:3.4] Thực hiện thêm/sửa/ẩn hoặc xóa sách với loại, mã, tên, hình, mô tả; khi sửa phải điền sẵn đúng dữ liệu hiện có trong `js/admin.js`.
+- [ ] T017 [US4] [Plan:3.3] Thực hiện thêm/sửa/xóa/ẩn loại sách; đảm bảo thao tác có xác nhận/thông báo và cập nhật danh sách trong `js/admin-catalog.js`.
+- [ ] T018 [US4] [Plan:3.4] Thực hiện thêm/sửa/ẩn hoặc xóa sách với loại, mã, tên, hình, mô tả; khi sửa phải điền sẵn đúng dữ liệu hiện có trong `js/admin-catalog.js`.
 - [ ] T019 [US4] [Plan:3.5] Hiển thị/tìm phiếu nhập; tạo phiếu có ngày nhập, sách, giá nhập và số lượng; cho sửa khi chưa hoàn tất, khóa sửa sau khi hoàn tất trong `js/admin.js`.
-- [ ] T020 [US4] [Plan:3.6] Quản lý tỷ lệ lợi nhuận theo loại và cho phép ghi đè theo sách; hiển thị giá vốn, tỷ lệ và giá bán tính toán trong `js/admin.js`.
+- [ ] T020 [US4] [Plan:3.6] Quản lý tỷ lệ lợi nhuận theo loại và cho phép ghi đè theo sách; hiển thị giá vốn, tỷ lệ và giá bán tính toán trong `js/admin-catalog.js`.
 - [ ] T021 [US4] [Plan:3.7] Tra cứu đơn theo khoảng ngày và trạng thái; xem chi tiết và cập nhật đúng các trạng thái mới đặt/đã xử lý/đã giao/hủy trong `js/admin.js`.
-- [ ] T022 [US4] [Plan:3.8] Tra cứu tồn theo loại/thời điểm, cảnh báo sắp hết hàng và hiển thị nhập–xuất–tồn một sách theo khoảng thời gian trong `js/admin.js`.
+- [ ] T022 [US4] [Plan:3.8] Tra cứu tồn theo loại/thời điểm, cảnh báo sắp hết hàng và hiển thị nhập–xuất–tồn một sách theo khoảng thời gian trong `js/admin-catalog.js`.
 - [ ] T023 [US4] [Plan:3.9] Đồng bộ các thao tác quản trị với cùng dữ liệu demo để đơn mới, phiếu nhập, giá và tồn kho phản ánh nhất quán trong `js/admin.js` và `js/storage.js`.
 
-### Giai đoạn 4 — Tích hợp, kiểm thử và bàn giao (03–05/11)
+### Giai đoạn 4 — Tích hợp, kiểm thử và bàn giao (04–05/11)
 
 **Mục tiêu:** không có liên kết chết, lỗi dữ liệu hoặc hình/font bị mất khi giảng viên mở file local trên Chrome.
 
