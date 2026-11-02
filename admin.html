@@ -5,7 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Quản trị | Hiệu sách của nhóm</title>
   <link rel="stylesheet" href="css/styles.css">
+  <script src="js/data.js" defer></script>
+  <script src="js/storage.js" defer></script>
   <script src="js/app.js" defer></script>
+  <script src="js/admin-catalog.js" defer></script>
 </head>
 <body>
   <header class="site-header">
@@ -22,9 +25,11 @@
     <h1>Quản trị cửa hàng</h1>
     <section class="panel">
       <h2>Trang quản trị</h2>
-      <p>Khu vực đăng nhập admin riêng và các mục quản lý sẽ được bổ sung tại đây.</p>
-      <p class="muted">Đây là trang khởi tạo; các chức năng chưa được triển khai.</p>
+      <p>Khu vực đăng nhập admin riêng và các mục quản lý khách hàng, nhập hàng, đơn hàng sẽ được ghép tại đây.</p>
+      <p class="muted">Dữ liệu phía dưới chỉ là dữ liệu mô phỏng trên trình duyệt, không phải hệ thống quản trị bảo mật.</p>
     </section>
+    <p class="form-message form-message--error" data-storage-error role="alert" hidden></p>
+    <div id="catalog-admin" class="admin-catalog-mount"></div>
   </main>
   <footer class="site-footer">Đồ án nhóm · <span data-current-year></span></footer>
 </body>

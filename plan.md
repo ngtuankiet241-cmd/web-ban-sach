@@ -79,19 +79,19 @@ Kiệt và Lượng cùng sở hữu chức năng của `index.html` và `admin.
 **Mục tiêu:** mỗi người biết phần mình chọn; các trang dùng chung một kiểu giao diện và cùng một nguồn dữ liệu.
 
 - [ ] T001 [Plan:1.1] Tạo nhánh chung `feature/store-admin` cho Kiệt và Lượng, cùng các nhánh `feature/cart` và `feature/account` từ `main`; ghi cặp phụ trách, đầu mối từng module và checklist trong GitHub issues.
-- [ ] T002 [P] [Plan:1.2] Thống nhất tên hiệu sách, màu sắc, kiểu chữ, trường dữ liệu sách và bộ dữ liệu giả lập trong `js/data.js`.
-- [ ] T003 [P] [Plan:1.2] Hoàn thiện thành phần dùng chung và responsive cơ bản trong `css/styles.css` và `js/app.js`.
-- [ ] T004 [Plan:1.3] Tạo/chuẩn hóa `js/storage.js` để đọc ghi JSON an toàn cho dữ liệu demo (sách, tài khoản giả lập, giỏ hàng, đơn hàng, loại sách, phiếu nhập), với giá trị khởi tạo khi chưa có dữ liệu.
+- [x] T002 [P] [Plan:1.2] Thống nhất tên hiệu sách, màu sắc, kiểu chữ, trường dữ liệu sách và bộ dữ liệu giả lập trong `js/data.js`.
+- [x] T003 [P] [Plan:1.2] Hoàn thiện thành phần dùng chung và responsive cơ bản trong `css/styles.css` và `js/app.js`.
+- [x] T004 [Plan:1.3] Tạo/chuẩn hóa `js/storage.js` để đọc ghi JSON an toàn cho dữ liệu demo (sách, tài khoản giả lập, giỏ hàng, đơn hàng, loại sách, phiếu nhập), với giá trị khởi tạo khi chưa có dữ liệu.
 - [ ] T005 [Plan:1.1] Chốt kịch bản demo xuyên suốt: khách xem/tìm sách → đăng nhập → thêm giỏ → đặt hàng → xem đơn; admin cập nhật một thao tác quản lý.
 
 ### Giai đoạn 2 — Hành trình khách hàng (02–03/11)
 
 **Mục tiêu:** bao phủ hiển thị/tìm sách, tài khoản, mua hàng và xem lại đơn.
 
-- [ ] T006 [US1] [P] [Plan:2.1] Dựng header, danh mục và bố cục cửa hàng trong `index.html` và `css/styles.css`, tham khảo ý tưởng giao diện Newshop nhưng dùng nhận diện/tài nguyên riêng.
-- [ ] T007 [US1] [Plan:2.1] Hiển thị sách theo loại, phân trang, trạng thái không có kết quả và chi tiết sách bằng modal/section trong `js/storefront.js`.
-- [ ] T008 [US1] [Plan:2.2] Thực hiện tìm kiếm tên cơ bản và lọc nâng cao kết hợp tên + loại + khoảng giá; phân trang kết quả trong `js/storefront.js`.
-- [ ] T009 [US1] [Plan:2.3] Cho phép thêm vào giỏ từ danh sách và chi tiết; nếu chưa đăng nhập thì điều hướng/nhắc đăng nhập, không tạo thêm HTML trong `js/storefront.js` và `js/account.js`.
+- [x] T006 [US1] [P] [Plan:2.1] Dựng header, danh mục và bố cục cửa hàng trong `index.html` và `css/styles.css`, tham khảo ý tưởng giao diện Newshop nhưng dùng nhận diện/tài nguyên riêng.
+- [x] T007 [US1] [Plan:2.1] Hiển thị sách theo loại, phân trang, trạng thái không có kết quả và chi tiết sách bằng modal/section trong `js/storefront.js`.
+- [x] T008 [US1] [Plan:2.2] Thực hiện tìm kiếm tên cơ bản và lọc nâng cao kết hợp tên + loại + khoảng giá; phân trang kết quả trong `js/storefront.js`.
+- [x] T009 [US1] [Plan:2.3] Cho phép thêm vào giỏ từ danh sách và chi tiết; nếu chưa đăng nhập thì điều hướng/nhắc đăng nhập, không tạo thêm HTML trong `js/storefront.js` và `js/account.js`.
 - [ ] T010 [US2] [P] [Plan:2.4] Tạo giao diện đăng ký/đăng nhập/đăng xuất khách hàng, trạng thái tài khoản đang đăng nhập và form xem/sửa hồ sơ trong `account.html` và `js/account.js`.
 - [ ] T011 [US3] [Plan:2.5] Hiển thị giỏ, cập nhật/xóa số lượng và tổng tiền; đồng bộ dữ liệu với `index.html` qua `js/cart.js` và `js/storage.js`.
 - [ ] T012 [US3] [Plan:2.6] Làm form địa chỉ giao hàng có lựa chọn địa chỉ đã lưu hoặc nhập mới với các trường phù hợp; mặc định chọn tiền mặt khi nhận hàng, thêm chuyển khoản/thanh toán trực tuyến dạng mô phỏng trong `cart.html` và `js/cart.js`.
@@ -104,12 +104,12 @@ Kiệt và Lượng cùng sở hữu chức năng của `index.html` và `admin.
 
 - [ ] T015 [US4] [Plan:3.1] Tạo màn hình đăng nhập admin riêng với khách hàng và danh mục điều hướng quản trị trong `admin.html` và `js/admin.js`.
 - [ ] T016 [US4] [Plan:3.2] Hiển thị danh sách khách hàng mẫu; mô phỏng reset mật khẩu và khóa/mở khóa tài khoản với trạng thái nhìn thấy được trong `js/admin.js`.
-- [ ] T017 [US4] [Plan:3.3] Thực hiện thêm/sửa/xóa/ẩn loại sách; đảm bảo thao tác có xác nhận/thông báo và cập nhật danh sách trong `js/admin-catalog.js`.
-- [ ] T018 [US4] [Plan:3.4] Thực hiện thêm/sửa/ẩn hoặc xóa sách với loại, mã, tên, hình, mô tả; khi sửa phải điền sẵn đúng dữ liệu hiện có trong `js/admin-catalog.js`.
+- [x] T017 [US4] [Plan:3.3] Thực hiện thêm/sửa/xóa/ẩn loại sách; đảm bảo thao tác có xác nhận/thông báo và cập nhật danh sách trong `js/admin-catalog.js`.
+- [x] T018 [US4] [Plan:3.4] Thực hiện thêm/sửa/ẩn hoặc xóa sách với loại, mã, tên, hình, mô tả; khi sửa phải điền sẵn đúng dữ liệu hiện có trong `js/admin-catalog.js`.
 - [ ] T019 [US4] [Plan:3.5] Hiển thị/tìm phiếu nhập; tạo phiếu có ngày nhập, sách, giá nhập và số lượng; cho sửa khi chưa hoàn tất, khóa sửa sau khi hoàn tất trong `js/admin.js`.
-- [ ] T020 [US4] [Plan:3.6] Quản lý tỷ lệ lợi nhuận theo loại và cho phép ghi đè theo sách; hiển thị giá vốn, tỷ lệ và giá bán tính toán trong `js/admin-catalog.js`.
+- [x] T020 [US4] [Plan:3.6] Quản lý tỷ lệ lợi nhuận theo loại và cho phép ghi đè theo sách; hiển thị giá vốn, tỷ lệ và giá bán tính toán trong `js/admin-catalog.js`.
 - [ ] T021 [US4] [Plan:3.7] Tra cứu đơn theo khoảng ngày và trạng thái; xem chi tiết và cập nhật đúng các trạng thái mới đặt/đã xử lý/đã giao/hủy trong `js/admin.js`.
-- [ ] T022 [US4] [Plan:3.8] Tra cứu tồn theo loại/thời điểm, cảnh báo sắp hết hàng và hiển thị nhập–xuất–tồn một sách theo khoảng thời gian trong `js/admin-catalog.js`.
+- [x] T022 [US4] [Plan:3.8] Tra cứu tồn theo loại/thời điểm, cảnh báo sắp hết hàng và hiển thị nhập–xuất–tồn một sách theo khoảng thời gian trong `js/admin-catalog.js`.
 - [ ] T023 [US4] [Plan:3.9] Đồng bộ các thao tác quản trị với cùng dữ liệu demo để đơn mới, phiếu nhập, giá và tồn kho phản ánh nhất quán trong `js/admin.js` và `js/storage.js`.
 
 ### Giai đoạn 4 — Tích hợp, kiểm thử và bàn giao (04–05/11)
