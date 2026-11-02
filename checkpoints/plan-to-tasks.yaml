@@ -1,0 +1,116 @@
+metadata:
+  generated: "2026-11-01"
+  source_plan: "plan.md"
+  target_tasks: "plan.md (inline task checklist)"
+
+summary:
+  total_plan_items: 17
+  covered_plan_items: 17
+  missing_plan_items: 0
+  coverage_percentage: 100.0
+  total_tasks_generated: 30
+  orphan_tasks: 0
+
+phases:
+  - phase_id: "Phase-1"
+    phase_name: "Common decisions and foundation"
+    items:
+      - item_id: "1.1"
+        description: "Team work selection and demo scope"
+        tasks: [{task_id: "T001"}, {task_id: "T005"}]
+      - item_id: "1.2"
+        description: "Shared design and sample data"
+        tasks: [{task_id: "T002"}, {task_id: "T003"}]
+      - item_id: "1.3"
+        description: "Browser storage for prototype data"
+        tasks: [{task_id: "T004"}]
+  - phase_id: "Phase-2"
+    phase_name: "Customer journeys"
+    items:
+      - item_id: "2.1"
+        description: "Catalog and details"
+        tasks: [{task_id: "T006"}, {task_id: "T007"}]
+      - item_id: "2.2"
+        description: "Product search"
+        tasks: [{task_id: "T008"}]
+      - item_id: "2.3"
+        description: "Login-gated purchase start"
+        tasks: [{task_id: "T009"}]
+      - item_id: "2.4"
+        description: "Customer account"
+        tasks: [{task_id: "T010"}]
+      - item_id: "2.5"
+        description: "Cart management"
+        tasks: [{task_id: "T011"}]
+      - item_id: "2.6"
+        description: "Delivery address and payment options"
+        tasks: [{task_id: "T012"}]
+      - item_id: "2.7"
+        description: "Order confirmation"
+        tasks: [{task_id: "T013"}]
+      - item_id: "2.8"
+        description: "Order history"
+        tasks: [{task_id: "T014"}]
+  - phase_id: "Phase-3"
+    phase_name: "Admin operations"
+    items:
+      - item_id: "3.1"
+        description: "Admin login and navigation"
+        tasks: [{task_id: "T015"}]
+      - item_id: "3.2"
+        description: "Customer administration"
+        tasks: [{task_id: "T016"}]
+      - item_id: "3.3"
+        description: "Category management"
+        tasks: [{task_id: "T017"}]
+      - item_id: "3.4"
+        description: "Product management"
+        tasks: [{task_id: "T018"}]
+      - item_id: "3.5"
+        description: "Stock receipts"
+        tasks: [{task_id: "T019"}]
+      - item_id: "3.6"
+        description: "Pricing"
+        tasks: [{task_id: "T020"}]
+      - item_id: "3.7"
+        description: "Order management"
+        tasks: [{task_id: "T021"}]
+      - item_id: "3.8"
+        description: "Inventory"
+        tasks: [{task_id: "T022"}]
+      - item_id: "3.9"
+        description: "Cross-admin persistence and consistency"
+        tasks: [{task_id: "T023"}]
+  - phase_id: "Phase-4"
+    phase_name: "Integration and handoff"
+    items:
+      - item_id: "4.1"
+        description: "Integration checks"
+        tasks: [{task_id: "T024"}]
+      - item_id: "4.2"
+        description: "Customer acceptance checklist"
+        tasks: [{task_id: "T025"}]
+      - item_id: "4.3"
+        description: "Admin acceptance checklist"
+        tasks: [{task_id: "T026"}]
+      - item_id: "4.4"
+        description: "Offline Chrome compatibility"
+        tasks: [{task_id: "T027"}]
+      - item_id: "4.5"
+        description: "Submission readiness"
+        tasks: [{task_id: "T028"}]
+      - item_id: "4.6"
+        description: "Optional graphics layout bonus"
+        tasks: [{task_id: "T029"}]
+      - item_id: "4.7"
+        description: "Optional Internet deployment bonus"
+        tasks: [{task_id: "T030"}]
+
+missing_plan_items: []
+orphan_tasks: []
+upstream_trace: []
+
+validation:
+  passed: true
+  errors: []
+  warnings: ["Tasks T029-T030 are optional bonus work and must not displace required rubric work."]

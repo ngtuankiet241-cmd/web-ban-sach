@@ -1,0 +1,223 @@
+metadata:
+  generated: "2026-11-01"
+  source_spec: "BB_DoAn_LTWeb&UD.docx and instructor constraints recorded in plan.md"
+  target_plan: "plan.md"
+
+summary:
+  total_requirements: 29
+  covered_requirements: 29
+  missing_requirements: 0
+  coverage_percentage: 100.0
+
+requirements:
+  - req_id: "REQ-001"
+    req_description: "Separate admin login and management navigation"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-3"
+      phase_name: "Admin operations"
+      items: [{item_id: "3.1", description: "Admin login and navigation"}]
+  - req_id: "REQ-002"
+    req_description: "View customer list"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-3"
+      phase_name: "Admin operations"
+      items: [{item_id: "3.2", description: "Customer management"}]
+  - req_id: "REQ-003"
+    req_description: "Reset customer password (prototype)"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-3"
+      phase_name: "Admin operations"
+      items: [{item_id: "3.2", description: "Customer management"}]
+  - req_id: "REQ-004"
+    req_description: "Lock and unlock customer account"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-3"
+      phase_name: "Admin operations"
+      items: [{item_id: "3.2", description: "Customer management"}]
+  - req_id: "REQ-005"
+    req_description: "Create, edit, delete or hide product categories"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-3"
+      phase_name: "Admin operations"
+      items: [{item_id: "3.3", description: "Category CRUD"}]
+  - req_id: "REQ-006"
+    req_description: "Create product with category, code, name, image and description"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-3"
+      phase_name: "Admin operations"
+      items: [{item_id: "3.4", description: "Product CRUD"}]
+  - req_id: "REQ-007"
+    req_description: "Prefill product edit form and delete or hide product"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-3"
+      phase_name: "Admin operations"
+      items: [{item_id: "3.4", description: "Product CRUD"}]
+  - req_id: "REQ-008"
+    req_description: "Display and search stock receipt list"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-3"
+      phase_name: "Admin operations"
+      items: [{item_id: "3.5", description: "Stock receipts"}]
+  - req_id: "REQ-009"
+    req_description: "Create receipt with date, unit cost and quantity per product"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-3"
+      phase_name: "Admin operations"
+      items: [{item_id: "3.5", description: "Stock receipts"}]
+  - req_id: "REQ-010"
+    req_description: "Edit receipt only before completion"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-3"
+      phase_name: "Admin operations"
+      items: [{item_id: "3.5", description: "Stock receipts"}]
+  - req_id: "REQ-011"
+    req_description: "Set profit margin per category and product"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-3"
+      phase_name: "Admin operations"
+      items: [{item_id: "3.6", description: "Pricing"}]
+  - req_id: "REQ-012"
+    req_description: "Query cost, margin and selling price"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-3"
+      phase_name: "Admin operations"
+      items: [{item_id: "3.6", description: "Pricing"}]
+  - req_id: "REQ-013"
+    req_description: "Filter orders by date range/status, inspect detail and update status"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-3"
+      phase_name: "Admin operations"
+      items: [{item_id: "3.7", description: "Order management"}]
+  - req_id: "REQ-014"
+    req_description: "Query stock by category at a selected time"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-3"
+      phase_name: "Admin operations"
+      items: [{item_id: "3.8", description: "Inventory"}]
+  - req_id: "REQ-015"
+    req_description: "Low-stock alert"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-3"
+      phase_name: "Admin operations"
+      items: [{item_id: "3.8", description: "Inventory"}]
+  - req_id: "REQ-016"
+    req_description: "Query inbound, outbound and remaining stock by product/date range"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-3"
+      phase_name: "Admin operations"
+      items: [{item_id: "3.8", description: "Inventory"}]
+  - req_id: "REQ-017"
+    req_description: "Customer registration"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-2"
+      phase_name: "Customer journeys"
+      items: [{item_id: "2.4", description: "Customer account"}]
+  - req_id: "REQ-018"
+    req_description: "Customer login/logout and show signed-in account"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-2"
+      phase_name: "Customer journeys"
+      items: [{item_id: "2.4", description: "Customer account"}]
+  - req_id: "REQ-019"
+    req_description: "View and edit customer profile"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-2"
+      phase_name: "Customer journeys"
+      items: [{item_id: "2.4", description: "Customer account"}]
+  - req_id: "REQ-020"
+    req_description: "Browse products by category with pagination"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-2"
+      phase_name: "Customer journeys"
+      items: [{item_id: "2.1", description: "Catalog and details"}]
+  - req_id: "REQ-021"
+    req_description: "View product details"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-2"
+      phase_name: "Customer journeys"
+      items: [{item_id: "2.1", description: "Catalog and details"}]
+  - req_id: "REQ-022"
+    req_description: "Basic name search with result pagination"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-2"
+      phase_name: "Customer journeys"
+      items: [{item_id: "2.2", description: "Product search"}]
+  - req_id: "REQ-023"
+    req_description: "Combined advanced name/category/price search with result pagination"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-2"
+      phase_name: "Customer journeys"
+      items: [{item_id: "2.2", description: "Product search"}]
+  - req_id: "REQ-024"
+    req_description: "Require customer login to use cart; add from listing and detail"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-2"
+      phase_name: "Customer journeys"
+      items: [{item_id: "2.3", description: "Cart purchase flow"}]
+  - req_id: "REQ-025"
+    req_description: "Increase/decrease cart quantities"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-2"
+      phase_name: "Customer journeys"
+      items: [{item_id: "2.5", description: "Cart and checkout"}]
+  - req_id: "REQ-026"
+    req_description: "Choose saved address or enter new delivery address"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-2"
+      phase_name: "Customer journeys"
+      items: [{item_id: "2.6", description: "Address and payment"}]
+  - req_id: "REQ-027"
+    req_description: "COD/bank transfer/online payment choices; COD default"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-2"
+      phase_name: "Customer journeys"
+      items: [{item_id: "2.6", description: "Address and payment"}]
+  - req_id: "REQ-028"
+    req_description: "Review order after completing purchase"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-2"
+      phase_name: "Customer journeys"
+      items: [{item_id: "2.7", description: "Order confirmation"}]
+  - req_id: "REQ-029"
+    req_description: "Customer views purchased order history"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-2"
+      phase_name: "Customer journeys"
+      items: [{item_id: "2.8", description: "Order history"}]
+
+missing_requirements: []
+orphan_plan_items: []
+
+validation:
+  passed: true
+  errors: []
+  warnings: ["Full rubric coverage is planned; final grade depends on instructor evaluation and working evidence."]
