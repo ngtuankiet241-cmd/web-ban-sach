@@ -27,3 +27,10 @@ Mở `index.html` hoặc chạy Live Server để thử. Dữ liệu là mô ph�
 - Tài khoản demo: `admin`
 - Mật khẩu demo: `admin123`
 - Dữ liệu khách hàng, đơn hàng, phiếu nhập và tồn kho lưu trong `localStorage` của trình duyệt.
+
+## Tài khoản khách hàng
+
+- Mở `account.html` để đăng nhập, tạo tài khoản, cập nhật hồ sơ và xem lịch sử đơn hàng.
+- Tài khoản demo: `an@example.com`
+- Mật khẩu demo: `123456`
+- Đây là prototype phía trình duyệt; mật khẩu demo chỉ phục vụ kiểm thử, không có bảo mật và không được dùng thông tin thật.

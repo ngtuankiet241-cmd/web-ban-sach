@@ -3,13 +3,17 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Đăng nhập, quản lý hồ sơ và xem lịch sử mua sách của bạn.">
   <title>Tài khoản | Hiệu sách của nhóm</title>
   <link rel="stylesheet" href="css/styles.css">
+  <script src="js/data.js" defer></script>
+  <script src="js/storage.js" defer></script>
   <script src="js/app.js" defer></script>
+  <script src="js/account.js" defer></script>
 </head>
 <body>
   <header class="site-header">
-    <a class="brand" href="index.html">Hiệu sách của nhóm</a>
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">S</span> Hiệu sách của nhóm</a>
     <nav aria-label="Điều hướng chính">
       <a href="index.html">Cửa hàng</a>
       <a href="admin.html">Quản trị</a>
@@ -17,15 +21,138 @@
       <a href="account.html" aria-current="page">Tài khoản</a>
     </nav>
   </header>
-  <main class="page">
-    <p class="eyebrow">Thông tin khách hàng</p>
-    <h1>Tài khoản của tôi</h1>
-    <section class="panel">
-      <h2>Tài khoản và đơn đã mua</h2>
-      <p>Khu vực đăng ký, đăng nhập, thông tin cá nhân và lịch sử mua hàng sẽ được bổ sung tại đây.</p>
-      <p class="muted">Đây là trang khởi tạo; các chức năng chưa được triển khai.</p>
+
+  <main class="account-page">
+    <section class="account-hero" aria-labelledby="account-title">
+      <div>
+        <p class="eyebrow">Góc riêng của bạn</p>
+        <h1 id="account-title">Tài khoản của tôi</h1>
+        <p>Theo dõi đơn hàng, cập nhật thông tin và tiếp tục hành trình đọc sách.</p>
+      </div>
+      <div class="account-hero__art" aria-hidden="true">
+        <span class="account-hero__book account-hero__book--one"></span>
+        <span class="account-hero__book account-hero__book--two"></span>
+        <span class="account-hero__spark">✦</span>
+      </div>
+    </section>
+
+    <p class="account-alert" data-storage-error role="alert" hidden></p>
+
+    <section class="account-auth panel" data-auth-view aria-labelledby="auth-heading">
+      <div class="account-section-heading">
+        <div>
+          <p class="eyebrow">Chào mừng bạn quay lại</p>
+          <h2 id="auth-heading">Bắt đầu từ đây</h2>
+        </div>
+        <span class="account-lock" aria-hidden="true">♡</span>
+      </div>
+      <div class="account-auth__tabs" role="group" aria-label="Chọn hình thức tài khoản">
+        <button class="account-auth__tab is-active" type="button" data-auth-mode="login" aria-pressed="true">Đăng nhập</button>
+        <button class="account-auth__tab" type="button" data-auth-mode="register" aria-pressed="false">Tạo tài khoản</button>
+      </div>
+      <p class="account-message" data-auth-message role="status" aria-live="polite"></p>
+
+      <form class="account-form" data-login-form>
+        <label for="login-email">Địa chỉ email</label>
+        <input id="login-email" name="email" type="email" autocomplete="email" placeholder="ban@email.com" required>
+        <label for="login-password">Mật khẩu</label>
+        <input id="login-password" name="password" type="password" autocomplete="current-password" required>
+        <button class="button button--primary button--full" type="submit">Đăng nhập <span aria-hidden="true">→</span></button>
+      </form>
+
+      <form class="account-form" data-register-form hidden>
+        <div class="account-form__grid">
+          <label for="register-name">Họ và tên
+            <input id="register-name" name="name" type="text" autocomplete="name" minlength="2" maxlength="80" placeholder="Nguyễn Văn An" required>
+          </label>
+          <label for="register-phone">Số điện thoại
+            <input id="register-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" minlength="8" maxlength="20" placeholder="090 123 4567" required>
+          </label>
+          <label class="account-form__wide" for="register-email">Địa chỉ email
+            <input id="register-email" name="email" type="email" autocomplete="email" maxlength="120" placeholder="ban@email.com" required>
+          </label>
+          <label for="register-password">Mật khẩu <span class="muted">(ít nhất 6 ký tự)</span>
+            <input id="register-password" name="password" type="password" autocomplete="new-password" minlength="6" required>
+          </label>
+          <label for="register-confirm">Nhập lại mật khẩu
+            <input id="register-confirm" name="confirmPassword" type="password" autocomplete="new-password" minlength="6" required>
+          </label>
+        </div>
+        <button class="button button--primary button--full" type="submit">Tạo tài khoản miễn phí <span aria-hidden="true">→</span></button>
+      </form>
+
+      <div class="account-demo">
+        <strong>Tài khoản dùng thử</strong>
+        <span>Email: <code>an@example.com</code></span>
+        <span>Mật khẩu: <code>123456</code></span>
+      </div>
+      <p class="account-disclaimer">Bản mô phỏng học tập: chỉ dùng dữ liệu giả, không nhập mật khẩu thật.</p>
+    </section>
+
+    <section class="account-dashboard" data-dashboard-view hidden aria-label="Thông tin tài khoản">
+      <div class="account-welcome panel">
+        <div class="account-welcome__identity">
+          <span class="account-avatar" data-account-avatar aria-hidden="true">S</span>
+          <div>
+            <p class="eyebrow">Rất vui được gặp bạn</p>
+            <h2>Xin chào, <span data-account-name></span>!</h2>
+            <p class="muted">Tài khoản của bạn đang hoạt động bình thường.</p>
+          </div>
+        </div>
+        <button class="button button--quiet" type="button" data-logout>Đăng xuất</button>
+      </div>
+
+      <div class="account-stats" aria-label="Tóm tắt hoạt động">
+        <article class="account-stat panel">
+          <span class="account-stat__icon" aria-hidden="true">▤</span>
+          <span class="account-stat__label">Đơn hàng</span>
+          <strong data-order-count>0</strong>
+        </article>
+        <article class="account-stat panel">
+          <span class="account-stat__icon account-stat__icon--gold" aria-hidden="true">✦</span>
+          <span class="account-stat__label">Tổng chi tiêu</span>
+          <strong data-order-spending>0 ₫</strong>
+        </article>
+      </div>
+
+      <div class="account-columns">
+        <section class="panel account-profile" aria-labelledby="profile-heading">
+          <div class="account-section-heading">
+            <div>
+              <p class="eyebrow">Hồ sơ cá nhân</p>
+              <h2 id="profile-heading">Thông tin của bạn</h2>
+            </div>
+            <span class="account-section-icon" aria-hidden="true">⌁</span>
+          </div>
+          <p class="account-message" data-profile-message role="status" aria-live="polite"></p>
+          <form class="account-form" data-profile-form>
+            <label for="profile-name">Họ và tên
+              <input id="profile-name" name="name" type="text" autocomplete="name" minlength="2" maxlength="80" required>
+            </label>
+            <label for="profile-email">Địa chỉ email
+              <input id="profile-email" name="email" type="email" autocomplete="email" maxlength="120" required>
+            </label>
+            <label for="profile-phone">Số điện thoại
+              <input id="profile-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" minlength="8" maxlength="20" required>
+            </label>
+            <button class="button button--primary" type="submit">Lưu thay đổi</button>
+          </form>
+        </section>
+
+        <section class="panel account-orders" aria-labelledby="orders-heading">
+          <div class="account-section-heading">
+            <div>
+              <p class="eyebrow">Những cuốn sách đã chọn</p>
+              <h2 id="orders-heading">Lịch sử đơn hàng</h2>
+            </div>
+            <a class="account-orders__shop" href="index.html">Mua sách <span aria-hidden="true">↗</span></a>
+          </div>
+          <div class="account-order-list" data-order-list></div>
+        </section>
+      </div>
     </section>
   </main>
-  <footer class="site-footer">Đồ án nhóm · <span data-current-year></span></footer>
+
+  <footer class="site-footer">Đồ án môn Lập trình web và ứng dụng · <span data-current-year></span></footer>
 </body>
 </html>
