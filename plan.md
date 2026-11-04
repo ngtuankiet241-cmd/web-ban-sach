@@ -92,11 +92,11 @@ Kiệt và Lượng cùng sở hữu chức năng của `index.html` và `admin.
 - [x] T007 [US1] [Plan:2.1] Hiển thị sách theo loại, phân trang, trạng thái không có kết quả và chi tiết sách bằng modal/section trong `js/storefront.js`.
 - [x] T008 [US1] [Plan:2.2] Thực hiện tìm kiếm tên cơ bản và lọc nâng cao kết hợp tên + loại + khoảng giá; phân trang kết quả trong `js/storefront.js`.
 - [x] T009 [US1] [Plan:2.3] Cho phép thêm vào giỏ từ danh sách và chi tiết; nếu chưa đăng nhập thì điều hướng/nhắc đăng nhập, không tạo thêm HTML trong `js/storefront.js` và `js/account.js`.
-- [ ] T010 [US2] [P] [Plan:2.4] Tạo giao diện đăng ký/đăng nhập/đăng xuất khách hàng, trạng thái tài khoản đang đăng nhập và form xem/sửa hồ sơ trong `account.html` và `js/account.js`.
+- [x] T010 [US2] [P] [Plan:2.4] Tạo giao diện đăng ký/đăng nhập/đăng xuất khách hàng, trạng thái tài khoản đang đăng nhập và form xem/sửa hồ sơ trong `account.html` và `js/account.js`.
 - [ ] T011 [US3] [Plan:2.5] Hiển thị giỏ, cập nhật/xóa số lượng và tổng tiền; đồng bộ dữ liệu với `index.html` qua `js/cart.js` và `js/storage.js`.
 - [ ] T012 [US3] [Plan:2.6] Làm form địa chỉ giao hàng có lựa chọn địa chỉ đã lưu hoặc nhập mới với các trường phù hợp; mặc định chọn tiền mặt khi nhận hàng, thêm chuyển khoản/thanh toán trực tuyến dạng mô phỏng trong `cart.html` và `js/cart.js`.
 - [ ] T013 [US3] [Plan:2.7] Xác nhận đơn, lưu đơn giả lập và hiển thị lại chi tiết đơn sau mua; chặn đặt hàng khi chưa đăng nhập/giỏ trống trong `js/cart.js`.
-- [ ] T014 [US2] [Plan:2.8] Hiển thị lịch sử và chi tiết các đơn của tài khoản hiện tại trong `account.html` và `js/account.js`.
+- [x] T014 [US2] [Plan:2.8] Hiển thị lịch sử và chi tiết các đơn của tài khoản hiện tại trong `account.html` và `js/account.js`.
 
 ### Giai đoạn 3 — Nghiệp vụ quản trị (02–03/11)
 
