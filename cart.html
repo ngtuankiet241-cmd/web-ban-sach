@@ -5,7 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Giỏ hàng | Hiệu sách của nhóm</title>
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/cart.css">
+  <script src="js/data.js" defer></script>
+  <script src="js/storage.js" defer></script>
   <script src="js/app.js" defer></script>
+  <script src="js/cart.js" defer></script>
 </head>
 <body>
   <header class="site-header">
@@ -13,18 +17,119 @@
     <nav aria-label="Điều hướng chính">
       <a href="index.html">Cửa hàng</a>
       <a href="admin.html">Quản trị</a>
-      <a href="cart.html" aria-current="page">Giỏ hàng</a>
+      <a href="cart.html" aria-current="page">Giỏ hàng <span class="cart-count" data-cart-count>0</span></a>
       <a href="account.html">Tài khoản</a>
     </nav>
   </header>
   <main class="page">
     <p class="eyebrow">Xem lại trước khi đặt hàng</p>
     <h1>Giỏ hàng và đặt hàng</h1>
-    <section class="panel">
-      <h2>Giỏ hàng</h2>
-      <p>Khu vực sản phẩm, địa chỉ giao hàng và phương thức thanh toán sẽ được bổ sung tại đây.</p>
-      <p class="muted">Đây là trang khởi tạo; các chức năng chưa được triển khai.</p>
+    <p class="form-message form-message--error" data-storage-error role="alert" hidden></p>
+    <div id="cart-alert" role="alert" hidden></div>
+
+    <!-- Chưa đăng nhập hoặc tài khoản bị khóa -->
+    <section class="panel" id="login-required" hidden>
+      <h2 id="login-title">Bạn cần đăng nhập</h2>
+      <p id="login-text">Giỏ hàng chỉ dùng được sau khi đăng ký và đăng nhập tài khoản khách hàng.</p>
+      <p><a class="button button--primary" href="account.html">Đăng nhập / Đăng ký</a></p>
     </section>
+
+    <div id="cart-app" hidden>
+      <div class="tabs" role="tablist">
+        <button type="button" role="tab" class="active" data-tab="checkout">Giỏ hàng</button>
+        <button type="button" role="tab" data-tab="orders">Đơn hàng đã mua</button>
+      </div>
+
+      <section id="tab-checkout">
+        <ol class="steps" id="steps">
+          <li class="active">Giỏ hàng</li>
+          <li>Giao hàng và thanh toán</li>
+          <li>Xem lại đơn hàng</li>
+        </ol>
+
+        <!-- Bước 1 -->
+        <section class="panel" id="step-1">
+          <h2>Sản phẩm trong giỏ</h2>
+          <p id="cart-empty" hidden>Giỏ hàng đang trống. <a href="index.html">Chọn sách để mua</a>.</p>
+          <div class="table-wrap" id="cart-table">
+            <table class="data-table">
+              <thead><tr><th>Sách</th><th>Đơn giá</th><th>Số lượng</th><th>Thành tiền</th><th></th></tr></thead>
+              <tbody id="cart-body"></tbody>
+            </table>
+          </div>
+          <p class="total-line">Tổng cộng: <strong id="cart-total">0 ₫</strong></p>
+          <div class="actions">
+            <a class="button button--light" href="index.html">Tiếp tục mua sắm</a>
+            <button type="button" class="button button--primary" id="to-checkout">Nhập thông tin giao hàng</button>
+          </div>
+        </section>
+
+        <!-- Bước 2 -->
+        <form class="panel" id="step-2" novalidate hidden>
+          <h2>Địa chỉ nhận hàng</h2>
+          <div id="addr-list"></div>
+          <label class="choice"><input type="radio" name="addr" value="new"> Nhập địa chỉ giao hàng mới</label>
+          <div id="new-addr" class="grid" hidden>
+            <label class="field">Họ tên người nhận <input id="recvName" autocomplete="name"><small class="error"></small></label>
+            <label class="field">Số điện thoại <input id="recvPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="0901234567"><small class="error"></small></label>
+            <label class="field">Tỉnh / Thành phố
+              <select id="city">
+                <option value="">-- Chọn --</option>
+                <option>TP. Hồ Chí Minh</option><option>Hà Nội</option><option>Đà Nẵng</option>
+                <option>Cần Thơ</option><option>Tỉnh khác</option>
+              </select><small class="error"></small></label>
+            <label class="field">Quận / Huyện <input id="district"><small class="error"></small></label>
+            <label class="field">Phường / Xã <input id="ward"><small class="error"></small></label>
+            <label class="field">Số nhà, tên đường <input id="street" autocomplete="street-address"><small class="error"></small></label>
+          </div>
+
+          <h2>Phương thức thanh toán</h2>
+          <label class="choice"><input type="radio" name="pay" value="cash" checked> Tiền mặt khi nhận hàng</label>
+          <label class="choice"><input type="radio" name="pay" value="transfer"> Chuyển khoản ngân hàng</label>
+          <div class="note" id="pay-transfer" hidden>
+            Chuyển đến: <strong>NH Demo – STK 0123456789 – Hiệu sách của nhóm</strong>. Nội dung: mã đơn hàng (hiển thị sau khi đặt).
+          </div>
+          <label class="choice"><input type="radio" name="pay" value="online"> Thanh toán trực tuyến</label>
+          <div class="note" id="pay-online" hidden>
+            <label class="field">Chọn hình thức
+              <select id="onlineMethod">
+                <option value="">-- Chọn --</option><option>Thẻ ATM nội địa</option>
+                <option>Thẻ Visa / Mastercard</option><option>Ví MoMo</option><option>ZaloPay</option>
+              </select><small class="error"></small></label>
+            <small>Đây là bản mô phỏng, không trừ tiền thật.</small>
+          </div>
+          <div class="actions">
+            <button type="button" class="button button--light" id="back-1">Quay lại giỏ hàng</button>
+            <button type="submit" class="button button--primary">Xem lại đơn hàng</button>
+          </div>
+        </form>
+
+        <!-- Bước 3 -->
+        <section class="panel" id="step-3" hidden>
+          <h2>Xem lại đơn hàng</h2>
+          <div id="review"></div>
+          <div class="actions">
+            <button type="button" class="button button--light" id="back-2">Sửa thông tin</button>
+            <button type="button" class="button button--primary" id="place-order">Xác nhận đặt hàng</button>
+          </div>
+        </section>
+
+        <!-- Hoàn tất -->
+        <section class="panel" id="step-done" hidden>
+          <h2>Đặt hàng thành công</h2>
+          <p id="done-text"></p>
+          <div class="actions">
+            <a class="button button--light" href="index.html">Tiếp tục mua sắm</a>
+            <button type="button" class="button button--primary" id="see-orders">Xem đơn hàng đã mua</button>
+          </div>
+        </section>
+      </section>
+
+      <section class="panel" id="tab-orders" hidden>
+        <h2>Đơn hàng đã mua</h2>
+        <div id="orders-list"></div>
+      </section>
+    </div>
   </main>
   <footer class="site-footer">Đồ án nhóm · <span data-current-year></span></footer>
 </body>
