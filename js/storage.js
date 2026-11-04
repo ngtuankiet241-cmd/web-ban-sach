@@ -1,5 +1,6 @@
 ﻿(function () {
   const prefix = "bookstore.";
+  const schemaVersion = 1;
 
   function storage() {
     try {
@@ -39,6 +40,69 @@
         write(name, window.BookstoreSeed[name]);
       }
     });
+    migrateInventoryLedger();
+  }
+
+  function migrateInventoryLedger() {
+    if (read("schemaVersion", null) === schemaVersion) {
+      return;
+    }
+
+    const books = read("books", []);
+    const movements = read("stockMovements", []);
+    if (!Array.isArray(books) || !Array.isArray(movements)) {
+      throw new Error("Không thể cập nhật sổ tồn vì dữ liệu sách hoặc biến động kho không hợp lệ.");
+    }
+
+    const validMovementDates = movements.map(function (movement) {
+      const occurredAt = new Date(movement.occurredAt).getTime();
+      if (!Number.isFinite(occurredAt)) {
+        throw new Error("Không thể cập nhật sổ tồn: ngày biến động kho không hợp lệ.");
+      }
+      return occurredAt;
+    });
+    const openingDate = validMovementDates.length
+      ? new Date(Math.min.apply(null, validMovementDates) - 1).toISOString()
+      : "1900-01-01T00:00:00.000Z";
+    let changed = false;
+
+    books.forEach(function (book) {
+      const currentStock = Number(book.stock);
+      if (!Number.isFinite(currentStock) || currentStock < 0) {
+        throw new Error("Không thể cập nhật sổ tồn: số lượng sách '" + book.id + "' không hợp lệ.");
+      }
+
+      const recordedBalance = movements.filter(function (movement) {
+        return movement.bookId === book.id;
+      }).reduce(function (balance, movement) {
+        const quantity = Number(movement.quantity);
+        if ((movement.direction !== "in" && movement.direction !== "out") ||
+            !Number.isFinite(quantity) || quantity < 0) {
+          throw new Error("Không thể cập nhật sổ tồn: biến động kho của sách '" + book.id + "' không hợp lệ.");
+        }
+        return balance + (movement.direction === "in" ? quantity : -quantity);
+      }, 0);
+      const openingBalance = currentStock - recordedBalance;
+      const openingMovementId = "migration-opening-" + book.id;
+
+      if (Math.abs(openingBalance) > 0.000001 &&
+          !movements.some(function (movement) { return movement.id === openingMovementId; })) {
+        movements.push({
+          id: openingMovementId,
+          bookId: book.id,
+          direction: openingBalance > 0 ? "in" : "out",
+          quantity: Math.abs(openingBalance),
+          occurredAt: openingDate,
+          referenceId: "migration-opening-balance"
+        });
+        changed = true;
+      }
+    });
+
+    if (changed) {
+      write("stockMovements", movements);
+    }
+    write("schemaVersion", schemaVersion);
   }
 
   function update(name, updater) {
@@ -55,6 +119,7 @@
     Object.keys(window.BookstoreSeed).forEach(function (name) {
       write(name, window.BookstoreSeed[name]);
     });
+    write("schemaVersion", schemaVersion);
   }
 
   function createId(name) {

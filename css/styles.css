@@ -762,6 +762,34 @@ textarea:focus-visible,
   gap: 0.5rem;
 }
 
+.receipt-items {
+  min-width: 0;
+  margin: 0;
+  padding: 0.9rem;
+  border: 1px solid #e5e3da;
+  border-radius: 0.55rem;
+}
+
+.receipt-items legend {
+  padding: 0 0.35rem;
+  color: #4c5b50;
+  font-weight: 650;
+}
+
+.receipt-item-row {
+  display: grid;
+  grid-template-columns: minmax(180px, 2fr) minmax(130px, 1fr) minmax(110px, 0.8fr) auto;
+  align-items: end;
+  gap: 0.7rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #e8e9e4;
+}
+
+.receipt-item-row:last-child {
+  margin-bottom: 0.9rem;
+}
+
 .table-wrap {
   max-width: 100%;
   margin: 0.75rem 0 1.5rem;
@@ -898,6 +926,10 @@ textarea:focus-visible,
   .section-heading > p {
     margin-top: 0.7rem;
   }
+
+  .receipt-item-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 480px) {
@@ -913,6 +945,10 @@ textarea:focus-visible,
   .site-header nav a {
     padding: 0.45rem;
     font-size: 0.88rem;
+  }
+
+  .receipt-item-row {
+    grid-template-columns: 1fr;
   }
 
   .catalog-toolbar {

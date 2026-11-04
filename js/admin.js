@@ -216,7 +216,7 @@
         '<input id="receipt-search" type="search" placeholder="Tìm mã phiếu">' +
         '<button class="button primary" id="new-receipt" type="button">Tạo phiếu nhập</button>' +
       "</div>" +
-      '<div class="table-wrap"><table><thead><tr><th>Mã phiếu</th><th>Ngày nhập</th><th>Số dòng sách</th><th>Trạng thái</th><th>Thao tác</th></tr></thead><tbody id="receipt-rows">' + receiptRows(receipts) + "</tbody></table></div>" +
+      '<div class="table-wrap"><table><thead><tr><th>Mã phiếu</th><th>Ngày nhập</th><th>Số sản phẩm</th><th>Trạng thái</th><th>Thao tác</th></tr></thead><tbody id="receipt-rows">' + receiptRows(receipts) + "</tbody></table></div>" +
       '<div id="receipt-editor"></div>';
 
     document.getElementById("receipt-search").addEventListener("input", function (event) {
@@ -245,18 +245,41 @@
   function openReceiptEditor(receipt, books) {
     var editor = document.getElementById("receipt-editor");
     var isCompleted = receipt && receipt.status === "completed";
-    var firstItem = receipt && receipt.items && receipt.items[0] ? receipt.items[0] : { bookId: books[0] ? books[0].id : "", quantity: 1, costPrice: books[0] ? books[0].costPrice : 0 };
-    var bookOptions = books.map(function (book) {
-      return '<option value="' + escapeHtml(book.id) + '" ' + (book.id === firstItem.bookId ? "selected" : "") + ">" + escapeHtml(book.title) + " (" + escapeHtml(book.code) + ")</option>";
-    }).join("");
+    var receiptItems = receipt && Array.isArray(receipt.items) && receipt.items.length
+      ? receipt.items
+      : [{ bookId: books[0] ? books[0].id : "", quantity: 1, costPrice: books[0] ? books[0].costPrice : 0 }];
+
+    function renderReceiptItem(item) {
+      var selectedBook = books.find(function (book) { return book.id === item.bookId; });
+      var bookOptions = '<option value="">Chọn sách</option>' + books.map(function (book) {
+        return '<option value="' + escapeHtml(book.id) + '" data-cost-price="' + escapeHtml(book.costPrice) + '"' +
+          (book.id === item.bookId ? " selected" : "") + ">" +
+          escapeHtml(book.title) + " (" + escapeHtml(book.code) + ")</option>";
+      }).join("");
+      if (item.bookId && !selectedBook) {
+        bookOptions += '<option value="' + escapeHtml(item.bookId) + '" selected disabled>Sách không còn tồn tại</option>';
+      }
+
+      return '<div class="receipt-item-row" data-receipt-item-row>' +
+        '<label>Sách<select name="bookId" required' + (isCompleted ? " disabled" : "") + ">" + bookOptions + "</select></label>" +
+        '<label>Giá nhập (đồng)<input name="costPrice" type="number" min="0" step="1" required value="' +
+          escapeHtml(item.costPrice == null ? "" : item.costPrice) + '"' + (isCompleted ? " disabled" : "") + "></label>" +
+        '<label>Số lượng<input name="quantity" type="number" min="1" step="1" required value="' +
+          escapeHtml(item.quantity == null ? "" : item.quantity) + '"' + (isCompleted ? " disabled" : "") + "></label>" +
+        '<button class="button small danger" type="button" data-remove-receipt-item' +
+          (isCompleted || receiptItems.length <= 1 ? " disabled" : "") + ">Xóa dòng</button>" +
+      "</div>";
+    }
 
     editor.innerHTML =
       '<section class="editor-box"><h3>' + (receipt ? "Chi tiết phiếu nhập " + escapeHtml(receipt.id) : "Tạo phiếu nhập mới") + "</h3>" +
       '<form id="receipt-form" class="form-grid">' +
         '<label>Ngày nhập<input name="receivedAt" type="datetime-local" required value="' + (receipt ? toLocalDateTime(receipt.receivedAt) : toLocalDateTime(new Date().toISOString())) + '"' + (isCompleted ? " disabled" : "") + "></label>" +
-        '<label>Sách<select name="bookId" required ' + (isCompleted ? "disabled" : "") + ">" + bookOptions + "</select></label>" +
-        '<label>Giá nhập<input name="costPrice" type="number" min="0" required value="' + escapeHtml(firstItem.costPrice || 0) + '"' + (isCompleted ? " disabled" : "") + "></label>" +
-        '<label>Số lượng<input name="quantity" type="number" min="1" required value="' + escapeHtml(firstItem.quantity || 1) + '"' + (isCompleted ? " disabled" : "") + "></label>" +
+        '<fieldset class="receipt-items admin-form__wide"><legend>Sản phẩm trong phiếu</legend>' +
+          '<div id="receipt-item-list">' + receiptItems.map(renderReceiptItem).join("") + "</div>" +
+          (!isCompleted ? '<button class="button small" type="button" id="add-receipt-item"' +
+            (books.length <= receiptItems.length ? " disabled" : "") + ">Thêm sản phẩm</button>" : "") +
+        "</fieldset>" +
         '<div class="form-actions">' +
           (!isCompleted ? '<button class="button primary" type="submit">' + (receipt ? "Lưu thay đổi" : "Tạo phiếu") + "</button>" : "") +
           (receipt && !isCompleted ? '<button class="button primary" type="button" id="complete-editor-receipt">Hoàn tất phiếu</button>' : "") +
@@ -265,26 +288,85 @@
 
     if (isCompleted) return;
 
-    document.getElementById("receipt-form").addEventListener("submit", function (event) {
+    var form = document.getElementById("receipt-form");
+    var itemList = document.getElementById("receipt-item-list");
+
+    function updateReceiptItemOptions() {
+      var rows = Array.prototype.slice.call(itemList.querySelectorAll("[data-receipt-item-row]"));
+      var selectedIds = rows.map(function (row) {
+        return row.querySelector('[name="bookId"]').value;
+      });
+      rows.forEach(function (row, index) {
+        var select = row.querySelector('[name="bookId"]');
+        Array.prototype.forEach.call(select.options, function (option) {
+          option.disabled = Boolean(option.value) && selectedIds.indexOf(option.value) !== index;
+        });
+        row.querySelector("[data-remove-receipt-item]").disabled = rows.length <= 1;
+      });
+      var addButton = document.getElementById("add-receipt-item");
+      addButton.disabled = selectedIds.filter(Boolean).length >= books.length;
+    }
+
+    form.addEventListener("change", function (event) {
+      if (event.target.name === "bookId") {
+        var selectedOption = event.target.options[event.target.selectedIndex];
+        var priceInput = event.target.closest("[data-receipt-item-row]").querySelector('[name="costPrice"]');
+        if (selectedOption.dataset.costPrice) {
+          priceInput.value = selectedOption.dataset.costPrice;
+        }
+        updateReceiptItemOptions();
+      }
+    });
+
+    form.addEventListener("click", function (event) {
+      if (event.target.closest("#add-receipt-item")) {
+        var selectedIds = Array.prototype.map.call(itemList.querySelectorAll('[name="bookId"]'), function (select) {
+          return select.value;
+        });
+        var nextBook = books.find(function (book) { return selectedIds.indexOf(book.id) === -1; });
+        if (nextBook) {
+          itemList.insertAdjacentHTML("beforeend", renderReceiptItem({
+            bookId: nextBook.id,
+            quantity: 1,
+            costPrice: nextBook.costPrice
+          }));
+          updateReceiptItemOptions();
+        }
+      }
+      if (event.target.closest("[data-remove-receipt-item]")) {
+        var rows = itemList.querySelectorAll("[data-receipt-item-row]");
+        if (rows.length > 1) {
+          event.target.closest("[data-receipt-item-row]").remove();
+          updateReceiptItemOptions();
+        }
+      }
+    });
+
+    form.addEventListener("submit", function (event) {
       event.preventDefault();
-      var data = new FormData(event.currentTarget);
-      var bookId = String(data.get("bookId"));
-      var quantity = Number(data.get("quantity"));
-      var costPrice = Number(data.get("costPrice"));
-      var receivedDate = new Date(String(data.get("receivedAt")));
-      if (!bookId || !Number.isInteger(quantity) || quantity < 1 ||
-          !Number.isFinite(costPrice) || costPrice < 0 || Number.isNaN(receivedDate.getTime())) {
+      var receivedDate = new Date(String(new FormData(form).get("receivedAt")));
+      var items = Array.prototype.map.call(itemList.querySelectorAll("[data-receipt-item-row]"), function (row) {
+        return {
+          bookId: row.querySelector('[name="bookId"]').value,
+          quantity: Number(row.querySelector('[name="quantity"]').value),
+          costPrice: Number(row.querySelector('[name="costPrice"]').value)
+        };
+      });
+      var itemIds = items.map(function (item) { return item.bookId; });
+      var currentBooks = storage.getBooks();
+      var invalidItem = items.some(function (item) {
+        return !item.bookId || !Number.isInteger(item.quantity) || item.quantity < 1 ||
+          !Number.isFinite(item.costPrice) || item.costPrice < 0 ||
+          !currentBooks.some(function (book) { return book.id === item.bookId; });
+      });
+      if (Number.isNaN(receivedDate.getTime()) || !items.length || invalidItem ||
+          new Set(itemIds).size !== itemIds.length) {
         showMessage("Vui lòng nhập đầy đủ và hợp lệ thông tin phiếu.", "error");
         return;
       }
       var receivedAt = receivedDate.toISOString();
 
       var receipts = storage.getReceipts();
-      if (!storage.getBooks().some(function (book) { return book.id === bookId; })) {
-        showMessage("Sách trong phiếu nhập không còn tồn tại.", "error");
-        return;
-      }
-      var item = { bookId: bookId, quantity: quantity, costPrice: costPrice };
       if (receipt) {
         var current = receipts.find(function (itemReceipt) { return itemReceipt.id === receipt.id; });
         if (!current || current.status === "completed") {
@@ -292,13 +374,13 @@
           return;
         }
         current.receivedAt = receivedAt;
-        current.items = [item];
+        current.items = items;
       } else {
         receipts.unshift({
-          id: "PN" + String(Date.now()).slice(-6),
+          id: "PN" + Date.now().toString(36).toUpperCase() + Math.random().toString(36).slice(2, 6).toUpperCase(),
           receivedAt: receivedAt,
           status: "draft",
-          items: [item]
+          items: items
         });
       }
       storage.setReceipts(receipts);
@@ -320,6 +402,15 @@
     if (!receipt) return;
     if (receipt.status === "completed") {
       showMessage("Phiếu nhập đã hoàn tất trước đó.", "error");
+      return;
+    }
+    if (!Array.isArray(receipt.items) || receipt.items.length === 0 ||
+        Number.isNaN(new Date(receipt.receivedAt).getTime())) {
+      showMessage("Phiếu nhập chưa có sản phẩm hoặc ngày nhập hợp lệ.", "error");
+      return;
+    }
+    if (new Set(receipt.items.map(function (item) { return item.bookId; })).size !== receipt.items.length) {
+      showMessage("Mỗi sản phẩm chỉ được xuất hiện một lần trong phiếu nhập.", "error");
       return;
     }
     if (!window.confirm("Hoàn tất phiếu nhập này và cộng tồn kho?")) return;
@@ -390,6 +481,7 @@
         '<label>Trạng thái<select id="order-status"><option value="">Tất cả</option><option>Mới đặt</option><option>Đã xử lý</option><option>Đã giao</option><option>Hủy</option></select></label>' +
         '<button class="button primary" id="order-filter" type="button">Tra cứu</button>' +
       "</div>" +
+      '<p class="form-message form-message--error" id="order-filter-message" role="alert" hidden></p>' +
       '<div class="table-wrap"><table><thead><tr><th>Mã đơn</th><th>Ngày đặt</th><th>Tổng tiền</th><th>Thanh toán</th><th>Trạng thái</th><th>Thao tác</th></tr></thead><tbody id="order-rows"></tbody></table></div>' +
       '<div id="order-detail"></div>';
 
@@ -400,6 +492,15 @@
       from = document.getElementById("order-from").value;
       to = document.getElementById("order-to").value;
       status = document.getElementById("order-status").value;
+      var message = document.getElementById("order-filter-message");
+      if (from && to && from > to) {
+        message.textContent = "Ngày bắt đầu không được sau ngày kết thúc.";
+        message.hidden = false;
+        document.getElementById("order-rows").innerHTML = "";
+        return;
+      }
+      message.textContent = "";
+      message.hidden = true;
       var filtered = storage.getOrders().filter(function (order) {
         var datePart = dateInputValue(order.orderedAt);
         var fromOk = !from || datePart >= from;

@@ -59,6 +59,7 @@ Kiệt và Lượng cùng sở hữu chức năng của `index.html` và `admin.
 - Dùng chung một `js/storage.js` và cùng các khóa localStorage có tiền tố `bookstore.`. Không tự đặt khóa riêng theo từng trang.
 - Tên khóa và cấu trúc thống nhất: `bookstore.categories` = `{id,name,active,marginPercent}[]`; `bookstore.books` = `{id,categoryId,code,title,author,image,description,costPrice,sellingPrice,stock,active,marginPercent?}[]`; `bookstore.customers` = `{id,name,email,phone,addresses,status}[]`; `bookstore.currentCustomerId` = ID khách hoặc `null`; `bookstore.cart` = `{bookId,quantity}[]`; `bookstore.orders` = `{id,customerId,items,deliveryAddress,paymentMethod,status,orderedAt,total}[]`; `bookstore.receipts` = `{id,receivedAt,status,items}[]`; `bookstore.stockMovements` = `{id,bookId,direction,quantity,occurredAt,referenceId}[]`.
 - Dùng chung một `js/storage.js` để parse/ghi các khóa trên và tạo dữ liệu mẫu khi chưa có; không tự đặt khóa hay cấu trúc riêng. Giá bán ưu tiên margin riêng của sách, nếu không có thì dùng margin loại. Order item lưu lại tên/giá tại thời điểm đặt.
+- Khi mở lần đầu sau bản tích hợp, `js/storage.js` giữ dữ liệu demo sẵn có và thêm biến động số dư mở đầu để sổ tồn khớp với số tồn hiện tại; không xóa dữ liệu đang lưu.
 - Thống nhất `direction` kho là `in`/`out`; phiếu nhập hoàn tất tạo biến động `in`, đơn mới tạo biến động `out`, đơn hủy tạo biến động hoàn kho. Cảnh báo sắp hết hàng khi tồn không quá 5 cuốn. Admin session chỉ là trạng thái mô phỏng riêng, không dùng chung tài khoản khách.
 - Kiệt tạo bộ dữ liệu mẫu theo contract này và gửi nhóm; mọi người không tự đổi tên khóa/trường. Kha và Luân dùng cùng ID tài khoản để liên kết giỏ/đơn; các module admin cập nhật đúng cùng sách/đơn/phiếu.
 - Chỉ dùng dữ liệu giả. Đây là prototype phía trình duyệt, không lưu mật khẩu thật và không xử lý thanh toán thật.
@@ -102,23 +103,23 @@ Kiệt và Lượng cùng sở hữu chức năng của `index.html` và `admin.
 
 **Mục tiêu:** bao phủ đủ các mục admin trong phiếu chấm; dùng tab/section bên trong `admin.html`.
 
-- [ ] T015 [US4] [Plan:3.1] Tạo màn hình đăng nhập admin riêng với khách hàng và danh mục điều hướng quản trị trong `admin.html` và `js/admin.js`.
-- [ ] T016 [US4] [Plan:3.2] Hiển thị danh sách khách hàng mẫu; mô phỏng reset mật khẩu và khóa/mở khóa tài khoản với trạng thái nhìn thấy được trong `js/admin.js`.
+- [x] T015 [US4] [Plan:3.1] Tạo màn hình đăng nhập admin riêng với khách hàng và danh mục điều hướng quản trị trong `admin.html` và `js/admin.js`.
+- [x] T016 [US4] [Plan:3.2] Hiển thị danh sách khách hàng mẫu; mô phỏng reset mật khẩu và khóa/mở khóa tài khoản với trạng thái nhìn thấy được trong `js/admin.js`.
 - [x] T017 [US4] [Plan:3.3] Thực hiện thêm/sửa/xóa/ẩn loại sách; đảm bảo thao tác có xác nhận/thông báo và cập nhật danh sách trong `js/admin-catalog.js`.
 - [x] T018 [US4] [Plan:3.4] Thực hiện thêm/sửa/ẩn hoặc xóa sách với loại, mã, tên, hình, mô tả; khi sửa phải điền sẵn đúng dữ liệu hiện có trong `js/admin-catalog.js`.
-- [ ] T019 [US4] [Plan:3.5] Hiển thị/tìm phiếu nhập; tạo phiếu có ngày nhập, sách, giá nhập và số lượng; cho sửa khi chưa hoàn tất, khóa sửa sau khi hoàn tất trong `js/admin.js`.
+- [x] T019 [US4] [Plan:3.5] Hiển thị/tìm phiếu nhập; tạo phiếu có ngày nhập, sách, giá nhập và số lượng từng sản phẩm; cho sửa khi chưa hoàn tất, khóa sửa sau khi hoàn tất trong `js/admin.js`.
 - [x] T020 [US4] [Plan:3.6] Quản lý tỷ lệ lợi nhuận theo loại và cho phép ghi đè theo sách; hiển thị giá vốn, tỷ lệ và giá bán tính toán trong `js/admin-catalog.js`.
-- [ ] T021 [US4] [Plan:3.7] Tra cứu đơn theo khoảng ngày và trạng thái; xem chi tiết và cập nhật đúng các trạng thái mới đặt/đã xử lý/đã giao/hủy trong `js/admin.js`.
+- [x] T021 [US4] [Plan:3.7] Tra cứu đơn theo khoảng ngày và trạng thái; xem chi tiết và cập nhật đúng các trạng thái mới đặt/đã xử lý/đã giao/hủy trong `js/admin.js`.
 - [x] T022 [US4] [Plan:3.8] Tra cứu tồn theo loại/thời điểm, cảnh báo sắp hết hàng và hiển thị nhập–xuất–tồn một sách theo khoảng thời gian trong `js/admin-catalog.js`.
-- [ ] T023 [US4] [Plan:3.9] Đồng bộ các thao tác quản trị với cùng dữ liệu demo để đơn mới, phiếu nhập, giá và tồn kho phản ánh nhất quán trong `js/admin.js` và `js/storage.js`.
+- [x] T023 [US4] [Plan:3.9] Đồng bộ các thao tác quản trị với cùng dữ liệu demo để đơn mới, phiếu nhập, giá và tồn kho phản ánh nhất quán trong `js/admin.js` và `js/storage.js`.
 
 ### Giai đoạn 4 — Tích hợp, kiểm thử và bàn giao (04–05/11)
 
 **Mục tiêu:** không có liên kết chết, lỗi dữ liệu hoặc hình/font bị mất khi giảng viên mở file local trên Chrome.
 
-- [ ] T024 [Plan:4.1] Kiểm tra đủ bốn HTML, liên kết tương đối, điều hướng, modal/tab, form validation, tiếng Việt và thông báo lỗi/thành công; sửa lỗi tích hợp trong các file liên quan.
+- [x] T024 [Plan:4.1] Kiểm tra đủ bốn HTML, liên kết tương đối, điều hướng, modal/tab, form validation, tiếng Việt và thông báo lỗi/thành công; sửa lỗi tích hợp trong các file liên quan.
 - [ ] T025 [Plan:4.2] Chạy checklist khách hàng: đăng ký/đăng nhập/đăng xuất, hồ sơ, tìm cơ bản/nâng cao + phân trang, xem sách, thêm giỏ có/không đăng nhập, đổi số lượng, hai cách địa chỉ, ba cách thanh toán, xem đơn và lịch sử.
-- [ ] T026 [Plan:4.3] Chạy checklist admin: đăng nhập riêng, khách hàng, loại sách, sản phẩm (đặc biệt form sửa có dữ liệu sẵn), phiếu nhập trước/sau hoàn tất, giá, bộ lọc/cập nhật đơn, tồn/thấp hàng/nhập-xuất-tồn.
+- [x] T026 [Plan:4.3] Chạy checklist admin: đăng nhập riêng, khách hàng, loại sách, sản phẩm (đặc biệt form sửa có dữ liệu sẵn), phiếu nhập trước/sau hoàn tất, giá, bộ lọc/cập nhật đơn, tồn/thấp hàng/nhập-xuất-tồn.
 - [ ] T027 [Plan:4.4] Thử mở `index.html` trực tiếp bằng Chrome khi ngắt mạng; xác nhận mọi ảnh/font/tài nguyên dùng đường dẫn tương đối, không có lỗi console làm hỏng luồng chính.
 - [ ] T028 [Plan:4.5] Chốt bản nộp trên `main`, xác nhận repo có đúng tối đa bốn file `.html`, README có hướng dẫn chạy và không có file bài giảng, mật khẩu hay dữ liệu cá nhân.
 - [ ] T029 [Plan:4.6] Nếu các tiêu chí 10 điểm đã ổn và còn thời gian, chuẩn bị layout/mockup bằng công cụ đồ họa để xét điểm cộng; không đánh đổi chức năng bắt buộc.
@@ -147,18 +148,18 @@ Kiệt và Lượng cùng sở hữu chức năng của `index.html` và `admin.
 | REQ-002 | Xem danh sách khách hàng | 3.2 | `js/admin.js` |
 | REQ-003 | Reset mật khẩu khách hàng (mô phỏng) | 3.2 | `js/admin.js` |
 | REQ-004 | Khóa/mở khóa tài khoản | 3.2 | `js/admin.js` |
-| REQ-005 | Thêm/sửa/xóa/ẩn loại sản phẩm | 3.3 | `js/admin.js` |
-| REQ-006 | Thêm sản phẩm gồm loại, mã, tên, hình, mô tả | 3.4 | `js/admin.js` |
-| REQ-007 | Sửa sản phẩm điền sẵn dữ liệu; xóa/ẩn sản phẩm | 3.4 | `js/admin.js` |
+| REQ-005 | Thêm/sửa/xóa/ẩn loại sản phẩm | 3.3 | `js/admin-catalog.js` |
+| REQ-006 | Thêm sản phẩm gồm loại, mã, tên, hình, mô tả | 3.4 | `js/admin-catalog.js` |
+| REQ-007 | Sửa sản phẩm điền sẵn dữ liệu; xóa/ẩn sản phẩm | 3.4 | `js/admin-catalog.js` |
 | REQ-008 | Hiển thị và tìm danh mục phiếu nhập | 3.5 | `js/admin.js` |
 | REQ-009 | Tạo phiếu nhập gồm ngày, giá nhập và số lượng từng sách | 3.5 | `js/admin.js` |
 | REQ-010 | Chỉ sửa phiếu nhập trước khi hoàn tất | 3.5 | `js/admin.js` |
-| REQ-011 | Thiết lập tỷ lệ lợi nhuận theo loại và theo sản phẩm | 3.6 | `js/admin.js` |
-| REQ-012 | Tra cứu giá vốn, lợi nhuận và giá bán | 3.6 | `js/admin.js` |
+| REQ-011 | Thiết lập tỷ lệ lợi nhuận theo loại và theo sản phẩm | 3.6 | `js/admin-catalog.js` |
+| REQ-012 | Tra cứu giá vốn, lợi nhuận và giá bán | 3.6 | `js/admin-catalog.js` |
 | REQ-013 | Lọc đơn theo khoảng ngày/trạng thái, xem chi tiết và cập nhật 4 trạng thái | 3.7 | `js/admin.js` |
-| REQ-014 | Tra cứu tồn theo loại tại một thời điểm | 3.8 | `js/admin.js` |
-| REQ-015 | Cảnh báo sách sắp hết | 3.8 | `js/admin.js` |
-| REQ-016 | Tra cứu nhập–xuất–tồn theo sách và khoảng thời gian | 3.8 | `js/admin.js` |
+| REQ-014 | Tra cứu tồn theo loại tại một thời điểm | 3.8 | `js/admin-catalog.js` |
+| REQ-015 | Cảnh báo sách sắp hết | 3.8 | `js/admin-catalog.js` |
+| REQ-016 | Tra cứu nhập–xuất–tồn theo sách và khoảng thời gian | 3.8 | `js/admin-catalog.js` |
 | REQ-017 | Khách đăng ký | 2.4 | `account.html`, `js/account.js` |
 | REQ-018 | Khách đăng nhập/đăng xuất, hiển thị tài khoản hiện tại | 2.4 | `account.html`, `js/account.js` |
 | REQ-019 | Xem và sửa thông tin cá nhân | 2.4 | `account.html`, `js/account.js` |
