@@ -16,4 +16,9 @@ Mở `index.html` trực tiếp bằng trình duyệt hoặc dùng extension Liv
 - `js/app.js`: JavaScript dùng chung
 - `assets/`: hình ảnh và tài nguyên của website
 
-Các trang hiện là bộ khung khởi tạo. Chức năng sẽ được nhóm bổ sung sau khi bình chọn và thống nhất phần việc.
+## Quản trị
+
+- Mở `admin.html`.
+- Tài khoản demo: `admin`
+- Mật khẩu demo: `admin123`
+- Dữ liệu khách hàng, đơn hàng, phiếu nhập và tồn kho lưu trong `localStorage` của trình duyệt.
