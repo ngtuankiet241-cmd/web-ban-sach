@@ -30,23 +30,7 @@
     $$("[data-cart-count]").forEach(function (el) { el.textContent = total; });
   }
 
-  function seedDemo() {
-    if (!currentCustomer()) {
-      const demo = {
-        id: "cus-demo", name: "Nguyễn Văn A", email: "demo@example.com", phone: "0901234567", status: "active",
-        addresses: [{ recipient: "Nguyễn Văn A", phone: "0901234567", address: "273 An Dương Vương, Phường Chợ Quán, TP. Hồ Chí Minh" }]
-      };
-      write("customers", read("customers").filter(function (c) { return c.id !== demo.id; }).concat(demo));
-      Bookstore.write("currentCustomerId", demo.id);
-    }
-    if (!read("cart").length) {
-      write("cart", read("books").filter(function (b) { return b.active && num(b.stock) > 1; }).slice(0, 2)
-        .map(function (b) { return { bookId: b.id, quantity: 1 }; }));
-    }
-  }
-
   function init() {
-    if (new URLSearchParams(location.search).has("demo")) { seedDemo(); }
     renderCount();
     const customer = currentCustomer();
     if (!customer || customer.status === "locked") {
