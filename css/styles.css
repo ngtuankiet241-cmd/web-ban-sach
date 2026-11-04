@@ -94,3 +94,222 @@ h1 {
   color: #68716b;
   text-align: center;
 }
+
+.admin-login {
+  max-width: 520px;
+}
+
+.admin-shell {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.admin-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.admin-nav h2 {
+  margin-bottom: 0.25rem;
+}
+
+.admin-tab {
+  width: 100%;
+  border: 0;
+  border-radius: 0.45rem;
+  padding: 0.75rem;
+  color: #334039;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+
+.admin-tab:hover,
+.admin-tab.active {
+  color: #234531;
+  background: #eaf1eb;
+  font-weight: 700;
+}
+
+.admin-content {
+  min-width: 0;
+}
+
+.form-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.form-grid label,
+.admin-toolbar label {
+  display: grid;
+  gap: 0.35rem;
+  color: #3b463f;
+  font-weight: 600;
+}
+
+.form-grid input,
+.form-grid select,
+.admin-toolbar input,
+.admin-toolbar select {
+  width: 100%;
+  min-height: 42px;
+  border: 1px solid #d5d9d5;
+  border-radius: 0.45rem;
+  padding: 0.6rem 0.7rem;
+  font: inherit;
+  background: #fff;
+}
+
+.button {
+  min-height: 40px;
+  border: 1px solid #cbd3cd;
+  border-radius: 0.45rem;
+  padding: 0.55rem 0.75rem;
+  color: #294436;
+  background: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.button:hover {
+  border-color: #8da596;
+  background: #f4f8f5;
+}
+
+.button.primary {
+  border-color: #345b45;
+  color: #fff;
+  background: #345b45;
+}
+
+.button.danger,
+.button.danger:hover {
+  border-color: #c96d69;
+  color: #8a302c;
+  background: #fff7f6;
+}
+
+.button.small {
+  min-height: 34px;
+  padding: 0.35rem 0.55rem;
+  font-size: 0.85rem;
+}
+
+.admin-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.admin-toolbar > input[type="search"] {
+  flex: 1;
+  min-width: 220px;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+th,
+td {
+  border-bottom: 1px solid #ebece7;
+  padding: 0.75rem 0.55rem;
+  text-align: left;
+  vertical-align: middle;
+}
+
+th {
+  color: #5d685f;
+  background: #f7f8f5;
+}
+
+.table-actions {
+  min-width: 180px;
+  white-space: nowrap;
+}
+
+.status {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 0.25rem 0.55rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.status.active,
+.status.order-status-delivered {
+  color: #256338;
+  background: #e6f3e9;
+}
+
+.status.locked,
+.status.order-status-cancelled {
+  color: #a03a35;
+  background: #fbeae8;
+}
+
+.status.draft,
+.status.order-status-new {
+  color: #805e1d;
+  background: #fff4d6;
+}
+
+.status.order-status-processed {
+  color: #315c86;
+  background: #e7f0f7;
+}
+
+.admin-message {
+  margin-bottom: 1rem;
+  border-left: 4px solid #528267;
+  border-radius: 0.45rem;
+  padding: 0.75rem 1rem;
+  background: #edf6ef;
+}
+
+.admin-message.error {
+  border-left-color: #bd554f;
+  background: #fff0ee;
+}
+
+.editor-box {
+  margin-top: 1rem;
+  border: 1px solid #dde2dc;
+  border-radius: 0.65rem;
+  padding: 1rem;
+  background: #fbfcfa;
+}
+
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+@media (max-width: 760px) {
+  .admin-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .admin-nav h2,
+  .admin-nav .danger {
+    grid-column: 1 / -1;
+  }
+}
