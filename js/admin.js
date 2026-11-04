@@ -3,7 +3,12 @@
 
   var storage = window.Bookstore || window.BookStoreStorage;
   var app = document.getElementById("admin-app");
+  var catalog = document.getElementById("catalog-admin");
   var sessionKey = "bookstore.adminSession";
+
+  function setCatalogVisible(visible) {
+    if (catalog) catalog.hidden = !visible;
+  }
 
   function isLoggedIn() {
     return sessionStorage.getItem(sessionKey) === "true";
@@ -52,6 +57,7 @@
   }
 
   function renderLogin() {
+    setCatalogVisible(false);
     app.innerHTML =
       '<section class="panel admin-login">' +
         "<h2>Đăng nhập quản trị</h2>" +
@@ -76,6 +82,7 @@
   }
 
   function renderAdmin() {
+    setCatalogVisible(true);
     app.innerHTML =
       '<section class="admin-shell">' +
         '<aside class="admin-nav panel">' +
@@ -156,7 +163,7 @@
       document.getElementById("customer-rows").innerHTML = customerRows(filtered);
     });
 
-    content.addEventListener("click", function (event) {
+    content.onclick = function (event) {
       var resetButton = event.target.closest("[data-reset-key]");
       var toggleButton = event.target.closest("[data-toggle-customer]");
       var latest = storage.getCustomers();
@@ -179,7 +186,7 @@
         renderCustomers();
         showMessage(customer.status === "locked" ? "Đã khóa tài khoản " + customer.name + "." : "Đã mở khóa tài khoản " + customer.name + ".", "success");
       }
-    });
+    };
   }
 
   function renderReceipts() {
@@ -224,7 +231,7 @@
       openReceiptEditor(null, books);
     });
 
-    content.addEventListener("click", function (event) {
+    content.onclick = function (event) {
       var view = event.target.closest("[data-view-receipt]");
       var complete = event.target.closest("[data-complete-receipt]");
       if (view) {
@@ -232,7 +239,7 @@
         if (receipt) openReceiptEditor(receipt, storage.getBooks());
       }
       if (complete) completeReceipt(complete.dataset.completeReceipt);
-    });
+    };
   }
 
   function openReceiptEditor(receipt, books) {
@@ -264,13 +271,19 @@
       var bookId = String(data.get("bookId"));
       var quantity = Number(data.get("quantity"));
       var costPrice = Number(data.get("costPrice"));
-      var receivedAt = new Date(String(data.get("receivedAt"))).toISOString();
-      if (!bookId || quantity < 1 || costPrice < 0 || !receivedAt) {
+      var receivedDate = new Date(String(data.get("receivedAt")));
+      if (!bookId || !Number.isInteger(quantity) || quantity < 1 ||
+          !Number.isFinite(costPrice) || costPrice < 0 || Number.isNaN(receivedDate.getTime())) {
         showMessage("Vui lòng nhập đầy đủ và hợp lệ thông tin phiếu.", "error");
         return;
       }
+      var receivedAt = receivedDate.toISOString();
 
       var receipts = storage.getReceipts();
+      if (!storage.getBooks().some(function (book) { return book.id === bookId; })) {
+        showMessage("Sách trong phiếu nhập không còn tồn tại.", "error");
+        return;
+      }
       var item = { bookId: bookId, quantity: quantity, costPrice: costPrice };
       if (receipt) {
         var current = receipts.find(function (itemReceipt) { return itemReceipt.id === receipt.id; });
@@ -312,11 +325,19 @@
     if (!window.confirm("Hoàn tất phiếu nhập này và cộng tồn kho?")) return;
 
     var books = storage.getBooks();
+    var invalidItem = receipt.items.find(function (item) {
+      return !Number.isInteger(Number(item.quantity)) || Number(item.quantity) < 1 ||
+        !Number.isFinite(Number(item.costPrice)) || Number(item.costPrice) < 0 ||
+        !books.some(function (book) { return book.id === item.bookId; });
+    });
+    if (invalidItem) {
+      showMessage("Phiếu nhập có sách không tồn tại hoặc số liệu không hợp lệ.", "error");
+      return;
+    }
     var categories = storage.getCategories();
     var movements = storage.getStockMovements();
     receipt.items.forEach(function (item) {
       var book = books.find(function (value) { return value.id === item.bookId; });
-      if (!book) return;
       book.stock = Number(book.stock || 0) + Number(item.quantity || 0);
       var itemCostPrice = Number(item.costPrice);
       if (Number.isFinite(itemCostPrice) && itemCostPrice >= 0) {
@@ -336,7 +357,7 @@
         bookId: book.id,
         direction: "in",
         quantity: Number(item.quantity || 0),
-        occurredAt: new Date().toISOString(),
+        occurredAt: receipt.receivedAt,
         referenceId: receipt.id
       });
     });
@@ -464,6 +485,13 @@
     var changed = false;
 
     if (oldStatus !== "Hủy" && newStatus === "Hủy") {
+      var missingBook = order.items.some(function (item) {
+        return !books.some(function (book) { return book.id === item.bookId; });
+      });
+      if (missingBook) {
+        showMessage("Không thể hủy đơn vì có sách trong đơn không còn tồn tại.", "error");
+        return;
+      }
       var cancelReference = order.id + "-cancel";
       var alreadyRestocked = movements.some(function (movement) {
         return movement.referenceId === cancelReference && movement.direction === "in";
@@ -474,7 +502,6 @@
       }
       order.items.forEach(function (item) {
         var book = books.find(function (value) { return value.id === item.bookId; });
-        if (!book) return;
         book.stock = Number(book.stock || 0) + Number(item.quantity || 0);
         movements.push({ id: storage.createId("mv"), bookId: book.id, direction: "in", quantity: Number(item.quantity || 0), occurredAt: new Date().toISOString(), referenceId: cancelReference });
       });

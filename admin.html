@@ -5,9 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Quản trị | Hiệu sách của nhóm</title>
   <link rel="stylesheet" href="css/styles.css">
-  <script src="js/app.js" defer></script>
+  <script src="js/data.js" defer></script>
   <script src="js/storage.js" defer></script>
+  <script src="js/app.js" defer></script>
   <script src="js/admin.js" defer></script>
+  <script src="js/admin-catalog.js" defer></script>
 </head>
 <body>
   <header class="site-header">
@@ -22,7 +24,9 @@
   <main class="page">
     <p class="eyebrow">Khu vực dành cho người quản lý</p>
     <h1>Quản trị cửa hàng</h1>
+    <p class="form-message form-message--error" data-storage-error role="alert" hidden></p>
     <div id="admin-app"></div>
+    <div id="catalog-admin" class="admin-catalog-mount" hidden></div>
   </main>
   <footer class="site-footer">Đồ án nhóm · <span data-current-year></span></footer>
 </body>
