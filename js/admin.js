@@ -1,7 +1,7 @@
 ﻿(function () {
   "use strict";
 
-  var storage = window.BookStoreStorage;
+  var storage = window.Bookstore || window.BookStoreStorage;
   var app = document.getElementById("admin-app");
   var sessionKey = "bookstore.adminSession";
 
@@ -25,6 +25,21 @@
     if (!value) return "";
     var date = new Date(value);
     return Number.isNaN(date.getTime()) ? "" : date.toLocaleString("vi-VN");
+  }
+
+  function dateInputValue(value) {
+    if (!value) return "";
+    var date = new Date(value);
+    if (Number.isNaN(date.getTime())) return "";
+    var offset = date.getTimezoneOffset() * 60000;
+    return new Date(date.getTime() - offset).toISOString().slice(0, 10);
+  }
+
+  function canChangeOrderStatus(oldStatus, newStatus) {
+    if (oldStatus === newStatus) return true;
+    if (oldStatus === "Mới đặt") return newStatus === "Đã xử lý" || newStatus === "Hủy";
+    if (oldStatus === "Đã xử lý") return newStatus === "Đã giao" || newStatus === "Hủy";
+    return false;
   }
 
   function showMessage(message, type) {
@@ -178,7 +193,7 @@
         var itemCount = receipt.items ? receipt.items.length : 0;
         return "<tr>" +
           "<td><strong>" + escapeHtml(receipt.id) + "</strong></td>" +
-          "<td>" + escapeHtml(formatDate(receipt.receivedAt).slice(0, 10)) + "</td>" +
+          "<td>" + escapeHtml(dateInputValue(receipt.receivedAt)) + "</td>" +
           "<td>" + itemCount + "</td>" +
           '<td><span class="status ' + (completed ? "active" : "draft") + '">' + (completed ? "Đã hoàn tất" : "Nháp") + "</span></td>" +
           '<td class="table-actions">' +
@@ -297,12 +312,25 @@
     if (!window.confirm("Hoàn tất phiếu nhập này và cộng tồn kho?")) return;
 
     var books = storage.getBooks();
+    var categories = storage.getCategories();
     var movements = storage.getStockMovements();
     receipt.items.forEach(function (item) {
       var book = books.find(function (value) { return value.id === item.bookId; });
       if (!book) return;
       book.stock = Number(book.stock || 0) + Number(item.quantity || 0);
-      book.costPrice = Number(item.costPrice || book.costPrice);
+      var itemCostPrice = Number(item.costPrice);
+      if (Number.isFinite(itemCostPrice) && itemCostPrice >= 0) {
+        book.costPrice = itemCostPrice;
+      }
+      var marginPercent = null;
+      if (book.marginPercent !== null && book.marginPercent !== undefined && book.marginPercent !== "") {
+        marginPercent = Number(book.marginPercent);
+      }
+      if (!Number.isFinite(marginPercent)) {
+        var category = categories.find(function (value) { return value.id === book.categoryId; });
+        marginPercent = category ? Number(category.marginPercent || 0) : 0;
+      }
+      book.sellingPrice = Math.round(Number(book.costPrice) * (1 + marginPercent / 100));
       movements.push({
         id: storage.createId("mv"),
         bookId: book.id,
@@ -352,7 +380,7 @@
       to = document.getElementById("order-to").value;
       status = document.getElementById("order-status").value;
       var filtered = storage.getOrders().filter(function (order) {
-        var datePart = new Date(order.orderedAt).toISOString().slice(0, 10);
+        var datePart = dateInputValue(order.orderedAt);
         var fromOk = !from || datePart >= from;
         var toOk = !to || datePart <= to;
         var statusOk = !status || order.status === status;
@@ -393,6 +421,8 @@
       return "<li>" + escapeHtml(item.title) + " × " + item.quantity + " — " + escapeHtml(formatMoney(item.price * item.quantity)) + "</li>";
     }).join("");
 
+    var statusOptions = '<option value="Mới đặt">Mới đặt</option><option value="Đã xử lý">Đã xử lý</option><option value="Đã giao">Đã giao</option><option value="Hủy">Hủy</option>';
+    var terminalStatus = order.status === "Đã giao" || order.status === "Hủy";
     document.getElementById("order-detail").innerHTML =
       '<section class="editor-box"><h3>Chi tiết đơn ' + escapeHtml(order.id) + "</h3>" +
       "<p><strong>Khách hàng:</strong> " + escapeHtml(customer ? customer.name : order.customerId) + "</p>" +
@@ -401,8 +431,8 @@
       "<p><strong>Ngày đặt:</strong> " + escapeHtml(formatDate(order.orderedAt)) + "</p>" +
       "<ul>" + items + "</ul>" +
       "<p><strong>Tổng cộng:</strong> " + escapeHtml(formatMoney(order.total)) + "</p>" +
-      '<label>Trạng thái mới<select id="order-new-status"><option>Mới đặt</option><option>Đã xử lý</option><option>Đã giao</option><option>Hủy</option></select></label>' +
-      '<button class="button primary" type="button" id="save-order-status">Cập nhật trạng thái</button>' +
+      '<label>Trạng thái mới<select id="order-new-status"' + (terminalStatus ? " disabled" : "") + ">" + statusOptions + "</select></label>" +
+      '<button class="button primary" type="button" id="save-order-status"' + (terminalStatus ? " disabled" : "") + ">Cập nhật trạng thái</button>" +
       "</section>";
 
     var select = document.getElementById("order-new-status");
@@ -415,7 +445,15 @@
   function updateOrderStatus(orderId, newStatus) {
     var orders = storage.getOrders();
     var order = orders.find(function (item) { return item.id === orderId; });
-    if (!order || order.status === newStatus) {
+    if (!order) {
+      showMessage("Không tìm thấy đơn hàng.", "error");
+      return;
+    }
+    if (!canChangeOrderStatus(order.status, newStatus)) {
+      showMessage("Không thể chuyển trạng thái đơn theo quy trình hiện tại.", "error");
+      return;
+    }
+    if (order.status === newStatus) {
       showMessage("Trạng thái đơn chưa thay đổi.", "success");
       return;
     }
@@ -426,27 +464,19 @@
     var changed = false;
 
     if (oldStatus !== "Hủy" && newStatus === "Hủy") {
-      order.items.forEach(function (item) {
-        var book = books.find(function (value) { return value.id === item.bookId; });
-        if (!book) return;
-        book.stock = Number(book.stock || 0) + Number(item.quantity || 0);
-        movements.push({ id: storage.createId("mv"), bookId: book.id, direction: "in", quantity: Number(item.quantity || 0), occurredAt: new Date().toISOString(), referenceId: order.id + "-cancel" });
+      var cancelReference = order.id + "-cancel";
+      var alreadyRestocked = movements.some(function (movement) {
+        return movement.referenceId === cancelReference && movement.direction === "in";
       });
-      changed = true;
-    } else if (oldStatus === "Hủy" && newStatus !== "Hủy") {
-      for (var i = 0; i < order.items.length; i += 1) {
-        var item = order.items[i];
-        var bookItem = books.find(function (value) { return value.id === item.bookId; });
-        if (!bookItem || Number(bookItem.stock || 0) < Number(item.quantity || 0)) {
-          showMessage("Không đủ tồn kho để khôi phục đơn này.", "error");
-          return;
-        }
+      if (alreadyRestocked) {
+        showMessage("Đơn này đã được hoàn kho trước đó.", "error");
+        return;
       }
       order.items.forEach(function (item) {
         var book = books.find(function (value) { return value.id === item.bookId; });
         if (!book) return;
-        book.stock = Number(book.stock || 0) - Number(item.quantity || 0);
-        movements.push({ id: storage.createId("mv"), bookId: book.id, direction: "out", quantity: Number(item.quantity || 0), occurredAt: new Date().toISOString(), referenceId: order.id + "-restore" });
+        book.stock = Number(book.stock || 0) + Number(item.quantity || 0);
+        movements.push({ id: storage.createId("mv"), bookId: book.id, direction: "in", quantity: Number(item.quantity || 0), occurredAt: new Date().toISOString(), referenceId: cancelReference });
       });
       changed = true;
     }

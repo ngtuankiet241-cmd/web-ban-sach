@@ -101,7 +101,7 @@
 
   seed();
 
-  window.BookStoreStorage = {
+  var bookStore = {
     prefix: PREFIX,
     read: read,
     write: write,
@@ -129,4 +129,7 @@
       write("stockMovements", seedMovements);
     }
   };
+
+  window.Bookstore = bookStore;
+  window.BookStoreStorage = bookStore;
 })();
