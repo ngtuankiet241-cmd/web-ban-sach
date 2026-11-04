@@ -1,6 +1,3 @@
-/* cart.js – giỏ hàng, đặt hàng, đơn đã mua.
-   Dùng API chung Bookstore (js/storage.js) và các khóa bookstore.* theo plan.md:
-   cart = {bookId, quantity}[] · orders · books · customers · currentCustomerId · stockMovements */
 (function () {
   "use strict";
   const root = document.querySelector("#cart-app");
@@ -19,7 +16,6 @@
 
   if (!window.Bookstore) { console.error("Thiếu js/storage.js"); return; }
 
-  /* ===== Đọc / ghi dữ liệu dùng chung ===== */
   function read(name) { const v = Bookstore.read(name); return Array.isArray(v) ? v : []; }
   function write(name, value) {
     Bookstore.write(name, value);
@@ -34,7 +30,6 @@
     $$("[data-cart-count]").forEach(function (el) { el.textContent = total; });
   }
 
-  /* ===== Dữ liệu mẫu để test riêng trang này: cart.html?demo=1 ===== */
   function seedDemo() {
     if (!currentCustomer()) {
       const demo = {
@@ -64,15 +59,14 @@
     }
     root.hidden = false;
 
-    let draft = null;   // thông tin giao hàng + thanh toán đã nhập
-    let busy = false;   // true khi đang tạo đơn, tránh vẽ lại giữa chừng
+    let draft = null;
+    let busy = false;
 
     const msg = function (text, type) {
       const a = $("#cart-alert");
       a.textContent = text; a.className = type === "ok" ? "ok" : ""; a.hidden = !text;
     };
 
-    /* ----- Giỏ hàng: ghép dòng giỏ với sách, gỡ sách ẩn/hết hàng ----- */
     function lines() {
       const books = read("books"), cart = read("cart"), out = [];
       cart.forEach(function (l) {
@@ -128,7 +122,6 @@
       if (e.target.dataset.act === "set") { setQty(e.target.closest("tr").dataset.id, Number(e.target.value)); renderCart(); }
     });
 
-    /* ----- Chuyển bước, chuyển tab ----- */
     function go(n) {
       ["1", "2", "3", "done"].forEach(function (s) { $("#step-" + s).hidden = String(n) !== s; });
       $$("#steps li").forEach(function (li, i) {
@@ -149,7 +142,6 @@
     $("#back-1").addEventListener("click", function () { go(1); });
     $("#back-2").addEventListener("click", function () { go(2); });
 
-    /* ----- Địa chỉ: chọn từ tài khoản hoặc nhập mới ----- */
     function savedAddresses() {
       return (Array.isArray(customer.addresses) ? customer.addresses : []).map(function (a) {
         if (typeof a === "string") { return { recipient: customer.name, phone: customer.phone || "", address: a }; }
@@ -201,7 +193,6 @@
     const shipText = function (s) { return s.recipient + (s.phone ? " · " + s.phone : "") + " · " + s.address; };
     const payText = function (d) { return PAY[d.pay] + (d.detail ? " – " + d.detail : ""); };
 
-    /* ----- Bước 3: xem lại ----- */
     $("#step-2").addEventListener("submit", function (e) {
       e.preventDefault();
       const d = collect(); if (!d) { return; }
@@ -217,7 +208,6 @@
       go(3);
     });
 
-    /* ----- Xác nhận: tạo đơn, trừ tồn, ghi biến động kho "out", xóa giỏ ----- */
     $("#place-order").addEventListener("click", function () {
       const ls = lines();
       if (!ls.length || !draft) { go(1); renderCart(); return; }
@@ -253,7 +243,6 @@
     });
     $("#see-orders").addEventListener("click", function () { tab("orders"); });
 
-    /* ----- Đơn đã mua của khách hiện tại ----- */
     function renderOrders() {
       const mine = read("orders").filter(function (o) { return o.customerId === customer.id; })
         .sort(function (a, b) { return new Date(b.orderedAt) - new Date(a.orderedAt); });
@@ -265,7 +254,6 @@
       }).join("") : '<p>Bạn chưa có đơn hàng nào. <a href="index.html">Mua sắm ngay</a>.</p>';
     }
 
-    // Đồng bộ khi dữ liệu đổi từ tab/trang khác (vd. admin đổi trạng thái, thêm giỏ ở index)
     const refresh = function () {
       if (busy) { return; }
       renderCount();
