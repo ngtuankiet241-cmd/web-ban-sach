@@ -1,4 +1,23 @@
 (function () {
+  "use strict";
+
+  // ==========================================================================
+  // FILE DATA.JS - DỮ LIỆU MẪU BAN ĐẦU (SEED DATA)
+  // ==========================================================================
+  // Dành cho sinh viên năm nhất dễ hiểu:
+  // Vì đồ án này không có cơ sở dữ liệu thật (như MySQL/SQL Server),
+  // nên file này đóng vai trò như "dữ liệu tạo sẵn lúc xuất xưởng" của website.
+  // Khi người dùng mở web lần đầu, file storage.js sẽ lấy dữ liệu từ file này
+  // lưu vào localStorage của trình duyệt để web có sẵn sách, khách hàng, đơn hàng...
+  // ==========================================================================
+
+  /**
+   * 1. DANH MỤC CÁC THỂ LOẠI SÁCH MẪU
+   * - id: mã định danh thể loại (viết liền không dấu)
+   * - name: tên hiển thị tiếng Việt
+   * - active: trạng thái đang hoạt động (true: đang bán, false: đã ẩn)
+   * - marginPercent: tỷ lệ % lợi nhuận mặc định của loại sách đó
+   */
   const categorySeed = [
     { id: "van-hoc", name: "Văn học", active: true, marginPercent: 30 },
     { id: "ky-nang", name: "Kỹ năng sống", active: true, marginPercent: 35 },
@@ -6,6 +25,13 @@
     { id: "thieu-nhi", name: "Thiếu nhi", active: true, marginPercent: 28 }
   ];
 
+  /**
+   * 2. DANH SÁCH 12 CUỐN SÁCH MẪU BAN ĐẦU
+   * - costPrice: giá vốn nhập vào (đồng)
+   * - sellingPrice: giá bán ra (tính theo công thức: giá vốn * (1 + margin%))
+   * - stock: số lượng tồn kho hiện tại
+   * - cover: mã màu nền hex để tự động vẽ ảnh bìa sách
+   */
   const booksSeed = [
     {
       id: "book-001", categoryId: "van-hoc", code: "VH001", title: "Nhà giả kim",
@@ -81,6 +107,13 @@
     }
   ];
 
+  /**
+   * 3. THUẬT TOÁN NGẮT DÒNG THÔNG MINH CHO TÊN SÁCH (WORD WRAPPING)
+   * - Vấn đề thực tế: Tiêu đề sách dài sẽ bị tràn khỏi bìa sách nếu viết trên 1 dòng.
+   * - Cách giải quyết: Tách chuỗi thành từng từ và gom lại sao cho mỗi dòng không quá maxChars ký tự.
+   * - Điểm mấu chốt: Cắt theo khoảng trắng giữa các từ, TUYỆT ĐỐI KHÔNG bẻ đôi một từ tiếng Việt.
+   *   (Ví dụ: từ "chậm" sẽ giữ nguyên, không bị cắt thành "ch" và "ậm").
+   */
   function wrapTitle(text, maxChars) {
     var words = String(text || "").trim().split(/\s+/);
     var lines = [];
@@ -100,8 +133,20 @@
     return lines;
   }
 
+  /**
+   * 4. HÀM TỰ ĐỘNG TẠO ẢNH BÌA SÁCH VECTOR BẰNG SVG (DATA URI)
+   * - Ý tưởng thiết kế thông minh:
+   *   Thay vì phải tải 12 file ảnh .jpg/.png từ mạng về (dễ bị lỗi mất ảnh khi chấm offline không có Internet),
+   *   hàm này tự động "vẽ" ra một ảnh bìa sách dạng vector SVG:
+   *   + Khung viền và gáy sách màu sắc trang nhã
+   *   + Tên sách dùng font Cambria rõ nét, canh giữa
+   *   + Tên tác giả ở phần dưới
+   *   + Chữ "BOOKABOOK" ở đáy bìa
+   * - Sau đó mã hóa chuỗi SVG này thành "Data URI" để gán trực tiếp vào thẻ <img src="...">.
+   */
   function makeCover(book) {
     var lines = wrapTitle(book.title, 15);
+    // Tùy theo số dòng tiêu đề (1, 2 hay 3 dòng) mà điều chỉnh vị trí xuất phát Y cho cân đối
     var startY = lines.length === 1 ? 135 : lines.length === 2 ? 120 : 105;
     var titleSvg = lines.slice(0, 3).map(function (line, index) {
       var escaped = line
@@ -116,6 +161,7 @@
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;");
 
+    // Chuỗi mã SVG của bìa sách
     var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 320">' +
       '<rect width="240" height="320" rx="8" fill="' + book.cover + '"/>' +
       '<rect x="14" y="14" width="212" height="292" rx="4" fill="none" stroke="#fff" stroke-opacity=".62"/>' +
@@ -124,14 +170,26 @@
       '<text x="50%" y="255" text-anchor="middle" fill="#fffdf5" font-family="Cambria, \'Times New Roman\', serif" font-size="13">' + safeAuthor + "</text>" +
       '<text x="50%" y="286" text-anchor="middle" fill="#fffdf5" font-family="Arial,sans-serif" font-size="11" letter-spacing="3">BOOKABOOK</text>' +
       "</svg>";
+
+    // Chuyển chuỗi SVG thành đường dẫn ảnh nội tuyến Data URI
     return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
   }
 
+  // Duyệt qua 12 cuốn sách, tự động sinh thuộc tính book.image bằng hàm makeCover
   booksSeed.forEach(function (book) {
     book.image = makeCover(book);
-    delete book.cover;
+    delete book.cover; // Xóa thuộc tính màu cover sau khi đã vẽ xong ảnh
   });
 
+  /**
+   * 5. SỔ CÁI THEO DÕI BIẾN ĐỘNG KHO (STOCK MOVEMENTS SEED)
+   * - Phục vụ tiêu chí [BAREM I.8]: Báo cáo Nhập – Xuất – Tồn.
+   * - direction:
+   *   + 'in': Nhập hàng vào kho (tăng tồn kho)
+   *   + 'out': Xuất hàng bán cho khách (giảm tồn kho)
+   * - Ban đầu tạo sẵn số dư đầu kỳ (opening balance) cho 12 cuốn sách
+   *   và 1 đơn xuất hàng mẫu DH001.
+   */
   const stockMovementsSeed = booksSeed.map(function (book) {
     return {
       id: "opening-" + book.id,
@@ -151,9 +209,15 @@
     referenceId: "DH001"
   });
 
+  /**
+   * 6. GOM TẤT CẢ DỮ LIỆU MẪU VÀO ĐỐI TƯỢNG TOÀN CỤC window.BookstoreSeed
+   * Để file storage.js có thể đọc và nạp vào localStorage khi cần.
+   */
   window.BookstoreSeed = {
     categories: categorySeed,
     books: booksSeed,
+
+    // Danh sách tài khoản khách hàng mẫu
     customers: [
       {
         id: "customer-1", name: "Nguyễn Minh An", email: "an@example.com",
@@ -162,7 +226,7 @@
       },
       {
         id: "customer-2", name: "Trần Thu Hà", email: "ha@example.com",
-        phone: "0912345678", password: "123456", status: "locked",
+        phone: "0912345678", password: "123456", status: "locked", // Tài khoản đang bị khóa để demo tính năng khóa tài khoản
         addresses: [{ id: "addr-2", label: "Văn phòng", recipient: "Trần Thu Hà", phone: "0912345678", address: "38 Lê Lợi, Quận 1, TP.HCM" }]
       },
       {
@@ -170,8 +234,11 @@
         phone: "0987654321", password: "123456", status: "active", addresses: []
       }
     ],
-    currentCustomerId: null,
-    cart: [],
+
+    currentCustomerId: null, // Khách hàng đang đăng nhập (mặc định chưa ai đăng nhập)
+    cart: [],                // Giỏ hàng hiện tại (rỗng)
+
+    // Đơn hàng mẫu ban đầu
     orders: [
       {
         id: "DH001",
@@ -184,12 +251,15 @@
         total: 72800
       }
     ],
+
+    // Phiếu nhập kho mẫu ban đầu (trạng thái draft: nháp)
     receipts: [
       {
         id: "PN001", receivedAt: "2026-10-30T00:00:00.000Z", status: "draft",
         items: [{ bookId: "book-001", quantity: 3, costPrice: 56000 }]
       }
     ],
+
     stockMovements: stockMovementsSeed,
     adminSession: null
   };

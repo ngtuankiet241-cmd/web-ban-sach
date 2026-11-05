@@ -1,4 +1,42 @@
-﻿:root {
+﻿/**
+ * ==============================================================================
+ * BOOKABOOK - BẢNG ĐẶC TẢ GIAO DIỆN VÀ PHONG CÁCH (CSS STYLESHEET)
+ * ==============================================================================
+ * Dành cho sinh viên năm nhất môn "Lập trình web và ứng dụng":
+ * 
+ * 1. Triết lý thiết kế (Pure Vanilla CSS):
+ *    - Toàn bộ giao diện được viết bằng CSS thuần hiện đại (không dùng thư viện ngoài
+ *      như Bootstrap hay Tailwind), tải nhanh và tương thích hoàn toàn trên Google Chrome.
+ *    - Bố cục giao diện sử dụng:
+ *        + CSS Flexbox (display: flex): Dùng cho thanh Menu Header, phân bố khoảng cách các nút.
+ *        + CSS Grid (display: grid): Dùng cho Lưới sách (Book Grid), chia cột bảng quản trị.
+ *        + CSS Clamp (font-size: clamp(...)): Kích cỡ tiêu đề tự co giãn theo độ rộng màn hình.
+ * 
+ * 2. Phông chữ (Typography):
+ *    - Tiêu đề chính, tên sách, bìa sách: Font có chân 'Cambria, Times New Roman, serif'
+ *      tạo vẻ đẹp cổ điển, sang trọng của nhà sách và hỗ trợ tiếng Việt có dấu hoàn hảo.
+ *    - Nội dung bài viết, bảng biểu, nút bấm: Font không chân 'Segoe UI, Arial, sans-serif'
+ *      rõ nét, hiện đại, dễ đọc trên mọi thiết bị.
+ * 
+ * 3. Mục lục các phân vùng CSS:
+ *    [PHẦN 1] THIẾT LẬP CƠ BẢN (RESET, ROOT VARIABLES, TYPOGRAPHY)
+ *    [PHẦN 2] THANH ĐIỀU HƯỚNG CHUNG (SITE HEADER & BOOKABOOK BRAND)
+ *    [PHẦN 3] BANNER TRANG CHỦ (HERO BANNER & SLOGAN CUỐN SÁCH 3D)
+ *    [PHẦN 4] BỘ LỌC TÌM KIẾM TRANG CHỦ (CATALOG FILTER & TOOLBAR)
+ *    [PHẦN 5] LƯỚI SẢN PHẨM & THẺ SÁCH (BOOK GRID & BOOK CARD)
+ *    [PHẦN 6] THANH NÚT PHÂN TRANG (PAGINATION)
+ *    [PHẦN 7] HỘP THOẠI MODAL XEM CHI TIẾT SÁCH (BOOK DETAIL DIALOG)
+ *    [PHẦN 8] MODULE QUẢN TRỊ DANH MỤC & THỂ LOẠI (ADMIN CATALOG & TABS)
+ *    [PHẦN 9] KHUNG ĐIỀU HƯỚNG QUẢN TRỊ VIÊN & SIDEBAR (ADMIN SHELL)
+ *    [PHẦN 10] TRANG TÀI KHOẢN KHÁCH HÀNG (ACCOUNT LOGIN, REGISTER, PROFILE, ORDERS)
+ *    [PHẦN 11] THIẾT KẾ ĐÁP ỨNG MÀN HÌNH (RESPONSIVE MEDIA QUERIES)
+ * ==============================================================================
+ */
+
+/* ==============================================================================
+ * [PHẦN 1] THIẾT LẬP CƠ BẢN (RESET, ROOT VARIABLES, TYPOGRAPHY)
+ * ============================================================================== */
+:root {
   color-scheme: light;
   font-family: "Segoe UI", Arial, sans-serif;
   color: #20251f;
@@ -21,6 +59,10 @@ a {
   color: inherit;
 }
 
+
+/* ==============================================================================
+ * [PHẦN 2] THANH ĐIỀU HƯỚNG CHUNG (SITE HEADER & BOOKABOOK BRAND)
+ * ============================================================================== */
 .site-header {
   display: flex;
   flex-wrap: wrap;
@@ -105,6 +147,10 @@ h1 {
   background: #345b45;
 }
 
+
+/* ==============================================================================
+ * [PHẦN 3] BANNER TRANG CHỦ (HERO BANNER & SLOGAN CUỐN SÁCH 3D)
+ * ============================================================================== */
 .store-hero {
   position: relative;
   display: flex;
@@ -307,6 +353,10 @@ textarea:focus-visible,
   line-height: 1.6;
 }
 
+
+/* ==============================================================================
+ * [PHẦN 4] BỘ LỌC TÌM KIẾM TRANG CHỦ (CATALOG FILTER & TOOLBAR - BAREM II.2)
+ * ============================================================================== */
 .catalog-layout {
   display: grid;
   grid-template-columns: minmax(220px, 270px) minmax(0, 1fr);
@@ -412,6 +462,10 @@ textarea:focus-visible,
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1rem;
 }
+
+/* ==============================================================================
+ * [PHẦN 5] LƯỚI SẢN PHẨM & THẺ SÁCH (BOOK GRID & BOOK CARD - BAREM II.1)
+ * ============================================================================== */
 
 .book-card {
   min-width: 0;
@@ -523,6 +577,10 @@ textarea:focus-visible,
   color: #9c3d37;
 }
 
+
+/* ==============================================================================
+ * [PHẦN 6] THANH NÚT PHÂN TRANG (PAGINATION - BAREM II.1)
+ * ============================================================================== */
 .pagination {
   display: flex;
   justify-content: center;
@@ -617,6 +675,10 @@ textarea:focus-visible,
   cursor: pointer;
 }
 
+
+/* ==============================================================================
+ * [PHẦN 7] HỘP THOẠI MODAL XEM CHI TIẾT SÁCH (BOOK DETAIL DIALOG - BAREM II.1)
+ * ============================================================================== */
 .book-detail {
   display: grid;
   grid-template-columns: minmax(190px, 0.8fr) minmax(0, 1.2fr);
@@ -671,6 +733,10 @@ textarea:focus-visible,
   font-weight: 600;
 }
 
+
+/* ==============================================================================
+ * [PHẦN 8] MODULE QUẢN TRỊ DANH MỤC & THỂ LOẠI (ADMIN CATALOG - BAREM I.1 & I.2)
+ * ============================================================================== */
 .admin-catalog-mount {
   margin-top: 1.5rem;
 }
@@ -959,6 +1025,10 @@ textarea:focus-visible,
   max-width: 520px;
 }
 
+
+/* ==============================================================================
+ * [PHẦN 9] KHUNG ĐIỀU HƯỚNG QUẢN TRỊ VIÊN & SIDEBAR (ADMIN SHELL - BAREM I)
+ * ============================================================================== */
 .admin-shell {
   display: grid;
   grid-template-columns: 220px minmax(0, 1fr);
@@ -1151,6 +1221,10 @@ th {
   }
 }
 
+
+/* ==============================================================================
+ * [PHẦN 10] TRANG TÀI KHOẢN KHÁCH HÀNG (ACCOUNT LOGIN, REGISTER, PROFILE, ORDERS)
+ * ============================================================================== */
 .account-page {
   width: min(100% - 2rem, 1080px);
   margin: 2rem auto 4rem;

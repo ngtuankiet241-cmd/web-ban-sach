@@ -1,13 +1,21 @@
 (function () {
+  "use strict";
+
+  // ==========================================================================
+  // KHỞI TẠO MODULE CATALOG ADMIN (LOẠI SÁCH, SÁCH, GIÁ BÁN, TỒN KHO)
+  // ==========================================================================
   const root = document.querySelector("#catalog-admin");
   if (!root) {
     return;
   }
 
   const money = new Intl.NumberFormat("vi-VN");
-  let selectedImage = "";
-  let activeTab = "categories";
+  let selectedImage = "";            // Lưu URL ảnh hoặc chuỗi Base64 Data URL của ảnh được chọn
+  let activeTab = "categories";      // Tab mặc định khi mở: "categories"
 
+  /**
+   * Hàm bảo mật chống XSS: escape các ký tự nguy hiểm sang HTML entities.
+   */
   function escapeHtml(value) {
     return String(value == null ? "" : value)
       .replace(/&/g, "&amp;")
@@ -17,6 +25,9 @@
       .replace(/'/g, "&#39;");
   }
 
+  /**
+   * Hiển thị thông báo phản hồi thao tác (thành công hoặc báo lỗi).
+   */
   function showMessage(message, isError) {
     const box = root.querySelector("#catalog-admin-message");
     box.textContent = message;
@@ -24,11 +35,17 @@
     box.hidden = !message;
   }
 
+  /**
+   * Bắt lỗi và in ra console cùng banner thông báo lỗi.
+   */
   function fail(error) {
     console.error(error);
     showMessage(error.message || "Thao tác chưa thực hiện được.", true);
   }
 
+  /**
+   * Đọc dữ liệu từ lớp lưu trữ Bookstore (localStorage).
+   */
   function read(name) {
     const value = Bookstore.read(name);
     if (value === undefined) {
@@ -37,30 +54,54 @@
     return value;
   }
 
+  /**
+   * Ghi dữ liệu vào lớp lưu trữ Bookstore (localStorage).
+   */
   function write(name, value) {
     Bookstore.write(name, value);
   }
 
+  /**
+   * Chuyển đổi an toàn về kiểu số (tránh NaN).
+   */
   function numberField(value) {
     return Number.isFinite(Number(value)) ? Number(value) : 0;
   }
 
+  /**
+   * Định dạng số tiền có thêm ký hiệu ₫.
+   */
   function formatMoney(value) {
     return money.format(numberField(value)) + " ₫";
   }
 
+  /**
+   * Kiểm tra xem đường dẫn ảnh có hợp lệ (ảnh assets/ nội bộ hoặc Data URI base64/SVG).
+   */
   function validImage(image) {
     return /^(assets\/|data:image\/)/i.test(String(image || ""));
   }
 
+  /**
+   * [BAREM I.6] Lấy tỷ lệ % lợi nhuận áp dụng cho cuốn sách:
+   * - Ưu tiên 1: Tỷ lệ riêng được đặt cho cuốn sách đó (book.marginPercent).
+   * - Ưu tiên 2: Nếu sách không có tỷ lệ riêng thì lấy tỷ lệ chung của Loại sách (category.marginPercent).
+   */
   function getMargin(book, category) {
     return book.marginPercent == null ? numberField(category.marginPercent) : numberField(book.marginPercent);
   }
 
+  /**
+   * [BAREM I.6] Tính giá bán theo công thức chuẩn:
+   * Giá bán = Giá vốn * (1 + % lợi nhuận / 100) (làm tròn số nguyên).
+   */
   function getSellingPrice(book, category) {
     return Math.round(numberField(book.costPrice) * (1 + getMargin(book, category) / 100));
   }
 
+  // ==========================================================================
+  // KHỞI TẠO BỐ CỤC GIAO DIỆN CATALOG (HTML NỘI BỘ CỦA 4 TAB CON)
+  // ==========================================================================
   root.innerHTML =
     '<section class="admin-catalog panel" aria-labelledby="catalog-admin-title">' +
     '<div class="section-heading section-heading--compact">' +
@@ -73,6 +114,8 @@
     '<button type="button" class="admin-tab" role="tab" aria-selected="false" data-admin-tab="pricing">Giá bán</button>' +
     '<button type="button" class="admin-tab" role="tab" aria-selected="false" data-admin-tab="inventory">Tồn kho</button>' +
     "</div>" +
+
+    // --- TAB 1: LOẠI SÁCH ---
     '<section class="admin-tab-panel" role="tabpanel" data-panel="categories">' +
     '<div class="admin-panel-heading"><h3>Loại sách</h3><p>Thêm, sửa, ẩn hoặc xóa loại không còn được sử dụng.</p></div>' +
     '<form class="admin-form admin-form--inline" id="category-form">' +
@@ -84,6 +127,8 @@
     "</form>" +
     '<div class="table-wrap"><table class="data-table"><thead><tr><th>Loại sách</th><th>Lợi nhuận</th><th>Trạng thái</th><th>Thao tác</th></tr></thead><tbody id="category-table"></tbody></table></div>' +
     "</section>" +
+
+    // --- TAB 2: DANH MỤC SÁCH ---
     '<section class="admin-tab-panel" role="tabpanel" data-panel="books" hidden>' +
     '<div class="admin-panel-heading"><h3>Danh mục sách</h3><p>Thông tin gồm loại, mã, tên, hình và mô tả. Khi sửa, biểu mẫu được điền sẵn dữ liệu hiện có.</p></div>' +
     '<form class="admin-form admin-form--grid" id="book-form">' +
@@ -110,6 +155,8 @@
     "</form>" +
     '<div class="table-wrap"><table class="data-table"><thead><tr><th>Sách</th><th>Loại</th><th>Giá bán</th><th>Tồn</th><th>Trạng thái</th><th>Thao tác</th></tr></thead><tbody id="book-table"></tbody></table></div>' +
     "</section>" +
+
+    // --- TAB 3: QUẢN LÝ GIÁ BÁN ---
     '<section class="admin-tab-panel" role="tabpanel" data-panel="pricing" hidden>' +
     '<div class="admin-panel-heading"><h3>Quản lý giá bán</h3><p>Giá bán = giá vốn × (1 + tỷ lệ lợi nhuận). Tỷ lệ riêng của sách được ưu tiên hơn tỷ lệ của loại.</p></div>' +
     '<h4>Tỷ lệ theo loại sách</h4>' +
@@ -117,6 +164,8 @@
     '<h4>Tỷ lệ và giá theo từng sách</h4>' +
     '<div class="table-wrap"><table class="data-table"><thead><tr><th>Sách</th><th>Giá vốn</th><th>Tỷ lệ riêng (%)</th><th>Giá bán hiện tại</th><th>Giá bán dự kiến</th><th>Thao tác</th></tr></thead><tbody id="book-margin-table"></tbody></table></div>' +
     "</section>" +
+
+    // --- TAB 4: TRA CỨU TỒN KHO & BÁO CÁO ---
     '<section class="admin-tab-panel" role="tabpanel" data-panel="inventory" hidden>' +
     '<div class="admin-panel-heading"><h3>Tra cứu tồn kho</h3><p>Số tồn tại thời điểm được tính từ sổ biến động nhập/xuất.</p></div>' +
     '<form class="admin-form admin-form--inline" id="inventory-query">' +
@@ -134,6 +183,9 @@
     '<div class="table-wrap"><table class="data-table"><thead><tr><th>Đầu kỳ</th><th>Nhập</th><th>Xuất</th><th>Cuối kỳ</th><th>Khoảng thời gian</th></tr></thead><tbody id="movement-table"></tbody></table></div>' +
     "</section></section>";
 
+  /**
+   * Reset form nhập liệu về trạng thái trống ban đầu để chuẩn bị thêm mới.
+   */
   function resetForm(formId) {
     const form = root.querySelector("#" + formId);
     form.reset();
@@ -149,6 +201,9 @@
     }
   }
 
+  /**
+   * Hiển thị khung xem trước hình ảnh bìa sách khi chọn file hoặc nhập link.
+   */
   function renderImagePreview(source) {
     const preview = root.querySelector("#book-image-preview");
     const safeSource = validImage(source) ? escapeHtml(source) : "";
@@ -158,6 +213,13 @@
       : "";
   }
 
+  /**
+   * [BAREM I.3] QUẢN LÝ LOẠI SẢN PHẨM (0.5 điểm):
+   * 1. Hiển thị danh sách loại sách và % lợi nhuận mặc định.
+   * 2. Nút "Sửa": Đưa tên và % lợi nhuận lên form để chỉnh sửa.
+   * 3. Nút "Ẩn/Hiện": Ẩn loại sách để không cho hiển thị ngoài cửa hàng.
+   * 4. Nút "Xóa": Xóa loại sách (chặn không cho xóa nếu trong loại vẫn còn sách).
+   */
   function renderCategories() {
     const categories = read("categories");
     const books = read("books");
@@ -174,6 +236,7 @@
         ">Xóa</button></td></tr>";
     }).join("") || '<tr><td colspan="4">Chưa có loại sách.</td></tr>';
 
+    // Đổ danh sách loại sách vào các thẻ <select> ở form thêm sách và bộ lọc tồn kho
     const activeOptions = categories.filter(function (category) {
       return category.active;
     }).map(function (category) {
@@ -186,6 +249,14 @@
     root.querySelector("#inventory-category").innerHTML = '<option value="">Tất cả loại</option>' + inventoryOptions;
   }
 
+  /**
+   * [BAREM I.4] QUẢN LÝ DANH MỤC SẢN PHẨM / SÁCH (0.75 điểm):
+   * 1. Hiển thị danh sách sách (hình ảnh, tên, mã, tác giả, loại, giá bán, tồn, trạng thái).
+   * 2. BAREM BẮT BUỘC: "Sửa sản phẩm: hiển thị đúng thông tin trước khi sửa".
+   *    -> Khi bấm nút "Sửa" (data-action="book-edit"), toàn bộ dữ liệu của sách được tự động gán vào form!
+   * 3. Nút "Ẩn/Hiện": Ngưng bán hoặc tiếp tục bán sách ngoài cửa hàng.
+   * 4. Nút "Xóa": Xóa sách khỏi danh mục bán.
+   */
   function renderBooks() {
     const books = read("books");
     const categories = read("categories");
@@ -204,9 +275,17 @@
     }).join("") || '<tr><td colspan="6">Chưa có sách.</td></tr>';
   }
 
+  /**
+   * [BAREM I.6] QUẢN LÝ GIÁ BÁN (0.5 điểm):
+   * 1. Hiển thị và sửa tỷ lệ % lợi nhuận theo từng Loại sách.
+   * 2. Hiển thị và sửa tỷ lệ % lợi nhuận riêng cho từng cuốn Sách.
+   * 3. Bảng tra cứu giá vốn, % lợi nhuận, giá bán hiện tại và giá bán dự kiến.
+   */
   function renderPricing() {
     const categories = read("categories");
     const books = read("books");
+
+    // Bảng 1: Lợi nhuận theo Loại sách
     root.querySelector("#category-margin-table").innerHTML = categories.map(function (category) {
       return "<tr><td>" + escapeHtml(category.name) + "</td><td>" +
         '<input class="table-input" type="number" min="0" max="500" step="0.1" value="' + numberField(category.marginPercent) +
@@ -215,9 +294,9 @@
         escapeHtml(category.id) + '">Lưu</button></td></tr>';
     }).join("");
 
+    // Bảng 2: Lợi nhuận theo từng cuốn Sách cụ thể
     root.querySelector("#book-margin-table").innerHTML = books.map(function (book) {
       const category = categories.find(function (item) { return item.id === book.categoryId; });
-      const margin = getMargin(book, category || { marginPercent: 0 });
       return "<tr><td>" + escapeHtml(book.title) + "</td><td>" + formatMoney(book.costPrice) + "</td><td>" +
         '<input class="table-input" type="number" min="0" max="500" step="0.1" value="' +
         (book.marginPercent == null ? "" : numberField(book.marginPercent)) +
@@ -225,11 +304,14 @@
         '" aria-label="Tỷ lệ riêng cho ' + escapeHtml(book.title) + '" data-margin-book="' + escapeHtml(book.id) + '">' +
         "</td><td>" + formatMoney(book.sellingPrice) + "</td><td>" +
         formatMoney(getSellingPrice(book, category || { marginPercent: 0 })) +
-        '</td><td><button class="button button--small button--primary" type="button" data-action="save-book-margin" data-id="' +
+        '</td><td><button class="button button--small button--primary\" type=\"button\" data-action=\"save-book-margin\" data-id="' +
         escapeHtml(book.id) + '">Lưu</button></td></tr>';
     }).join("") || '<tr><td colspan="6">Chưa có sách.</td></tr>';
   }
 
+  /**
+   * Đổ danh sách sách vào ô chọn sách ở form Báo cáo Nhập-Xuất-Tồn.
+   */
   function renderInventoryOptions() {
     const books = read("books");
     const select = root.querySelector("#movement-book");
@@ -242,6 +324,11 @@
     }
   }
 
+  /**
+   * [BAREM I.8] Tính số lượng tồn kho của một cuốn sách tại MỘT THỜI ĐIỂM (asOfDate):
+   * Lọc toàn bộ lịch sử biến động kho (stockMovements) có ngày xảy ra <= thời điểm chọn:
+   * Tổng tồn = (Tổng số lượng nhập 'in') - (Tổng số lượng xuất 'out').
+   */
   function inventoryAt(bookId, asOfDate) {
     const cutoff = new Date(asOfDate + "T23:59:59.999");
     if (Number.isNaN(cutoff.getTime())) {
@@ -255,6 +342,11 @@
     }, 0);
   }
 
+  /**
+   * [BAREM I.8] QUẢN LÝ TỒN KHO & CẢNH BÁO SẮP HẾT HÀNG:
+   * 1. Tra cứu số lượng tồn của sản phẩm theo Loại tại một ngày chọn.
+   * 2. BAREM BẮT BUỘC: "Cảnh báo sản phẩm sắp hết hàng" -> Nếu tồn <= 5 cuốn, hiện nhãn đỏ "Sắp hết hàng"!
+   */
   function renderInventory(asOf, categoryId) {
     const books = read("books");
     const categories = read("categories");
@@ -270,6 +362,13 @@
     root.querySelector("#inventory-table").innerHTML = rows || '<tr><td colspan="5">Không có sản phẩm trong loại đã chọn.</td></tr>';
   }
 
+  /**
+   * [BAREM I.8] BÁO CÁO NHẬP – XUẤT – TỒN CỦA MỘT SẢN PHẨM TRONG KHOẢNG THỜI GIAN:
+   * - Tồn đầu kỳ: Tổng biến động kho trước ngày bắt đầu (fromDate).
+   * - Nhập trong kỳ: Tổng biến động 'in' (từ phiếu nhập hoàn tất) từ fromDate đến toDate.
+   * - Xuất trong kỳ: Tổng biến động 'out' (từ khách đặt hàng) từ fromDate đến toDate.
+   * - Tồn cuối kỳ = Đầu kỳ + Nhập - Xuất.
+   */
   function renderMovementReport(bookId, fromDate, toDate) {
     if (fromDate > toDate) {
       throw new Error("Ngày bắt đầu không được sau ngày kết thúc.");
@@ -280,25 +379,36 @@
       const when = new Date(movement.occurredAt);
       return movement.bookId === bookId && when <= cutoff;
     });
+
+    // 1. Tính tồn đầu kỳ
     const opening = movements.filter(function (movement) {
       return new Date(movement.occurredAt) < start;
     }).reduce(function (sum, movement) {
       const quantity = numberField(movement.quantity);
       return sum + (movement.direction === "in" ? quantity : -quantity);
     }, 0);
+
+    // 2. Lấy biến động trong kỳ
     const period = movements.filter(function (movement) {
       const when = new Date(movement.occurredAt);
       return when >= start && when <= cutoff;
     });
+
+    // 3. Tính tổng nhập và xuất trong kỳ
     const inbound = period.filter(function (movement) { return movement.direction === "in"; })
       .reduce(function (sum, movement) { return sum + numberField(movement.quantity); }, 0);
     const outbound = period.filter(function (movement) { return movement.direction === "out"; })
       .reduce(function (sum, movement) { return sum + numberField(movement.quantity); }, 0);
+
+    // 4. Hiển thị lên bảng báo cáo
     root.querySelector("#movement-table").innerHTML =
       "<tr><td>" + opening + "</td><td>" + inbound + "</td><td>" + outbound + "</td><td>" +
       (opening + inbound - outbound) + "</td><td>" + escapeHtml(fromDate) + " – " + escapeHtml(toDate) + "</td></tr>";
   }
 
+  /**
+   * Gọi hàm render lại tất cả các phần dữ liệu của catalog để đồng bộ giao diện.
+   */
   function renderAll() {
     renderCategories();
     renderBooks();
@@ -324,7 +434,11 @@
     }
   }
 
+  // ==========================================================================
+  // XỬ LÝ SỰ KIỆN CLICK VÀ THAO TÁC NÚT BẤM (BUTTON ACTIONS)
+  // ==========================================================================
   root.addEventListener("click", function (event) {
+    // 1. Chuyển tab con bên trong catalog (Loại sách, Sách, Giá bán, Tồn kho)
     const tab = event.target.closest("[data-admin-tab]");
     if (tab) {
       activeTab = tab.dataset.adminTab;
@@ -340,12 +454,14 @@
       return;
     }
 
+    // 2. Thao tác trên các nút có data-action
     const button = event.target.closest("[data-action]");
     if (!button || button.disabled) {
       return;
     }
     const id = button.dataset.id;
     try {
+      // Sửa loại sách -> điền sẵn tên & % lợi nhuận lên form
       if (button.dataset.action === "category-edit") {
         const category = read("categories").find(function (item) { return item.id === id; });
         if (!category) { throw new Error("Không tìm thấy loại sách để sửa."); }
@@ -355,13 +471,17 @@
         form.elements.marginPercent.value = category.marginPercent;
         form.querySelector("[data-submit-label]").textContent = "Lưu loại sách";
         form.elements.name.focus();
-      } else if (button.dataset.action === "category-toggle") {
+      }
+      // Ẩn / Hiện loại sách
+      else if (button.dataset.action === "category-toggle") {
         write("categories", read("categories").map(function (item) {
           return item.id === id ? Object.assign({}, item, { active: !item.active }) : item;
         }));
         renderAll();
         showMessage("Đã cập nhật trạng thái loại sách.", false);
-      } else if (button.dataset.action === "category-delete") {
+      }
+      // Xóa loại sách (chặn nếu còn sách)
+      else if (button.dataset.action === "category-delete") {
         const books = read("books");
         if (books.some(function (book) { return book.categoryId === id; })) {
           throw new Error("Không thể xóa loại đang có sách. Hãy chuyển hoặc xóa sách trước; có thể ẩn loại thay thế.");
@@ -370,7 +490,9 @@
         write("categories", read("categories").filter(function (item) { return item.id !== id; }));
         renderAll();
         showMessage("Đã xóa loại sách.", false);
-      } else if (button.dataset.action === "book-edit") {
+      }
+      // [BAREM I.4] Sửa sách -> ĐIỀN ĐÚNG THÔNG TIN HIỆN CÓ VÀO FORM
+      else if (button.dataset.action === "book-edit") {
         const book = read("books").find(function (item) { return item.id === id; });
         if (!book) { throw new Error("Không tìm thấy sách để sửa."); }
         const form = root.querySelector("#book-form");
@@ -383,6 +505,7 @@
           option.textContent = category.name + " (đã ẩn)";
           form.elements.categoryId.appendChild(option);
         }
+        // Điền tất cả giá trị cũ vào form
         Object.keys(book).forEach(function (key) {
           if (form.elements[key]) {
             form.elements[key].value = book[key] == null ? "" : book[key];
@@ -395,19 +518,25 @@
         activeTab = "books";
         root.querySelector('[data-admin-tab="books"]').click();
         form.elements.title.focus();
-      } else if (button.dataset.action === "book-toggle") {
+      }
+      // Ẩn / Hiện sách
+      else if (button.dataset.action === "book-toggle") {
         write("books", read("books").map(function (item) {
           return item.id === id ? Object.assign({}, item, { active: !item.active }) : item;
         }));
         renderAll();
         showMessage("Đã cập nhật trạng thái sách.", false);
-      } else if (button.dataset.action === "book-delete") {
+      }
+      // Xóa sách khỏi danh mục
+      else if (button.dataset.action === "book-delete") {
         if (!window.confirm("Xóa sách này khỏi dữ liệu demo?")) { return; }
         write("books", read("books").filter(function (item) { return item.id !== id; }));
         write("cart", read("cart").filter(function (item) { return item.bookId !== id; }));
         renderAll();
         showMessage("Đã xóa sách khỏi danh mục bán; lịch sử biến động kho được giữ lại.", false);
-      } else if (button.dataset.action === "save-category-margin") {
+      }
+      // Lưu tỷ lệ lợi nhuận theo Loại sách & tự động tính lại giá bán cho toàn bộ sách trong loại
+      else if (button.dataset.action === "save-category-margin") {
         const input = root.querySelector('[data-margin-category="' + CSS.escape(id) + '"]');
         const margin = Number(input.value);
         if (!Number.isFinite(margin) || margin < 0 || margin > 500) {
@@ -419,7 +548,9 @@
         updateAllSellingPrices();
         renderAll();
         showMessage("Đã lưu tỷ lệ loại và tính lại giá bán.", false);
-      } else if (button.dataset.action === "save-book-margin") {
+      }
+      // Lưu tỷ lệ lợi nhuận riêng cho từng cuốn sách & tính lại giá bán
+      else if (button.dataset.action === "save-book-margin") {
         const input = root.querySelector('[data-margin-book="' + CSS.escape(id) + '"]');
         const raw = input.value.trim();
         const margin = raw === "" ? null : Number(raw);
@@ -438,6 +569,7 @@
     }
   });
 
+  // Nút bấm làm mới biểu mẫu (reset form)
   root.addEventListener("click", function (event) {
     const reset = event.target.closest("[data-reset-form]");
     if (reset) {
@@ -446,6 +578,7 @@
     }
   });
 
+  // Sự kiện submit form thêm / sửa Loại sách
   root.querySelector("#category-form").addEventListener("submit", function (event) {
     event.preventDefault();
     const form = event.currentTarget;
@@ -476,6 +609,7 @@
     }
   });
 
+  // Xử lý khi người dùng nhập đường dẫn ảnh bằng tay
   root.querySelector("#book-image-path").addEventListener("input", function (event) {
     if (event.target.value.trim()) {
       selectedImage = event.target.value.trim();
@@ -483,6 +617,7 @@
     }
   });
 
+  // Xử lý khi người dùng chọn file ảnh từ máy (dùng FileReader chuyển thành Base64)
   root.querySelector("#book-image-file").addEventListener("change", function (event) {
     const file = event.target.files && event.target.files[0];
     if (!file) {
@@ -511,6 +646,7 @@
     reader.readAsDataURL(file);
   });
 
+  // [BAREM I.4] Sự kiện submit form thêm / sửa Sách
   root.querySelector("#book-form").addEventListener("submit", function (event) {
     event.preventDefault();
     const form = event.currentTarget;
@@ -580,6 +716,9 @@
     }
   });
 
+  /**
+   * Thêm một bản ghi vào sổ biến động kho (stockMovements) để ghi vết nhập/xuất.
+   */
   function addStockMovement(bookId, direction, quantity, referenceId) {
     const movements = read("stockMovements");
     movements.push({
@@ -593,6 +732,9 @@
     write("stockMovements", movements);
   }
 
+  /**
+   * [BAREM I.6] Tính toán lại giá bán cho TOÀN BỘ sách khi tỷ lệ lợi nhuận của Loại sách thay đổi.
+   */
   function updateAllSellingPrices() {
     const categories = read("categories");
     write("books", read("books").map(function (book) {
@@ -603,6 +745,7 @@
     }));
   }
 
+  // Sự kiện tra cứu tồn kho theo ngày
   root.querySelector("#inventory-query").addEventListener("submit", function (event) {
     event.preventDefault();
     const form = event.currentTarget;
@@ -614,6 +757,7 @@
     }
   });
 
+  // Sự kiện lọc loại sách trong báo cáo tồn kho
   root.querySelector("#inventory-category").addEventListener("change", function () {
     const date = root.querySelector('[name="asOf"]').value;
     try {
@@ -623,6 +767,7 @@
     }
   });
 
+  // Sự kiện tra cứu Báo cáo Nhập - Xuất - Tồn theo một cuốn sách trong khoảng ngày
   root.querySelector("#movement-query").addEventListener("submit", function (event) {
     event.preventDefault();
     const form = event.currentTarget;
@@ -634,6 +779,7 @@
     }
   });
 
+  // Lắng nghe sự kiện thay đổi dữ liệu từ các trang khác để tự cập nhật
   window.addEventListener("storage", function (event) {
     if (event.key && event.key.startsWith("bookstore.")) {
       try {
@@ -651,10 +797,12 @@
     }
   });
 
+  // Cung cấp API làm mới ra ngoài window
   window.BookstoreCatalogAdmin = {
     refresh: renderAll
   };
 
+  // Khởi động render dữ liệu ban đầu
   try {
     renderAll();
   } catch (error) {
