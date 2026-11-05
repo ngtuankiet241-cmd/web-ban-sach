@@ -39,7 +39,7 @@
     var offset = date.getTimezoneOffset() * 60000;
     return new Date(date.getTime() - offset).toISOString().slice(0, 10);
   }
-
+// Quy tắc chuyển trạng thái đơn hàng: Mới đặt → Đã xử lý → Đã giao, hoặc có thể hủy từ Mới đặt hoặc Đã xử lý
   function canChangeOrderStatus(oldStatus, newStatus) {
     if (oldStatus === newStatus) return true;
     if (oldStatus === "Mới đặt") return newStatus === "Đã xử lý" || newStatus === "Hủy";
@@ -176,7 +176,7 @@
       }
     }
   }
-
+// Quản lý khách hàng 
   function renderCustomers() {
     var customers = storage.getCustomers();
     var content = document.getElementById("admin-tab-content");
@@ -239,7 +239,7 @@
       }
     };
   }
-
+// Hiển thị và tìm kiếm phiếu nhập kho
   function renderReceipts() {
     var content = document.getElementById("admin-tab-content");
     var books = storage.getBooks();
@@ -292,7 +292,7 @@
       if (complete) completeReceipt(complete.dataset.completeReceipt);
     };
   }
-
+// Tạo, xem và sửa phiếu nhập kho
   function openReceiptEditor(receipt, books) {
     var editor = document.getElementById("receipt-editor");
     var isCompleted = receipt && receipt.status === "completed";
@@ -364,7 +364,7 @@
       });
     }
   }
-
+// Hoàn tất phiếu nhập kho và cập nhật tồn kho
   function completeReceipt(receiptId) {
     var receipts = storage.getReceipts();
     var receipt = receipts.find(function (item) { return item.id === receiptId; });
@@ -425,7 +425,7 @@
     var offset = date.getTimezoneOffset() * 60000;
     return new Date(date.getTime() - offset).toISOString().slice(0, 16);
   }
-
+// Hiển thị, lọc theo ngày và trạng thái
   function renderOrders() {
     var content = document.getElementById("admin-tab-content");
     var orders = storage.getOrders();
@@ -483,7 +483,7 @@
     if (status === "Hủy") return "cancelled";
     return "new";
   }
-
+// Xem chi tiết đơn hàng và thông tin khách hàng
   function openOrderDetail(orderId) {
     var order = storage.getOrders().find(function (item) { return item.id === orderId; });
     if (!order) return;
@@ -513,7 +513,7 @@
       updateOrderStatus(orderId, select.value);
     });
   }
-
+// Kiểm tra và cập nhật trạng thái đơn hàng
   function updateOrderStatus(orderId, newStatus) {
     var orders = storage.getOrders();
     var order = orders.find(function (item) { return item.id === orderId; });
