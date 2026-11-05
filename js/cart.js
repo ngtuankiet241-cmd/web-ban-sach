@@ -1,4 +1,5 @@
 (function () {
+  // Logic giỏ hàng và đặt đơn của cart.html; đồng bộ giỏ, tồn kho và đơn hàng qua storage.js.
   "use strict";
   const root = document.querySelector("#cart-app");
   if (!root) { return; }

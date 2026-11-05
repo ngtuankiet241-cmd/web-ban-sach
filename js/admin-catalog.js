@@ -1,3 +1,4 @@
+// Quản lý thể loại/sách trong admin.html; admin.js điều khiển khu vực này, storage.js lưu dữ liệu dùng chung.
 (function () {
   const root = document.querySelector("#catalog-admin");
   if (!root) {

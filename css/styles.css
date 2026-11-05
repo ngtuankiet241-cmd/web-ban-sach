@@ -1,4 +1,6 @@
-﻿:root {
+﻿/* Giao diện và thành phần dùng chung cho index.html, account.html, cart.html, admin.html.
+   cart.html nạp thêm css/cart.css cho kiểu riêng của giỏ hàng. */
+:root {
   color-scheme: light;
   font-family: "Segoe UI", Arial, sans-serif;
   color: #20251f;
@@ -22,6 +24,9 @@ a {
 }
 
 .site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -150,7 +155,6 @@ h1 {
 
 .store-hero h1 {
   margin-bottom: 1rem;
-  font-family: Georgia, "Times New Roman", serif;
   font-size: clamp(2.6rem, 6vw, 4.5rem);
   font-weight: 500;
   line-height: 1.08;
@@ -639,7 +643,6 @@ textarea:focus-visible,
 
 .book-detail__content h2 {
   margin: 0.2rem 0 0.5rem;
-  font-family: Georgia, "Times New Roman", serif;
   font-size: 1.8rem;
   font-weight: 500;
 }
