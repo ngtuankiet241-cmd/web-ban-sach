@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Giỏ hàng | Hiệu sách của nhóm</title>
+  <title>Giỏ hàng | Bookabook</title>
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/cart.css">
   <script src="js/data.js" defer></script>
@@ -13,7 +13,7 @@
 </head>
 <body>
   <header class="site-header">
-    <a class="brand" href="index.html">Hiệu sách của nhóm</a>
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">B</span> Bookabook</a>
     <nav aria-label="Điều hướng chính">
       <a href="index.html">Cửa hàng</a>
       <a href="admin.html">Quản trị</a>
@@ -27,7 +27,7 @@
     <p class="form-message form-message--error" data-storage-error role="alert" hidden></p>
     <div id="cart-alert" role="alert" hidden></div>
 
-    <!-- Chưa đăng nhập hoặc tài khoản bị khóa -->
+
     <section class="panel" id="login-required" hidden>
       <h2 id="login-title">Bạn cần đăng nhập</h2>
       <p id="login-text">Giỏ hàng chỉ dùng được sau khi đăng ký và đăng nhập tài khoản khách hàng.</p>
@@ -47,7 +47,7 @@
           <li>Xem lại đơn hàng</li>
         </ol>
 
-        <!-- Bước 1 -->
+
         <section class="panel" id="step-1">
           <h2>Sản phẩm trong giỏ</h2>
           <p id="cart-empty" hidden>Giỏ hàng đang trống. <a href="index.html">Chọn sách để mua</a>.</p>
@@ -64,7 +64,7 @@
           </div>
         </section>
 
-        <!-- Bước 2 -->
+
         <form class="panel" id="step-2" novalidate hidden>
           <h2>Địa chỉ nhận hàng</h2>
           <div id="addr-list"></div>
@@ -87,7 +87,7 @@
           <label class="choice"><input type="radio" name="pay" value="cash" checked> Tiền mặt khi nhận hàng</label>
           <label class="choice"><input type="radio" name="pay" value="transfer"> Chuyển khoản ngân hàng</label>
           <div class="note" id="pay-transfer" hidden>
-            Chuyển đến: <strong>NH Demo – STK 0123456789 – Hiệu sách của nhóm</strong>. Nội dung: mã đơn hàng (hiển thị sau khi đặt).
+            Chuyển đến: <strong>NH Demo – STK 0123456789 – Bookabook</strong>. Nội dung: mã đơn hàng (hiển thị sau khi đặt).
           </div>
           <label class="choice"><input type="radio" name="pay" value="online"> Thanh toán trực tuyến</label>
           <div class="note" id="pay-online" hidden>
@@ -104,7 +104,7 @@
           </div>
         </form>
 
-        <!-- Bước 3 -->
+
         <section class="panel" id="step-3" hidden>
           <h2>Xem lại đơn hàng</h2>
           <div id="review"></div>
@@ -114,7 +114,7 @@
           </div>
         </section>
 
-        <!-- Hoàn tất -->
+
         <section class="panel" id="step-done" hidden>
           <h2>Đặt hàng thành công</h2>
           <p id="done-text"></p>
@@ -131,6 +131,6 @@
       </section>
     </div>
   </main>
-  <footer class="site-footer">Đồ án nhóm · <span data-current-year></span></footer>
+  <footer class="site-footer">Bookabook · Đồ án nhóm · <span data-current-year></span></footer>
 </body>
 </html>
