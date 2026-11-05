@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
   const prefix = "bookstore.";
 
   function storage() {
@@ -39,6 +39,32 @@
         write(name, window.BookstoreSeed[name]);
       }
     });
+
+    // Tự động đồng bộ ảnh bìa mới cho các cuốn sách seed nếu đang dùng ảnh SVG demo cũ
+    try {
+      const existingBooks = read("books");
+      if (Array.isArray(existingBooks) && window.BookstoreSeed && Array.isArray(window.BookstoreSeed.books)) {
+        let hasChanges = false;
+        const seedMap = new Map();
+        window.BookstoreSeed.books.forEach(function (b) {
+          seedMap.set(b.id, b.image);
+        });
+        existingBooks.forEach(function (book) {
+          if (seedMap.has(book.id) && typeof book.image === "string" && book.image.indexOf("data:image/svg+xml") === 0) {
+            const freshImage = seedMap.get(book.id);
+            if (book.image !== freshImage) {
+              book.image = freshImage;
+              hasChanges = true;
+            }
+          }
+        });
+        if (hasChanges) {
+          write("books", existingBooks);
+        }
+      }
+    } catch (ignore) {
+      // Bỏ qua nếu môi trường kiểm thử không có localStorage
+    }
   }
 
   function update(name, updater) {

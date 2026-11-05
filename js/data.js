@@ -81,23 +81,48 @@
     }
   ];
 
+  function wrapTitle(text, maxChars) {
+    var words = String(text || "").trim().split(/\s+/);
+    var lines = [];
+    var current = "";
+    for (var i = 0; i < words.length; i++) {
+      var word = words[i];
+      if (!current) {
+        current = word;
+      } else if ((current + " " + word).length <= maxChars) {
+        current += " " + word;
+      } else {
+        lines.push(current);
+        current = word;
+      }
+    }
+    if (current) lines.push(current);
+    return lines;
+  }
+
   function makeCover(book) {
-    const safeTitle = book.title
+    var lines = wrapTitle(book.title, 15);
+    var startY = lines.length === 1 ? 135 : lines.length === 2 ? 120 : 105;
+    var titleSvg = lines.slice(0, 3).map(function (line, index) {
+      var escaped = line
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+      return '<tspan x="50%" dy="' + (index === 0 ? 0 : 26) + '">' + escaped + "</tspan>";
+    }).join("");
+
+    var safeAuthor = (book.author || "")
       .replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;");
-    const titleLines = safeTitle.match(/.{1,18}/g) || [safeTitle];
-    const titleSvg = titleLines.slice(0, 3).map(function (line, index) {
-      return '<tspan x="50%" dy="' + (index === 0 ? 0 : 25) + '">' + line + "</tspan>";
-    }).join("");
-    const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 320">' +
+
+    var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 320">' +
       '<rect width="240" height="320" rx="8" fill="' + book.cover + '"/>' +
       '<rect x="14" y="14" width="212" height="292" rx="4" fill="none" stroke="#fff" stroke-opacity=".62"/>' +
       '<path d="M25 42h18v236H25z" fill="#243b32" fill-opacity=".22"/>' +
-      '<text x="50%" y="122" text-anchor="middle" fill="#fffdf5" font-family="Georgia,serif" font-size="21" font-weight="700">' + titleSvg + "</text>" +
-      '<text x="50%" y="255" text-anchor="middle" fill="#fffdf5" font-family="Arial,sans-serif" font-size="13">' +
-      book.author.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") + "</text>" +
-      '<text x="50%" y="286" text-anchor="middle" fill="#fffdf5" font-family="Arial,sans-serif" font-size="11" letter-spacing="3">HIEU SACH</text>' +
+      '<text x="50%" y="' + startY + '" text-anchor="middle" fill="#fffdf5" font-family="Cambria, \'Times New Roman\', serif" font-size="20" font-weight="700">' + titleSvg + "</text>" +
+      '<text x="50%" y="255" text-anchor="middle" fill="#fffdf5" font-family="Cambria, \'Times New Roman\', serif" font-size="13">' + safeAuthor + "</text>" +
+      '<text x="50%" y="286" text-anchor="middle" fill="#fffdf5" font-family="Arial,sans-serif" font-size="11" letter-spacing="3">BOOKABOOK</text>' +
       "</svg>";
     return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
   }

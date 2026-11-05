@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
   "use strict";
 
   var storage = window.Bookstore || window.BookStoreStorage;
@@ -57,6 +57,9 @@
   }
 
   function renderLogin() {
+    if (catalog && catalog.parentElement && catalog.parentElement !== app.parentElement) {
+      app.after(catalog);
+    }
     setCatalogVisible(false);
     app.innerHTML =
       '<section class="panel admin-login">' +
@@ -82,19 +85,27 @@
   }
 
   function renderAdmin() {
-    setCatalogVisible(true);
     app.innerHTML =
       '<section class="admin-shell">' +
         '<aside class="admin-nav panel">' +
           "<h2>Danh mục quản trị</h2>" +
           '<button class="admin-tab active" data-tab="customers">Khách hàng</button>' +
+          '<button class="admin-tab" data-tab="categories">Loại sách</button>' +
+          '<button class="admin-tab" data-tab="books">Sản phẩm (Sách)</button>' +
           '<button class="admin-tab" data-tab="receipts">Phiếu nhập</button>' +
+          '<button class="admin-tab" data-tab="pricing">Giá bán</button>' +
           '<button class="admin-tab" data-tab="orders">Đơn hàng</button>' +
+          '<button class="admin-tab" data-tab="inventory">Tồn kho</button>' +
           '<button class="button danger" id="admin-reset-demo" type="button">Khôi phục dữ liệu demo</button>' +
           '<button class="button" id="admin-logout" type="button">Đăng xuất</button>' +
         "</aside>" +
         '<div class="admin-content panel"><div id="admin-tab-content"></div></div>' +
       "</section>";
+
+    var adminContent = app.querySelector(".admin-content");
+    if (adminContent && catalog) {
+      adminContent.appendChild(catalog);
+    }
 
     app.querySelectorAll(".admin-tab").forEach(function (button) {
       button.addEventListener("click", function () {
@@ -104,14 +115,32 @@
       });
     });
 
+    if (catalog) {
+      catalog.addEventListener("click", function (e) {
+        var tabBtn = e.target.closest("[data-admin-tab]");
+        if (tabBtn) {
+          var targetTab = tabBtn.dataset.adminTab;
+          app.querySelectorAll(".admin-tab").forEach(function (item) {
+            item.classList.toggle("active", item.dataset.tab === targetTab);
+          });
+        }
+      });
+    }
+
     document.getElementById("admin-logout").addEventListener("click", function () {
       sessionStorage.removeItem(sessionKey);
+      if (catalog && catalog.parentElement && catalog.parentElement !== app.parentElement) {
+        app.after(catalog);
+      }
       renderLogin();
     });
 
     document.getElementById("admin-reset-demo").addEventListener("click", function () {
       if (window.confirm("Khôi phục toàn bộ dữ liệu demo? Các thay đổi hiện tại sẽ bị mất.")) {
         storage.resetDemoData();
+        app.querySelectorAll(".admin-tab").forEach(function (item) {
+          item.classList.toggle("active", item.dataset.tab === "customers");
+        });
         renderTab("customers");
         showMessage("Đã khôi phục dữ liệu demo.", "success");
       }
@@ -121,9 +150,31 @@
   }
 
   function renderTab(tab) {
-    if (tab === "customers") renderCustomers();
-    if (tab === "receipts") renderReceipts();
-    if (tab === "orders") renderOrders();
+    var tabContent = document.getElementById("admin-tab-content");
+    if (!tabContent) return;
+
+    if (tab === "customers") {
+      setCatalogVisible(false);
+      tabContent.hidden = false;
+      renderCustomers();
+    } else if (tab === "receipts") {
+      setCatalogVisible(false);
+      tabContent.hidden = false;
+      renderReceipts();
+    } else if (tab === "orders") {
+      setCatalogVisible(false);
+      tabContent.hidden = false;
+      renderOrders();
+    } else {
+      tabContent.hidden = true;
+      setCatalogVisible(true);
+      if (catalog) {
+        var subTab = catalog.querySelector('[data-admin-tab="' + tab + '"]');
+        if (subTab) {
+          subTab.click();
+        }
+      }
+    }
   }
 
   function renderCustomers() {
