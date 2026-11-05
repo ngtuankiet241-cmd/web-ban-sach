@@ -1,3 +1,4 @@
+// Đăng ký, đăng nhập, hồ sơ và lịch sử mua cho account.html; chia sẻ khách/đơn với các trang qua storage.js.
 (function () {
   const authView = document.querySelector("[data-auth-view]");
   const dashboardView = document.querySelector("[data-dashboard-view]");
@@ -43,6 +44,10 @@
     element.textContent = message || "";
     element.classList.toggle("is-error", type === "error");
     element.classList.toggle("is-success", type === "success");
+  }
+
+  function isValidPhone(value) {
+    return /^0\d{9}$/.test(String(value || "").trim());
   }
 
   function showStorageError(error) {
@@ -212,13 +217,12 @@
     const email = String(formData.get("email") || "").trim().toLowerCase();
     const password = String(formData.get("password") || "");
     const confirmPassword = String(formData.get("confirmPassword") || "");
-
     if (password !== confirmPassword) {
       setMessage(authMessage, "Mật khẩu nhập lại chưa khớp.", "error");
       return;
     }
-    if (phone.replace(/\D/g, "").length < 8) {
-      setMessage(authMessage, "Vui lòng nhập số điện thoại hợp lệ.", "error");
+    if (!isValidPhone(phone)) {
+      setMessage(authMessage, "Số điện thoại phải gồm đúng 10 chữ số và bắt đầu bằng số 0.", "error");
       return;
     }
 
@@ -254,9 +258,8 @@
     const name = String(formData.get("name") || "").trim();
     const email = String(formData.get("email") || "").trim().toLowerCase();
     const phone = String(formData.get("phone") || "").trim();
-
-    if (phone.replace(/\D/g, "").length < 8) {
-      setMessage(profileMessage, "Vui lòng nhập số điện thoại hợp lệ.", "error");
+    if (!isValidPhone(phone)) {
+      setMessage(profileMessage, "Số điện thoại phải gồm đúng 10 chữ số và bắt đầu bằng số 0.", "error");
       return;
     }
 
