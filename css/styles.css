@@ -35,6 +35,9 @@ a {
 THANH ĐIỀU HƯỚNG CHUNG (SITE HEADER & BOOKABOOK BRAND)
  */
 .site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
