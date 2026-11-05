@@ -150,7 +150,7 @@ h1 {
 
 .store-hero h1 {
   margin-bottom: 1rem;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: Cambria, "Times New Roman", serif;
   font-size: clamp(2.6rem, 6vw, 4.5rem);
   font-weight: 500;
   line-height: 1.08;
@@ -296,7 +296,7 @@ textarea:focus-visible,
 
 .section-heading h2 {
   margin: 0;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: Cambria, "Times New Roman", serif;
   font-size: clamp(1.8rem, 4vw, 2.5rem);
   font-weight: 500;
 }
@@ -453,7 +453,7 @@ textarea:focus-visible,
   border-radius: 0.3rem 0.7rem 0.7rem 0.3rem;
   color: #fff;
   background: #345b45;
-  font-family: Georgia, serif;
+  font-family: Cambria, serif;
   font-size: 3rem;
   box-shadow: 8px 8px 12px rgb(0 0 0 / 15%);
 }
@@ -639,7 +639,7 @@ textarea:focus-visible,
 
 .book-detail__content h2 {
   margin: 0.2rem 0 0.5rem;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: Cambria, "Times New Roman", serif;
   font-size: 1.8rem;
   font-weight: 500;
 }
@@ -1752,4 +1752,16 @@ th {
     align-items: flex-start;
     flex-direction: column;
   }
+}
+
+/* Gộp thanh điều hướng Admin thống nhất */
+.admin-content .admin-catalog {
+  border: none;
+  padding: 0;
+  box-shadow: none;
+  background: transparent;
+}
+
+.admin-content .admin-catalog > .admin-tabs {
+  display: none;
 }

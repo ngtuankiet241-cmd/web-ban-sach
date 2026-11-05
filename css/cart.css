@@ -176,4 +176,3 @@ summary {
     cursor: pointer; 
 }
 
-@media (max-width: 600px) { .grid, .note { margin-left: 0; } }
