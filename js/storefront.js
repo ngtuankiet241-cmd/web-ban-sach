@@ -1,4 +1,3 @@
-// Logic cửa hàng của index.html; đọc sách/thể loại và lưu thao tác mua qua API trong storage.js.
 (function () {
   const pageSize = 8;
   const state = { page: 1, books: [], categories: [], filters: null, sort: "featured" };

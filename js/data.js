@@ -1,4 +1,3 @@
-// Dữ liệu mẫu cho cửa hàng, tài khoản, giỏ hàng và quản trị; storage.js dùng BookstoreSeed để khởi tạo localStorage.
 (function () {
   const categorySeed = [
     { id: "van-hoc", name: "Văn học", active: true, marginPercent: 30 },
@@ -83,46 +82,19 @@
   ];
 
   function makeCover(book) {
-    const safeTitle = String(book.title || "")
+    const safeTitle = book.title
       .replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;");
-    const titleLines = [];
-    String(book.title || "").trim().split(/\s+/).forEach(function (word) {
-      let remaining = word;
-      while (remaining.length > 18) {
-        if (titleLines.length && titleLines[titleLines.length - 1].length < 18) {
-          const available = 18 - titleLines[titleLines.length - 1].length - 1;
-          if (available > 0) {
-            titleLines[titleLines.length - 1] += " " + remaining.slice(0, available);
-            remaining = remaining.slice(available);
-            continue;
-          }
-        }
-        titleLines.push(remaining.slice(0, 18));
-        remaining = remaining.slice(18);
-      }
-
-      const lastLine = titleLines[titleLines.length - 1];
-      if (lastLine && lastLine.length + remaining.length + 1 <= 18) {
-        titleLines[titleLines.length - 1] += " " + remaining;
-      } else if (remaining) {
-        titleLines.push(remaining);
-      }
-    });
-    const lines = titleLines.length ? titleLines : [safeTitle];
-    const titleSvg = lines.slice(0, 3).map(function (line, index) {
-      const safeLine = line
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;");
-      return '<tspan x="50%" dy="' + (index === 0 ? 0 : 25) + '">' + safeLine + "</tspan>";
+    const titleLines = safeTitle.match(/.{1,18}/g) || [safeTitle];
+    const titleSvg = titleLines.slice(0, 3).map(function (line, index) {
+      return '<tspan x="50%" dy="' + (index === 0 ? 0 : 25) + '">' + line + "</tspan>";
     }).join("");
     const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 320">' +
       '<rect width="240" height="320" rx="8" fill="' + book.cover + '"/>' +
       '<rect x="14" y="14" width="212" height="292" rx="4" fill="none" stroke="#fff" stroke-opacity=".62"/>' +
       '<path d="M25 42h18v236H25z" fill="#243b32" fill-opacity=".22"/>' +
-      '<text x="50%" y="122" text-anchor="middle" fill="#fffdf5" font-family="Arial,sans-serif" font-size="21" font-weight="700">' + titleSvg + "</text>" +
+      '<text x="50%" y="122" text-anchor="middle" fill="#fffdf5" font-family="Georgia,serif" font-size="21" font-weight="700">' + titleSvg + "</text>" +
       '<text x="50%" y="255" text-anchor="middle" fill="#fffdf5" font-family="Arial,sans-serif" font-size="13">' +
       book.author.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") + "</text>" +
       '<text x="50%" y="286" text-anchor="middle" fill="#fffdf5" font-family="Arial,sans-serif" font-size="11" letter-spacing="3">HIEU SACH</text>' +

@@ -1,5 +1,4 @@
-﻿// API dữ liệu dùng chung; cần data.js chạy trước và được dùng bởi các module chức năng của cả bốn trang.
-(function () {
+﻿(function () {
   const prefix = "bookstore.";
 
   function storage() {
@@ -40,29 +39,6 @@
         write(name, window.BookstoreSeed[name]);
       }
     });
-
-    const books = read("books", []);
-    let coversUpdated = false;
-    books.forEach(function (book) {
-      const seedBook = window.BookstoreSeed.books.find(function (seed) {
-        return seed.id === book.id && seed.title === book.title && seed.author === book.author;
-      });
-      const imagePrefix = "data:image/svg+xml;charset=utf-8,";
-      if (!seedBook || typeof book.image !== "string" || book.image.indexOf(imagePrefix) !== 0) {
-        return;
-      }
-
-      const svg = decodeURIComponent(book.image.slice(imagePrefix.length));
-      if (svg.includes('font-family="Georgia,serif"') &&
-          svg.includes('viewBox="0 0 240 320"') &&
-          svg.includes(">HIEU SACH</text>")) {
-        book.image = seedBook.image;
-        coversUpdated = true;
-      }
-    });
-    if (coversUpdated) {
-      write("books", books);
-    }
   }
 
   function update(name, updater) {

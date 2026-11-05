@@ -1,5 +1,4 @@
-﻿// Đăng nhập và các nghiệp vụ quản trị trong admin.html; cùng admin-catalog.js thao tác dữ liệu qua storage.js.
-(function () {
+﻿(function () {
   "use strict";
 
   var storage = window.Bookstore || window.BookStoreStorage;
