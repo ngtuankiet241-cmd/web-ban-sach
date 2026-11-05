@@ -1,4 +1,6 @@
 <!doctype html>
+<!-- Trang tài khoản khách hàng; dùng css/styles.css và các JS chung cùng js/account.js.
+     Chia sẻ dữ liệu qua js/storage.js với index.html, cart.html và admin.html. -->
 <html lang="vi">
 <head>
   <meta charset="utf-8">
@@ -66,7 +68,7 @@
             <input id="register-name" name="name" type="text" autocomplete="name" minlength="2" maxlength="80" placeholder="Nguyễn Văn An" required>
           </label>
           <label for="register-phone">Số điện thoại
-            <input id="register-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" minlength="8" maxlength="20" placeholder="090 123 4567" required>
+            <input id="register-phone" name="phone" type="tel" autocomplete="tel" inputmode="numeric" placeholder="0901234567" required>
           </label>
           <label class="account-form__wide" for="register-email">Địa chỉ email
             <input id="register-email" name="email" type="email" autocomplete="email" maxlength="120" placeholder="ban@email.com" required>
@@ -133,7 +135,7 @@
               <input id="profile-email" name="email" type="email" autocomplete="email" maxlength="120" required>
             </label>
             <label for="profile-phone">Số điện thoại
-              <input id="profile-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" minlength="8" maxlength="20" required>
+              <input id="profile-phone" name="phone" type="tel" autocomplete="tel" inputmode="numeric" required>
             </label>
             <button class="button button--primary" type="submit">Lưu thay đổi</button>
           </form>
