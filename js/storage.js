@@ -1,7 +1,5 @@
 /**
- * ==============================================================================
- * BOOKABOOK - MÔ-ĐUN QUẢN LÝ DỮ LIỆU CỤC BỘ (LOCAL STORAGE)
- * ==============================================================================
+ * MÔ-ĐUN QUẢN LÝ DỮ LIỆU CỤC BỘ (LOCAL STORAGE)
  * Dành cho sinh viên năm nhất:
  * - Trong môn "Lập trình web và ứng dụng", đồ án là Clickable Prototype chạy offline.
  * - Website không dùng Database hay Backend thật (như MySQL/NodeJS/PHP), mà toàn bộ
@@ -10,7 +8,6 @@
  * - LocalStorage chỉ lưu được dữ liệu dạng chuỗi (String), nên:
  *     + Khi lưu (write): Phải dùng `JSON.stringify(object)` để biến Object thành chuỗi.
  *     + Khi đọc (read): Phải dùng `JSON.parse(string)` để biến chuỗi thành Object.
- * ==============================================================================
  */
 
 (function () {
@@ -128,8 +125,7 @@
 
   /**
    * KHÔI PHỤC DỮ LIỆU GỐC (RESET DEMO)
-   * Ghi đè toàn bộ dữ liệu trong LocalStorage bằng dữ liệu ban đầu trong data.js.
-   * Rất hữu ích khi demo cho thầy cô xem xong muốn đưa dữ liệu về như mới.
+   * Ghi đè toàn bộ dữ liệu trong LocalStorage bằng dữ liệu ban đầu trong data.js
    */
   function resetDemoData() {
     Object.keys(window.BookstoreSeed).forEach(function (name) {

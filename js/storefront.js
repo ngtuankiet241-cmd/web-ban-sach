@@ -1,10 +1,6 @@
 /**
- * ==============================================================================
  * BOOKABOOK - MÔ-ĐUN CỬA HÀNG TRANG CHỦ (STOREFRONT / CATALOG)
- * ==============================================================================
- * Phụ trách bởi: Nguyễn Tấn Kiệt (MSSV 3124410175 - Trưởng nhóm 9)
- * 
- * BAREM ĐỒ ÁN MÔN LẬP TRÌNH WEB VÀ ỨNG DỤNG:
+ 
  * - [BAREM II.1] TRANG CHỦ & DANH MỤC SẢN PHẨM:
  *     + Hiển thị danh mục sách theo dạng lưới (Grid), phân trang (8 cuốn/trang).
  *     + Mỗi thẻ sách hiển thị: Bìa sách, tên sách, tác giả, thể loại, giá bán, số lượng tồn.
@@ -19,7 +15,6 @@
  *     + Kiểm tra trạng thái đăng nhập: Khách hàng phải đăng nhập mới được thêm giỏ.
  *     + Kiểm tra số lượng tồn kho: Không cho thêm quá số lượng sách có sẵn trong kho.
  *     + Cập nhật badge số lượng giỏ hàng trên thanh Menu Header.
- * ==============================================================================
  */
 
 (function () {
@@ -403,9 +398,7 @@
     }
   }
 
-  // ==============================================================================
   // GẮN CÁC SỰ KIỆN TƯƠNG TÁC (EVENT LISTENERS)
-  // ==============================================================================
 
   /**
    * [BAREM II.2] SỰ KIỆN SUBMIT FORM TÌM KIẾM VÀ LỌC NÂNG CAO
@@ -420,7 +413,7 @@
 
     // Kiểm tra tính hợp lệ của khoảng giá
     if ((minPrice !== null && (!Number.isFinite(minPrice) || minPrice < 0)) ||
-        (maxPrice !== null && (!Number.isFinite(maxPrice) || maxPrice < 0))) {
+      (maxPrice !== null && (!Number.isFinite(maxPrice) || maxPrice < 0))) {
       announce("Khoảng giá phải là số không âm.");
       return;
     }

@@ -1,41 +1,10 @@
 ﻿/**
- * ==============================================================================
- * BOOKABOOK - BẢNG ĐẶC TẢ GIAO DIỆN VÀ PHONG CÁCH (CSS STYLESHEET)
- * ==============================================================================
- * Dành cho sinh viên năm nhất môn "Lập trình web và ứng dụng":
- * 
- * 1. Triết lý thiết kế (Pure Vanilla CSS):
- *    - Toàn bộ giao diện được viết bằng CSS thuần hiện đại (không dùng thư viện ngoài
- *      như Bootstrap hay Tailwind), tải nhanh và tương thích hoàn toàn trên Google Chrome.
  *    - Bố cục giao diện sử dụng:
  *        + CSS Flexbox (display: flex): Dùng cho thanh Menu Header, phân bố khoảng cách các nút.
  *        + CSS Grid (display: grid): Dùng cho Lưới sách (Book Grid), chia cột bảng quản trị.
- *        + CSS Clamp (font-size: clamp(...)): Kích cỡ tiêu đề tự co giãn theo độ rộng màn hình.
- * 
- * 2. Phông chữ (Typography):
- *    - Tiêu đề chính, tên sách, bìa sách: Font có chân 'Cambria, Times New Roman, serif'
- *      tạo vẻ đẹp cổ điển, sang trọng của nhà sách và hỗ trợ tiếng Việt có dấu hoàn hảo.
- *    - Nội dung bài viết, bảng biểu, nút bấm: Font không chân 'Segoe UI, Arial, sans-serif'
- *      rõ nét, hiện đại, dễ đọc trên mọi thiết bị.
- * 
- * 3. Mục lục các phân vùng CSS:
- *    [PHẦN 1] THIẾT LẬP CƠ BẢN (RESET, ROOT VARIABLES, TYPOGRAPHY)
- *    [PHẦN 2] THANH ĐIỀU HƯỚNG CHUNG (SITE HEADER & BOOKABOOK BRAND)
- *    [PHẦN 3] BANNER TRANG CHỦ (HERO BANNER & SLOGAN CUỐN SÁCH 3D)
- *    [PHẦN 4] BỘ LỌC TÌM KIẾM TRANG CHỦ (CATALOG FILTER & TOOLBAR)
- *    [PHẦN 5] LƯỚI SẢN PHẨM & THẺ SÁCH (BOOK GRID & BOOK CARD)
- *    [PHẦN 6] THANH NÚT PHÂN TRANG (PAGINATION)
- *    [PHẦN 7] HỘP THOẠI MODAL XEM CHI TIẾT SÁCH (BOOK DETAIL DIALOG)
- *    [PHẦN 8] MODULE QUẢN TRỊ DANH MỤC & THỂ LOẠI (ADMIN CATALOG & TABS)
- *    [PHẦN 9] KHUNG ĐIỀU HƯỚNG QUẢN TRỊ VIÊN & SIDEBAR (ADMIN SHELL)
- *    [PHẦN 10] TRANG TÀI KHOẢN KHÁCH HÀNG (ACCOUNT LOGIN, REGISTER, PROFILE, ORDERS)
- *    [PHẦN 11] THIẾT KẾ ĐÁP ỨNG MÀN HÌNH (RESPONSIVE MEDIA QUERIES)
- * ==============================================================================
- */
+ *        + CSS Clamp (font-size: clamp(...)): Kích cỡ tiêu đề tự co giãn theo độ rộng màn hình.*/
 
-/* ==============================================================================
- * [PHẦN 1] THIẾT LẬP CƠ BẢN (RESET, ROOT VARIABLES, TYPOGRAPHY)
- * ============================================================================== */
+/*  THIẾT LẬP CƠ BẢN (RESET, ROOT VARIABLES, TYPOGRAPHY)*/
 :root {
   color-scheme: light;
   font-family: "Segoe UI", Arial, sans-serif;
@@ -49,20 +18,22 @@
   box-sizing: border-box;
 }
 
+/* Thân trang web: chiều cao tối thiểu 100vh để luôn chiếm trọn màn hình, không bị hở đáy */
 body {
   min-width: 320px;
   min-height: 100vh;
   margin: 0;
 }
 
+/* Thẻ liên kết: kế thừa màu chữ của phần tử cha để giữ phong cách đồng bộ */
 a {
   color: inherit;
 }
 
 
-/* ==============================================================================
- * [PHẦN 2] THANH ĐIỀU HƯỚNG CHUNG (SITE HEADER & BOOKABOOK BRAND)
- * ============================================================================== */
+/* 
+THANH ĐIỀU HƯỚNG CHUNG (SITE HEADER & BOOKABOOK BRAND)
+ */
 .site-header {
   display: flex;
   flex-wrap: wrap;
@@ -74,6 +45,7 @@ a {
   border-bottom: 1px solid #e5e3da;
 }
 
+/* Logo thương hiệu Bookabook: chữ in đậm, kích thước 1.1rem, màu xanh lá đậm sang trọng */
 .brand {
   color: #345b45;
   font-size: 1.1rem;
@@ -81,12 +53,14 @@ a {
   text-decoration: none;
 }
 
+/* Khung chứa các liên kết menu: dùng Flexbox xếp ngang, khoảng cách giữa các mục là 0.5rem */
 nav {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
 }
 
+/* Các nút liên kết trên menu: có khoảng đệm padding để người dùng dễ bấm, bo góc tròn */
 nav a {
   padding: 0.5rem 0.7rem;
   border-radius: 0.4rem;
@@ -94,16 +68,19 @@ nav a {
 }
 
 nav a:hover,
+/* Hiệu ứng đổi màu nền khi rê chuột vào menu hoặc khi đang ở trang hiện tại */
 nav a[aria-current="page"] {
   color: #234531;
   background: #eaf1eb;
 }
 
+/* Khung bố cục chính ở các trang con: giới hạn độ rộng tối đa 900px và căn giữa màn hình */
 .page {
   width: min(100% - 2rem, 900px);
   margin: 3.5rem auto;
 }
 
+/* Dòng chữ phụ nhỏ ở đầu tiêu đề: màu xanh lá nhạt, tạo điểm nhấn phân cấp thị giác */
 .eyebrow {
   margin-bottom: 0.4rem;
   color: #557361;
@@ -111,11 +88,13 @@ nav a[aria-current="page"] {
   font-weight: 600;
 }
 
+/* Tiêu đề lớn cấp 1: sử dụng hàm clamp() để cỡ chữ tự co giãn mượt mà theo độ rộng màn hình */
 h1 {
   margin-top: 0;
   font-size: clamp(2rem, 5vw, 3rem);
 }
 
+/* Khung khối nội dung nền trắng, có viền mờ bo góc 0.8rem tạo cảm giác thẻ nổi sạch sẽ */
 .panel {
   padding: 1.5rem;
   border: 1px solid #e5e3da;
@@ -123,20 +102,24 @@ h1 {
   background: #fff;
 }
 
+/* Tiêu đề cấp 2 bên trong khối panel: xóa lề trên để nội dung gọn gàng */
 .panel h2 {
   margin-top: 0;
 }
 
+/* Màu chữ xám nhạt dùng cho các đoạn mô tả phụ, thông tin ngày giờ, số lượng */
 .muted {
   color: #68716b;
 }
 
+/* Chân trang web (Footer): căn giữa màn hình, viền mờ, chữ màu xám trang nhã */
 .site-footer {
   padding: 1.5rem;
   color: #68716b;
   text-align: center;
 }
 
+/* Khối biểu tượng chữ B đại diện cho thương hiệu Bookabook */
 .brand-mark {
   display: inline-grid;
   width: 2rem;
@@ -148,9 +131,8 @@ h1 {
 }
 
 
-/* ==============================================================================
- * [PHẦN 3] BANNER TRANG CHỦ (HERO BANNER & SLOGAN CUỐN SÁCH 3D)
- * ============================================================================== */
+/* BANNER TRANG CHỦ (HERO BANNER & SLOGAN CUỐN SÁCH 3D)
+*/
 .store-hero {
   position: relative;
   display: flex;
@@ -164,6 +146,7 @@ h1 {
 }
 
 .store-hero::before,
+/* Các họa tiết vòng tròn ánh sáng mờ trang trí phía sau banner */
 .store-hero::after {
   position: absolute;
   width: 300px;
@@ -173,11 +156,13 @@ h1 {
   content: "";
 }
 
+/* Các họa tiết vòng tròn ánh sáng mờ trang trí phía sau banner */
 .store-hero::before {
   top: -190px;
   right: 12%;
 }
 
+/* Các họa tiết vòng tròn ánh sáng mờ trang trí phía sau banner */
 .store-hero::after {
   right: 2%;
   bottom: -240px;
@@ -185,15 +170,18 @@ h1 {
   height: 420px;
 }
 
+/* Khối chứa văn bản giới thiệu và slogan của nhà sách Bookabook */
 .store-hero__content {
   z-index: 1;
   max-width: 560px;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện store-hero */
 .store-hero .eyebrow {
   color: #d7e5d7;
 }
 
+/* Tiêu đề slogan "Mỗi trang sách, một thế giới mới" dùng font Cambria cổ điển sang trọng */
 .store-hero h1 {
   margin-bottom: 1rem;
   font-family: Cambria, "Times New Roman", serif;
@@ -202,13 +190,15 @@ h1 {
   line-height: 1.08;
 }
 
-.store-hero__content > p:not(.eyebrow) {
+/* Định dạng kiểu dáng cho thành phần giao diện store-hero__content */
+.store-hero__content>p:not(.eyebrow) {
   max-width: 430px;
   color: #e3ebe1;
   font-size: 1.1rem;
   line-height: 1.7;
 }
 
+/* Nút bấm tiêu chuẩn: bo góc, chữ in đậm, có chuyển động êm khi bấm hoặc rê chuột */
 .button {
   display: inline-flex;
   min-height: 2.7rem;
@@ -225,6 +215,7 @@ h1 {
   transition: background-color 140ms ease, transform 140ms ease;
 }
 
+/* Hiệu ứng khi rê chuột vào nút bấm: đổi màu nền nhẹ nhàng tạo phản hồi thị giác */
 .button:hover:not(:disabled) {
   transform: translateY(-1px);
 }
@@ -235,52 +226,62 @@ select:focus-visible,
 textarea:focus-visible,
 .text-button:focus-visible,
 .book-card__cover:focus-visible,
+/* Định dạng kiểu dáng cho thành phần giao diện pagination__button */
 .pagination__button:focus-visible {
   outline: 3px solid #d6a64f;
   outline-offset: 2px;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện button */
 .button:disabled {
   cursor: not-allowed;
   opacity: 0.55;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện button--light */
 .button--light {
   margin-top: 0.75rem;
   color: #2e523d;
   background: #fffdf5;
 }
 
+/* Nút bấm hành động chính (Primary): nền xanh lá rêu sang trọng, chữ trắng nổi bật */
 .button--primary {
   color: #fff;
   background: #345b45;
 }
 
+/* Nút bấm hành động chính (Primary): nền xanh lá rêu sang trọng, chữ trắng nổi bật */
 .button--primary:hover:not(:disabled) {
   background: #284936;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện button--quiet */
 .button--quiet {
   color: #345b45;
   background: #edf2ed;
 }
 
+/* Nút bấm cảnh báo nguy hiểm (Danger): màu đỏ dùng cho thao tác xóa dữ liệu, khóa tài khoản */
 .button--danger {
   color: #8d3434;
   background: #fff0ef;
 }
 
+/* Biến thể nút bấm kích thước nhỏ: phù hợp đặt trong bảng dữ liệu hoặc thẻ sản phẩm */
 .button--small {
   min-height: 2rem;
   padding: 0.35rem 0.6rem;
   font-size: 0.82rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện button--full */
 .button--full {
   width: 100%;
   margin-top: 0.7rem;
 }
 
+/* Khu vực trưng bày nghệ thuật: xếp 3 cuốn sách minh họa dạng 3D sống động */
 .store-hero__art {
   position: relative;
   width: 330px;
@@ -288,6 +289,7 @@ textarea:focus-visible,
   margin-right: 4%;
 }
 
+/* Tạo hình một cuốn sách 3D: có gáy sách, bóng đổ chân thực và hiệu ứng chiều sâu */
 .hero-book {
   position: absolute;
   bottom: 24px;
@@ -299,12 +301,14 @@ textarea:focus-visible,
   box-shadow: 12px 18px 22px rgb(22 37 27 / 22%);
 }
 
+/* Cuốn sách mẫu số 1: xoay nghiêng -7 độ nằm ở lớp bên trái */
 .hero-book--one {
   left: 12px;
   transform: rotate(-15deg);
   background: #d18d60;
 }
 
+/* Cuốn sách mẫu số 2: đứng thẳng ở vị trí trung tâm nổi bật nhất */
 .hero-book--two {
   left: 104px;
   z-index: 1;
@@ -313,12 +317,14 @@ textarea:focus-visible,
   background: #e3c37c;
 }
 
+/* Cuốn sách mẫu số 3: xoay nghiêng 8 độ nằm ở lớp bên phải */
 .hero-book--three {
   right: 3px;
   transform: rotate(14deg);
   background: #809d8a;
 }
 
+/* Hiệu ứng ngôi sao lấp lánh điểm xuyết quanh banner trang chủ */
 .hero-spark {
   position: absolute;
   top: 0;
@@ -327,11 +333,13 @@ textarea:focus-visible,
   font-size: 2rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện store-content */
 .store-content {
   width: min(100% - 2rem, 1120px);
   margin: 3.5rem auto;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện section-heading */
 .section-heading {
   display: flex;
   align-items: end;
@@ -340,6 +348,7 @@ textarea:focus-visible,
   margin-bottom: 1.5rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện section-heading */
 .section-heading h2 {
   margin: 0;
   font-family: Cambria, "Times New Roman", serif;
@@ -347,16 +356,15 @@ textarea:focus-visible,
   font-weight: 500;
 }
 
-.section-heading > p {
+/* Định dạng kiểu dáng cho thành phần giao diện section-heading */
+.section-heading>p {
   max-width: 390px;
   margin-bottom: 0.2rem;
   line-height: 1.6;
 }
 
 
-/* ==============================================================================
- * [PHẦN 4] BỘ LỌC TÌM KIẾM TRANG CHỦ (CATALOG FILTER & TOOLBAR - BAREM II.2)
- * ============================================================================== */
+/*  BỘ LỌC TÌM KIẾM TRANG CHỦ (CATALOG FILTER & TOOLBAR - BAREM II.2) */
 .catalog-layout {
   display: grid;
   grid-template-columns: minmax(220px, 270px) minmax(0, 1fr);
@@ -364,12 +372,14 @@ textarea:focus-visible,
   gap: 1.5rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện filter-panel */
 .filter-panel {
   position: sticky;
   top: 1rem;
   padding: 1.25rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện filter-panel */
 .filter-panel h2 {
   margin-bottom: 1.2rem;
   font-size: 1.2rem;
@@ -377,6 +387,7 @@ textarea:focus-visible,
 
 .filter-panel label,
 .admin-form label,
+/* Định dạng kiểu dáng cho thành phần giao diện sort-control */
 .sort-control {
   display: grid;
   gap: 0.4rem;
@@ -391,6 +402,7 @@ textarea:focus-visible,
 .admin-form select,
 .admin-form textarea,
 .sort-control select,
+/* Ô nhập liệu biểu mẫu: bo góc viền, có viền nét thanh và đổi màu khi được focus */
 .table-input {
   width: 100%;
   min-height: 2.65rem;
@@ -402,10 +414,12 @@ textarea:focus-visible,
   font: inherit;
 }
 
-.filter-panel form > label {
+/* Nhãn chỉ dẫn cho ô nhập liệu: chữ in đậm nhẹ, cỡ chữ vừa phải, dễ nhìn */
+.filter-panel form>label {
   margin-top: 1rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện price-fields */
 .price-fields {
   min-width: 0;
   margin: 1rem 0 0;
@@ -413,6 +427,7 @@ textarea:focus-visible,
   border: 0;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện price-fields */
 .price-fields legend {
   margin-bottom: 0.5rem;
   color: #414b44;
@@ -420,20 +435,24 @@ textarea:focus-visible,
   font-weight: 600;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện price-fields__row */
 .price-fields__row {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.6rem;
 }
 
+/* Nhãn chỉ dẫn cho ô nhập liệu: chữ in đậm nhẹ, cỡ chữ vừa phải, dễ nhìn */
 .price-fields__row label {
   font-size: 0.82rem;
 }
 
+/* Ô nhập liệu biểu mẫu: bo góc viền, có viền nét thanh và đổi màu khi được focus */
 .price-fields__row input {
   min-width: 0;
 }
 
+/* Thanh công cụ: hiển thị số lượng sách tìm thấy và dropdown chọn cách sắp xếp giá/tên */
 .catalog-toolbar {
   display: flex;
   align-items: end;
@@ -442,31 +461,34 @@ textarea:focus-visible,
   margin-bottom: 1rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện catalog-toolbar */
 .catalog-toolbar h2 {
   margin: 0 0 0.25rem;
   font-size: 1.2rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện catalog-toolbar */
 .catalog-toolbar .muted {
   margin: 0;
   font-size: 0.88rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện sort-control */
 .sort-control {
   grid-template-columns: auto minmax(130px, 190px);
   align-items: center;
 }
 
+/* Lưới hiển thị sách: dùng CSS Grid tự động co giãn số cột theo độ rộng màn hình */
 .book-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1rem;
 }
 
-/* ==============================================================================
- * [PHẦN 5] LƯỚI SẢN PHẨM & THẺ SÁCH (BOOK GRID & BOOK CARD - BAREM II.1)
- * ============================================================================== */
+/* LƯỚI SẢN PHẨM & THẺ SÁCH (BOOK GRID & BOOK CARD - BAREM II.1)*/
 
+/* Thẻ sản phẩm một cuốn sách: viền bo góc, nền trắng, chứa toàn bộ thông tin cuốn sách */
 .book-card {
   min-width: 0;
   overflow: hidden;
@@ -476,11 +498,13 @@ textarea:focus-visible,
   transition: box-shadow 150ms ease, transform 150ms ease;
 }
 
+/* Hiệu ứng khi rê chuột vào thẻ sách: nổi bóng đổ và nhấc nhẹ lên tạo cảm giác tương tác */
 .book-card:hover {
   transform: translateY(-3px);
   box-shadow: 0 12px 28px rgb(32 37 31 / 9%);
 }
 
+/* Khung bìa sách: tỷ lệ khung hình chuẩn, có nền màu be nhạt khi ảnh đang tải */
 .book-card__cover {
   display: grid;
   width: 100%;
@@ -493,12 +517,14 @@ textarea:focus-visible,
   cursor: pointer;
 }
 
+/* Ảnh bìa sách SVG/JPG: tự động phủ kín khung bìa mà không bị méo tỉ lệ */
 .book-card__cover img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện book-cover-fallback */
 .book-cover-fallback {
   display: grid;
   width: 70%;
@@ -512,10 +538,12 @@ textarea:focus-visible,
   box-shadow: 8px 8px 12px rgb(0 0 0 / 15%);
 }
 
+/* Phần thân dưới thẻ sách: chứa thể loại, tên sách, tác giả, giá và nút bấm */
 .book-card__body {
   padding: 0.9rem;
 }
 
+/* Nhãn thể loại sách: chữ in hoa nhỏ màu xanh lá trang nhã */
 .book-card__category {
   margin: 0 0 0.35rem;
   color: #557361;
@@ -525,6 +553,7 @@ textarea:focus-visible,
   letter-spacing: 0.04em;
 }
 
+/* Tiêu đề tên sách: in đậm với font Cambria, giới hạn dòng để các thẻ đều nhau */
 .book-card h3 {
   min-height: 2.7em;
   margin: 0;
@@ -532,6 +561,7 @@ textarea:focus-visible,
   line-height: 1.35;
 }
 
+/* Nút bấm dạng văn bản thuần: không viền, không nền, trông như đường link nhưng là nút bấm */
 .text-button {
   padding: 0;
   border: 0;
@@ -543,10 +573,12 @@ textarea:focus-visible,
   cursor: pointer;
 }
 
+/* Nút bấm dạng văn bản thuần: không viền, không nền, trông như đường link nhưng là nút bấm */
 .text-button:hover {
   color: #345b45;
 }
 
+/* Tên tác giả sách: chữ màu xám thanh lịch, dễ nhìn */
 .book-card__author {
   min-height: 2.3em;
   margin: 0.35rem 0;
@@ -554,6 +586,7 @@ textarea:focus-visible,
   font-size: 0.82rem;
 }
 
+/* Giá bán sách: kích thước chữ to, in đậm màu xanh rêu làm điểm nhấn thu hút */
 .book-card__price {
   margin: 0.65rem 0;
   color: #345b45;
@@ -561,6 +594,7 @@ textarea:focus-visible,
   font-weight: 750;
 }
 
+/* Chân thẻ sách: dùng Flexbox căn đều nhãn tồn kho bên trái và nút thêm giỏ bên phải */
 .book-card__footer {
   display: flex;
   align-items: center;
@@ -568,19 +602,19 @@ textarea:focus-visible,
   gap: 0.4rem;
 }
 
+/* Nhãn số lượng tồn kho: màu xám nhạt khi sách còn hàng (VD: "Còn 12 cuốn") */
 .stock-label {
   color: #557361;
   font-size: 0.75rem;
 }
 
+/* Nhãn cảnh báo hết hàng: chữ màu đỏ cam khi số lượng tồn kho bằng 0 */
 .stock-label--out {
   color: #9c3d37;
 }
 
 
-/* ==============================================================================
- * [PHẦN 6] THANH NÚT PHÂN TRANG (PAGINATION - BAREM II.1)
- * ============================================================================== */
+/*  THANH NÚT PHÂN TRANG (PAGINATION - BAREM II.1) */
 .pagination {
   display: flex;
   justify-content: center;
@@ -588,6 +622,7 @@ textarea:focus-visible,
   margin-top: 1.5rem;
 }
 
+/* Nút bấm từng trang (‹, 1, 2, 3, ›): hình vuông bo góc, dễ thao tác bấm */
 .pagination__button {
   min-width: 2.35rem;
   min-height: 2.35rem;
@@ -600,17 +635,20 @@ textarea:focus-visible,
   cursor: pointer;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện pagination__button */
 .pagination__button:disabled {
   opacity: 0.45;
   cursor: not-allowed;
 }
 
+/* Nút của trang hiện tại đang xem: tô màu nền xanh rêu đậm, chữ màu trắng */
 .pagination__button.is-current {
   border-color: #345b45;
   color: #fff;
   background: #345b45;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện empty-state */
 .empty-state {
   padding: 2rem;
   border: 1px dashed #cbd4cb;
@@ -620,6 +658,7 @@ textarea:focus-visible,
   text-align: center;
 }
 
+/* Vùng hiển thị câu thông báo thành công hoặc báo lỗi màu đỏ */
 .form-message {
   min-height: 1.25rem;
   margin: 0.6rem 0 0;
@@ -627,10 +666,12 @@ textarea:focus-visible,
   font-size: 0.88rem;
 }
 
+/* Vùng hiển thị câu thông báo thành công hoặc báo lỗi màu đỏ */
 .form-message--error {
   color: #a33e36;
 }
 
+/* Badge hiển thị số lượng sản phẩm trên icon Giỏ hàng ở Header */
 .cart-count {
   display: inline-grid;
   min-width: 1.25rem;
@@ -644,6 +685,7 @@ textarea:focus-visible,
   font-size: 0.72rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện book-dialog */
 .book-dialog {
   width: min(780px, calc(100% - 2rem));
   max-height: min(90vh, 760px);
@@ -655,15 +697,18 @@ textarea:focus-visible,
   box-shadow: 0 24px 80px rgb(0 0 0 / 25%);
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện book-dialog */
 .book-dialog::backdrop {
   background: rgb(22 30 24 / 60%);
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện dialog-close-form */
 .dialog-close-form {
   display: flex;
   justify-content: end;
 }
 
+/* Nút dấu X ở góc trên cùng bên phải để người dùng bấm đóng popup */
 .dialog-close {
   width: 2rem;
   height: 2rem;
@@ -676,9 +721,7 @@ textarea:focus-visible,
 }
 
 
-/* ==============================================================================
- * [PHẦN 7] HỘP THOẠI MODAL XEM CHI TIẾT SÁCH (BOOK DETAIL DIALOG - BAREM II.1)
- * ============================================================================== */
+/* HỘP THOẠI MODAL XEM CHI TIẾT SÁCH (BOOK DETAIL DIALOG - BAREM II.1)*/
 .book-detail {
   display: grid;
   grid-template-columns: minmax(190px, 0.8fr) minmax(0, 1.2fr);
@@ -686,6 +729,7 @@ textarea:focus-visible,
   padding: 0.5rem 0 0;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện book-detail__image */
 .book-detail__image {
   overflow: hidden;
   align-self: start;
@@ -693,12 +737,14 @@ textarea:focus-visible,
   background: #e9eee8;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện book-detail__image */
 .book-detail__image img {
   display: block;
   width: 100%;
   height: auto;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện book-detail__content */
 .book-detail__content h2 {
   margin: 0.2rem 0 0.5rem;
   font-family: Cambria, "Times New Roman", serif;
@@ -706,15 +752,18 @@ textarea:focus-visible,
   font-weight: 500;
 }
 
-.book-detail__content > p:not(.eyebrow, .book-card__author, .book-card__price, .form-message) {
+/* Vùng hiển thị câu thông báo thành công hoặc báo lỗi màu đỏ */
+.book-detail__content>p:not(.eyebrow, .book-card__author, .book-card__price, .form-message) {
   line-height: 1.65;
 }
 
+/* Bảng danh sách định nghĩa (<dl>) hiển thị mã sách, nhà xuất bản, năm xuất bản, số trang */
 .book-specs {
   margin: 1rem 0;
   border-top: 1px solid #e5e3da;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện book-specs */
 .book-specs div {
   display: grid;
   grid-template-columns: 130px 1fr;
@@ -724,35 +773,39 @@ textarea:focus-visible,
   font-size: 0.88rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện book-specs */
 .book-specs dt {
   color: #68716b;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện book-specs */
 .book-specs dd {
   margin: 0;
   font-weight: 600;
 }
 
 
-/* ==============================================================================
- * [PHẦN 8] MODULE QUẢN TRỊ DANH MỤC & THỂ LOẠI (ADMIN CATALOG - BAREM I.1 & I.2)
- * ============================================================================== */
+/* MODULE QUẢN TRỊ DANH MỤC & THỂ LOẠI (ADMIN CATALOG - BAREM I.1 & I.2) */
 .admin-catalog-mount {
   margin-top: 1.5rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện admin-catalog */
 .admin-catalog {
   padding: 1.5rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện section-heading--compact */
 .section-heading--compact {
   align-items: center;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện section-heading--compact */
 .section-heading--compact h2 {
   font-size: 1.8rem;
 }
 
+/* Nút bấm chuyển tab trong trang quản trị */
 .admin-tabs {
   display: flex;
   flex-wrap: wrap;
@@ -762,6 +815,7 @@ textarea:focus-visible,
   border-bottom: 1px solid #e5e3da;
 }
 
+/* Nút bấm chuyển tab trong trang quản trị */
 .admin-tab {
   padding: 0.65rem 0.9rem;
   border: 0;
@@ -773,21 +827,25 @@ textarea:focus-visible,
   cursor: pointer;
 }
 
+/* Nút bấm chuyển tab trong trang quản trị */
 .admin-tab.is-active {
   color: #fff;
   background: #345b45;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện admin-panel-heading */
 .admin-panel-heading h3 {
   margin-bottom: 0.25rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện admin-panel-heading */
 .admin-panel-heading p {
   margin-top: 0;
   color: #68716b;
   font-size: 0.9rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện admin-form */
 .admin-form {
   margin: 1rem 0 1.4rem;
   padding: 1rem;
@@ -796,6 +854,7 @@ textarea:focus-visible,
   background: #fafbf8;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện admin-form--inline */
 .admin-form--inline {
   display: flex;
   flex-wrap: wrap;
@@ -803,24 +862,29 @@ textarea:focus-visible,
   gap: 0.8rem;
 }
 
-.admin-form--inline > label {
+/* Nhãn chỉ dẫn cho ô nhập liệu: chữ in đậm nhẹ, cỡ chữ vừa phải, dễ nhìn */
+.admin-form--inline>label {
   flex: 1 1 190px;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện admin-form--grid */
 .admin-form--grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.8rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện admin-form__wide */
 .admin-form__wide {
   grid-column: 1 / -1;
 }
 
+/* Ô nhập liệu biểu mẫu: bo góc viền, có viền nét thanh và đổi màu khi được focus */
 .admin-form textarea {
   resize: vertical;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện admin-form__actions */
 .admin-form__actions {
   display: flex;
   flex-wrap: wrap;
@@ -828,6 +892,7 @@ textarea:focus-visible,
   gap: 0.5rem;
 }
 
+/* Khung bọc bảng dữ liệu: cho phép cuộn ngang (overflow-x: auto) khi xem trên màn hình nhỏ */
 .table-wrap {
   max-width: 100%;
   margin: 0.75rem 0 1.5rem;
@@ -837,6 +902,7 @@ textarea:focus-visible,
   background: #fff;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện data-table */
 .data-table {
   width: 100%;
   border-collapse: collapse;
@@ -844,6 +910,7 @@ textarea:focus-visible,
 }
 
 .data-table th,
+/* Định dạng kiểu dáng cho thành phần giao diện data-table */
 .data-table td {
   min-width: 90px;
   padding: 0.7rem;
@@ -851,6 +918,7 @@ textarea:focus-visible,
   vertical-align: middle;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện data-table */
 .data-table th {
   color: #4c5b50;
   background: #f3f5f1;
@@ -858,20 +926,24 @@ textarea:focus-visible,
   white-space: nowrap;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện data-table */
 .data-table td {
   font-size: 0.88rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện data-table */
 .data-table tbody tr:last-child td {
   border-bottom: 0;
 }
 
+/* Cột tác vụ trong bảng: chứa các nút Sửa, Xóa, Xem chi tiết, Khóa/Mở khóa */
 .table-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 0.35rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện table-book */
 .table-book {
   display: flex;
   min-width: 190px;
@@ -879,6 +951,7 @@ textarea:focus-visible,
   gap: 0.6rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện table-book */
 .table-book img {
   width: 42px;
   height: 54px;
@@ -886,6 +959,7 @@ textarea:focus-visible,
   object-fit: cover;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện table-book */
 .table-book small {
   display: block;
   margin-top: 0.25rem;
@@ -893,6 +967,7 @@ textarea:focus-visible,
 }
 
 .status-pill,
+/* Định dạng kiểu dáng cho thành phần giao diện stock-alert */
 .stock-alert {
   display: inline-block;
   padding: 0.25rem 0.45rem;
@@ -903,17 +978,20 @@ textarea:focus-visible,
   white-space: nowrap;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện stock-alert */
 .stock-alert {
   color: #8a421f;
   background: #fff1d9;
 }
 
+/* Ô nhập liệu biểu mẫu: bo góc viền, có viền nét thanh và đổi màu khi được focus */
 .table-input {
   min-width: 95px;
   min-height: 2.15rem;
   padding: 0.4rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện image-preview */
 .image-preview img {
   display: block;
   max-width: 140px;
@@ -923,17 +1001,24 @@ textarea:focus-visible,
   object-fit: contain;
 }
 
+/* Đáp ứng màn hình Laptop nhỏ / Tablet ngang: thu gọn khoảng cách lề và kích thước font */
 @media (max-width: 1000px) {
+
+  /* Lưới hiển thị sách: dùng CSS Grid tự động co giãn số cột theo độ rộng màn hình */
   .book-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
+/* Đáp ứng màn hình Tablet / iPad: chuyển bố cục từ 2 cột sang 1 cột dọc */
 @media (max-width: 720px) {
+
+  /* Banner chào mừng trang chủ: nền màu be ấm áp, bố cục Flexbox chia chữ và sách 3D */
   .store-hero {
     min-height: 330px;
   }
 
+  /* Khu vực trưng bày nghệ thuật: xếp 3 cuốn sách minh họa dạng 3D sống động */
   .store-hero__art {
     position: absolute;
     right: -80px;
@@ -941,94 +1026,113 @@ textarea:focus-visible,
     opacity: 0.35;
   }
 
+  /* Khối chứa văn bản giới thiệu và slogan của nhà sách Bookabook */
   .store-hero__content {
     max-width: 100%;
   }
 
+  /* Bố cục trang sản phẩm: chia 2 cột gồm thanh bộ lọc bên trái và danh sách sách bên phải */
   .catalog-layout {
     grid-template-columns: 1fr;
   }
 
+  /* Định dạng kiểu dáng cho thành phần giao diện filter-panel */
   .filter-panel {
     position: static;
   }
 
+  /* Lưới hiển thị sách: dùng CSS Grid tự động co giãn số cột theo độ rộng màn hình */
   .book-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  /* Định dạng kiểu dáng cho thành phần giao diện section-heading */
   .section-heading {
     display: block;
   }
 
-  .section-heading > p {
+  /* Định dạng kiểu dáng cho thành phần giao diện section-heading */
+  .section-heading>p {
     margin-top: 0.7rem;
   }
 }
 
+/* Đáp ứng màn hình Điện thoại thông minh (Mobile): tối ưu nút bấm to bản, dễ chạm vuốt */
 @media (max-width: 480px) {
+
+  /* Thanh Header đầu trang: dùng Flexbox căn đều Logo ở bên trái và Menu ở bên phải */
   .site-header {
     align-items: flex-start;
   }
 
+  /* Định dạng kiểu dáng cho thành phần giao diện site-header */
   .site-header nav {
     width: 100%;
     gap: 0.15rem;
   }
 
+  /* Định dạng kiểu dáng cho thành phần giao diện site-header */
   .site-header nav a {
     padding: 0.45rem;
     font-size: 0.88rem;
   }
 
+  /* Thanh công cụ: hiển thị số lượng sách tìm thấy và dropdown chọn cách sắp xếp giá/tên */
   .catalog-toolbar {
     align-items: start;
     flex-direction: column;
   }
 
+  /* Định dạng kiểu dáng cho thành phần giao diện sort-control */
   .sort-control {
     width: 100%;
     grid-template-columns: auto 1fr;
   }
 
+  /* Phần thân dưới thẻ sách: chứa thể loại, tên sách, tác giả, giá và nút bấm */
   .book-card__body {
     padding: 0.7rem;
   }
 
+  /* Chân thẻ sách: dùng Flexbox căn đều nhãn tồn kho bên trái và nút thêm giỏ bên phải */
   .book-card__footer {
     align-items: flex-start;
     flex-direction: column;
   }
 
+  /* Bố cục xem chi tiết sách: chia 2 cột gồm ảnh bìa phóng to bên trái và thông số bên phải */
   .book-detail {
     grid-template-columns: 1fr;
   }
 
+  /* Định dạng kiểu dáng cho thành phần giao diện book-detail__image */
   .book-detail__image {
     max-width: 230px;
   }
 
+  /* Định dạng kiểu dáng cho thành phần giao diện admin-catalog */
   .admin-catalog {
     padding: 1rem;
   }
 
+  /* Định dạng kiểu dáng cho thành phần giao diện admin-form--grid */
   .admin-form--grid {
     grid-template-columns: 1fr;
   }
 
+  /* Định dạng kiểu dáng cho thành phần giao diện admin-form__wide */
   .admin-form__wide {
     grid-column: auto;
   }
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện admin-login */
 .admin-login {
   max-width: 520px;
 }
 
 
-/* ==============================================================================
- * [PHẦN 9] KHUNG ĐIỀU HƯỚNG QUẢN TRỊ VIÊN & SIDEBAR (ADMIN SHELL - BAREM I)
- * ============================================================================== */
+/* KHUNG ĐIỀU HƯỚNG QUẢN TRỊ VIÊN & SIDEBAR (ADMIN SHELL - BAREM I) */
 .admin-shell {
   display: grid;
   grid-template-columns: 220px minmax(0, 1fr);
@@ -1036,37 +1140,44 @@ textarea:focus-visible,
   align-items: start;
 }
 
+/* Thanh điều hướng Sidebar quản trị viên: chứa 7 tab chức năng theo chuẩn Barem */
 .admin-nav {
   display: flex;
   flex-direction: column;
   gap: 0.55rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện admin-nav */
 .admin-nav h2 {
   margin-bottom: 0.25rem;
 }
 
+/* Nút bấm chuyển tab trong trang quản trị */
 .admin-nav .admin-tab {
   width: 100%;
   text-align: left;
 }
 
+/* Nút bấm chuyển tab trong trang quản trị */
 .admin-nav .admin-tab.active {
   color: #234531;
   background: #eaf1eb;
   font-weight: 700;
 }
 
+/* Khu vực làm việc chính của Admin: chứa các bảng dữ liệu và form thêm/sửa */
 .admin-content {
   min-width: 0;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện form-grid */
 .form-grid {
   display: grid;
   gap: 1rem;
 }
 
 .form-grid label,
+/* Nhãn chỉ dẫn cho ô nhập liệu: chữ in đậm nhẹ, cỡ chữ vừa phải, dễ nhìn */
 .admin-toolbar label {
   display: grid;
   gap: 0.35rem;
@@ -1077,6 +1188,7 @@ textarea:focus-visible,
 .form-grid input,
 .form-grid select,
 .admin-toolbar input,
+/* Ô nhập liệu biểu mẫu: bo góc viền, có viền nét thanh và đổi màu khi được focus */
 .admin-toolbar select {
   width: 100%;
   min-height: 42px;
@@ -1087,30 +1199,35 @@ textarea:focus-visible,
   background: #fff;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện button */
 .button.primary {
   border-color: #345b45;
   color: #fff;
   background: #345b45;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện button */
 .button.primary:hover:not(:disabled) {
   border-color: #234531;
   background: #234531;
 }
 
 .button.danger,
+/* Định dạng kiểu dáng cho thành phần giao diện button */
 .button.danger:hover {
   border-color: #c96d69;
   color: #8a302c;
   background: #fff7f6;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện button */
 .button.small {
   min-height: 34px;
   padding: 0.35rem 0.55rem;
   font-size: 0.85rem;
 }
 
+/* Thanh công cụ lọc và tìm kiếm nhanh trong trang quản trị */
 .admin-toolbar {
   display: flex;
   flex-wrap: wrap;
@@ -1119,11 +1236,13 @@ textarea:focus-visible,
   margin-bottom: 1rem;
 }
 
-.admin-toolbar > input[type="search"] {
+/* Ô nhập liệu biểu mẫu: bo góc viền, có viền nét thanh và đổi màu khi được focus */
+.admin-toolbar>input[type="search"] {
   flex: 1;
   min-width: 220px;
 }
 
+/* Bảng dữ liệu: viền mỏng, căn lề văn bản rõ ràng, chiếm 100% chiều rộng khung chứa */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -1131,6 +1250,7 @@ table {
 }
 
 th,
+/* Ô dữ liệu trong bảng: có khoảng đệm padding vừa phải để dễ đọc */
 td {
   border-bottom: 1px solid #ebece7;
   padding: 0.75rem 0.55rem;
@@ -1138,15 +1258,18 @@ td {
   vertical-align: middle;
 }
 
+/* Tiêu đề cột của bảng: in đậm, nền xám nhạt, cố định vị trí rõ ràng */
 th {
   color: #5d685f;
   background: #f7f8f5;
 }
 
+/* Cột tác vụ trong bảng: chứa các nút Sửa, Xóa, Xem chi tiết, Khóa/Mở khóa */
 .table-actions {
   min-width: 180px;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện status */
 .status {
   display: inline-block;
   border-radius: 999px;
@@ -1156,28 +1279,33 @@ th {
 }
 
 .status.active,
+/* Định dạng kiểu dáng cho thành phần giao diện status */
 .status.order-status-delivered {
   color: #256338;
   background: #e6f3e9;
 }
 
 .status.locked,
+/* Định dạng kiểu dáng cho thành phần giao diện status */
 .status.order-status-cancelled {
   color: #a03a35;
   background: #fbeae8;
 }
 
 .status.draft,
+/* Định dạng kiểu dáng cho thành phần giao diện status */
 .status.order-status-new {
   color: #805e1d;
   background: #fff4d6;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện status */
 .status.order-status-processed {
   color: #315c86;
   background: #e7f0f7;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện admin-message */
 .admin-message {
   margin-bottom: 1rem;
   border-left: 4px solid #528267;
@@ -1186,11 +1314,13 @@ th {
   background: #edf6ef;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện admin-message */
 .admin-message.error {
   border-left-color: #bd554f;
   background: #fff0ee;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện editor-box */
 .editor-box {
   margin-top: 1rem;
   border: 1px solid #dde2dc;
@@ -1199,41 +1329,47 @@ th {
   background: #fbfcfa;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện form-actions */
 .form-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
 }
 
+/* Đáp ứng màn hình Tablet / iPad: chuyển bố cục từ 2 cột sang 1 cột dọc */
 @media (max-width: 760px) {
+
+  /* Khung bố cục tổng thể trang quản trị: chia cột Sidebar menu bên trái và Nội dung bên phải */
   .admin-shell {
     grid-template-columns: 1fr;
   }
 
+  /* Thanh điều hướng Sidebar quản trị viên: chứa 7 tab chức năng theo chuẩn Barem */
   .admin-nav {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .admin-nav h2,
+  /* Định dạng kiểu dáng cho thành phần giao diện admin-nav */
   .admin-nav #admin-reset-demo {
     grid-column: 1 / -1;
   }
 }
 
 
-/* ==============================================================================
- * [PHẦN 10] TRANG TÀI KHOẢN KHÁCH HÀNG (ACCOUNT LOGIN, REGISTER, PROFILE, ORDERS)
- * ============================================================================== */
+/* TRANG TÀI KHOẢN KHÁCH HÀNG (ACCOUNT LOGIN, REGISTER, PROFILE, ORDERS) */
 .account-page {
   width: min(100% - 2rem, 1080px);
   margin: 2rem auto 4rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-page */
 .account-page [hidden] {
   display: none !important;
 }
 
+/* Banner chào mừng trong trang Tài khoản: nền gradient xanh rêu trang nhã */
 .account-hero {
   position: relative;
   display: flex;
@@ -1248,21 +1384,25 @@ th {
   box-shadow: 0 16px 38px rgb(34 67 47 / 14%);
 }
 
-.account-hero > div:first-child {
+/* Banner chào mừng trong trang Tài khoản: nền gradient xanh rêu trang nhã */
+.account-hero>div:first-child {
   position: relative;
   z-index: 1;
 }
 
+/* Banner chào mừng trong trang Tài khoản: nền gradient xanh rêu trang nhã */
 .account-hero .eyebrow {
   color: #d7e5d7;
 }
 
+/* Banner chào mừng trong trang Tài khoản: nền gradient xanh rêu trang nhã */
 .account-hero h1 {
   margin: 0;
   font-size: clamp(2.1rem, 5vw, 3.2rem);
   letter-spacing: -0.035em;
 }
 
+/* Banner chào mừng trong trang Tài khoản: nền gradient xanh rêu trang nhã */
 .account-hero p:last-child {
   max-width: 490px;
   margin: 0.75rem 0 0;
@@ -1270,6 +1410,7 @@ th {
   line-height: 1.65;
 }
 
+/* Banner chào mừng trong trang Tài khoản: nền gradient xanh rêu trang nhã */
 .account-hero__art {
   position: absolute;
   top: 0;
@@ -1279,6 +1420,7 @@ th {
   opacity: 0.8;
 }
 
+/* Banner chào mừng trong trang Tài khoản: nền gradient xanh rêu trang nhã */
 .account-hero__book {
   position: absolute;
   bottom: -27px;
@@ -1289,12 +1431,14 @@ th {
   box-shadow: inset 12px 0 rgb(255 255 255 / 12%), 0 15px 25px rgb(18 38 24 / 25%);
 }
 
+/* Banner chào mừng trong trang Tài khoản: nền gradient xanh rêu trang nhã */
 .account-hero__book--one {
   right: 92px;
   background: #dca35f;
   transform: rotate(-13deg);
 }
 
+/* Banner chào mừng trong trang Tài khoản: nền gradient xanh rêu trang nhã */
 .account-hero__book--two {
   right: 23px;
   bottom: -14px;
@@ -1303,6 +1447,7 @@ th {
   transform: rotate(12deg);
 }
 
+/* Banner chào mừng trong trang Tài khoản: nền gradient xanh rêu trang nhã */
 .account-hero__spark {
   position: absolute;
   top: 37px;
@@ -1311,6 +1456,7 @@ th {
   font-size: 2.4rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-alert */
 .account-alert {
   margin: 1.25rem 0;
   border-left: 4px solid #bd554f;
@@ -1320,6 +1466,7 @@ th {
   background: #fff0ee;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-auth */
 .account-auth {
   max-width: 700px;
   margin: 2rem auto 0;
@@ -1327,6 +1474,7 @@ th {
   box-shadow: 0 10px 32px rgb(33 46 37 / 5%);
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-section-heading */
 .account-section-heading {
   display: flex;
   align-items: center;
@@ -1334,12 +1482,14 @@ th {
   gap: 1rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-section-heading */
 .account-section-heading h2 {
   margin: 0;
   font-size: clamp(1.3rem, 3vw, 1.65rem);
   letter-spacing: -0.02em;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-section-heading */
 .account-section-heading .eyebrow {
   margin: 0 0 0.35rem;
   font-size: 0.8rem;
@@ -1348,6 +1498,7 @@ th {
 }
 
 .account-lock,
+/* Định dạng kiểu dáng cho thành phần giao diện account-section-icon */
 .account-section-icon {
   display: grid;
   width: 2.8rem;
@@ -1360,6 +1511,7 @@ th {
   font-size: 1.4rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-auth__tabs */
 .account-auth__tabs {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1370,6 +1522,7 @@ th {
   background: #f3f4f0;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-auth__tab */
 .account-auth__tab {
   min-height: 2.7rem;
   border: 0;
@@ -1381,6 +1534,7 @@ th {
   cursor: pointer;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-auth__tab */
 .account-auth__tab.is-active {
   color: #294b36;
   background: #fff;
@@ -1389,16 +1543,19 @@ th {
 
 .account-auth__tab:focus-visible,
 .account-orders__shop:focus-visible,
+/* Định dạng kiểu dáng cho thành phần giao diện account-order */
 .account-order summary:focus-visible {
   outline: 3px solid #d6a64f;
   outline-offset: 2px;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-form */
 .account-form {
   display: grid;
   gap: 0.55rem;
 }
 
+/* Nhãn chỉ dẫn cho ô nhập liệu: chữ in đậm nhẹ, cỡ chữ vừa phải, dễ nhìn */
 .account-form label {
   display: grid;
   gap: 0.35rem;
@@ -1407,6 +1564,7 @@ th {
   font-weight: 650;
 }
 
+/* Ô nhập liệu biểu mẫu: bo góc viền, có viền nét thanh và đổi màu khi được focus */
 .account-form input {
   width: 100%;
   min-height: 2.8rem;
@@ -1419,24 +1577,29 @@ th {
   font-weight: 400;
 }
 
+/* Ô nhập liệu biểu mẫu: bo góc viền, có viền nét thanh và đổi màu khi được focus */
 .account-form input::placeholder {
   color: #9aa19b;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-form */
 .account-form .button {
   margin-top: 0.45rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-form__grid */
 .account-form__grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.9rem 1rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-form__wide */
 .account-form__wide {
   grid-column: 1 / -1;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-message */
 .account-message {
   min-height: 0;
   margin: 0;
@@ -1444,10 +1607,12 @@ th {
   font-size: 0.9rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-message */
 .account-message:empty {
   display: none;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-message */
 .account-message.is-error {
   margin: 0 0 0.7rem;
   border-radius: 0.45rem;
@@ -1456,6 +1621,7 @@ th {
   background: #fff0ef;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-message */
 .account-message.is-success {
   margin: 0 0 0.7rem;
   border-radius: 0.45rem;
@@ -1464,6 +1630,7 @@ th {
   background: #edf6ef;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-demo */
 .account-demo {
   display: flex;
   flex-wrap: wrap;
@@ -1476,17 +1643,20 @@ th {
   font-size: 0.88rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-demo */
 .account-demo strong {
   width: 100%;
   color: #345b45;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-demo */
 .account-demo code {
   color: #273f30;
   font-family: "Segoe UI", Arial, sans-serif;
   font-weight: 650;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-disclaimer */
 .account-disclaimer {
   margin: 0.75rem 0 0;
   color: #7a827c;
@@ -1494,12 +1664,14 @@ th {
   text-align: center;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-dashboard */
 .account-dashboard {
   display: grid;
   gap: 1rem;
   margin-top: 1.5rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-welcome */
 .account-welcome {
   display: flex;
   align-items: center;
@@ -1508,6 +1680,7 @@ th {
   padding: 1.5rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-welcome__identity */
 .account-welcome__identity {
   display: flex;
   align-items: center;
@@ -1515,6 +1688,7 @@ th {
   min-width: 0;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-avatar */
 .account-avatar {
   display: grid;
   width: 3.7rem;
@@ -1530,25 +1704,30 @@ th {
   font-weight: 750;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-welcome */
 .account-welcome h2 {
   margin: 0;
   font-size: clamp(1.15rem, 3vw, 1.55rem);
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-welcome */
 .account-welcome .eyebrow {
   margin: 0 0 0.25rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-welcome */
 .account-welcome .muted {
   margin: 0.35rem 0 0;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-stats */
 .account-stats {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-stat */
 .account-stat {
   display: grid;
   grid-template-columns: auto 1fr;
@@ -1558,6 +1737,7 @@ th {
   padding: 1rem 1.25rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-stat__icon */
 .account-stat__icon {
   display: grid;
   width: 2.6rem;
@@ -1570,21 +1750,25 @@ th {
   font-size: 1.2rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-stat__icon--gold */
 .account-stat__icon--gold {
   color: #9a6f2b;
   background: #fbf3e4;
 }
 
+/* Nhãn chỉ dẫn cho ô nhập liệu: chữ in đậm nhẹ, cỡ chữ vừa phải, dễ nhìn */
 .account-stat__label {
   color: #68716b;
   font-size: 0.83rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-stat */
 .account-stat strong {
   color: #25382c;
   font-size: 1.1rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-columns */
 .account-columns {
   display: grid;
   grid-template-columns: minmax(270px, 0.8fr) minmax(0, 1.2fr);
@@ -1593,15 +1777,18 @@ th {
 }
 
 .account-profile,
+/* Định dạng kiểu dáng cho thành phần giao diện account-orders */
 .account-orders {
   min-width: 0;
   padding: 1.5rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-profile */
 .account-profile .account-form {
   margin-top: 1.2rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-orders__shop */
 .account-orders__shop {
   flex: 0 0 auto;
   color: #345b45;
@@ -1610,16 +1797,19 @@ th {
   text-decoration: none;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-orders__shop */
 .account-orders__shop:hover {
   text-decoration: underline;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-order-list */
 .account-order-list {
   display: grid;
   gap: 0.8rem;
   margin-top: 1.2rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-order */
 .account-order {
   border: 1px solid #e5e8e2;
   border-radius: 0.7rem;
@@ -1627,6 +1817,7 @@ th {
   background: #fff;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-order__header */
 .account-order__header {
   display: grid;
   grid-template-columns: 1fr 1fr auto;
@@ -1636,20 +1827,24 @@ th {
   border-bottom: 1px solid #edf0eb;
 }
 
-.account-order__header > div {
+/* Định dạng kiểu dáng cho thành phần giao diện account-order__header */
+.account-order__header>div {
   display: grid;
   gap: 0.2rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-order__caption */
 .account-order__caption {
   color: #778078;
   font-size: 0.74rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-order__header */
 .account-order__header strong {
   font-size: 0.88rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-order__status */
 .account-order__status {
   border-radius: 999px;
   padding: 0.3rem 0.6rem;
@@ -1658,31 +1853,37 @@ th {
   white-space: nowrap;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-order__status--new */
 .account-order__status--new {
   color: #805e1d;
   background: #fff4d6;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-order__status--processed */
 .account-order__status--processed {
   color: #315c86;
   background: #e7f0f7;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-order__status--delivered */
 .account-order__status--delivered {
   color: #256338;
   background: #e6f3e9;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-order__status--cancelled */
 .account-order__status--cancelled {
   color: #a03a35;
   background: #fbeae8;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-order__status--other */
 .account-order__status--other {
   color: #59645b;
   background: #f0f2ef;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-order__items */
 .account-order__items {
   display: grid;
   gap: 0.55rem;
@@ -1692,6 +1893,7 @@ th {
 }
 
 .account-order__items li,
+/* Định dạng kiểu dáng cho thành phần giao diện account-order__footer */
 .account-order__footer {
   display: flex;
   justify-content: space-between;
@@ -1700,35 +1902,42 @@ th {
   font-size: 0.85rem;
 }
 
-.account-order__items li > span {
+/* Định dạng kiểu dáng cho thành phần giao diện account-order__items */
+.account-order__items li>span {
   min-width: 0;
 }
 
-.account-order__items li > strong,
-.account-order__footer > strong {
+.account-order__items li>strong,
+/* Định dạng kiểu dáng cho thành phần giao diện account-order__footer */
+.account-order__footer>strong {
   flex: 0 0 auto;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-order__quantity */
 .account-order__quantity {
   color: #79817b;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-order__footer */
 .account-order__footer {
   border-top: 1px solid #edf0eb;
   padding-top: 0.8rem;
   color: #68716b;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-order__footer */
 .account-order__footer strong {
   color: #345b45;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-order__address */
 .account-order__address {
   margin: 0.65rem 0 0;
   color: #778078;
   font-size: 0.78rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-empty */
 .account-empty {
   display: grid;
   justify-items: center;
@@ -1739,6 +1948,7 @@ th {
   text-align: center;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-empty__icon */
 .account-empty__icon {
   display: grid;
   width: 3rem;
@@ -1750,78 +1960,99 @@ th {
   font-size: 1.4rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-empty */
 .account-empty strong {
   margin-top: 0.4rem;
 }
 
+/* Định dạng kiểu dáng cho thành phần giao diện account-empty */
 .account-empty p {
   margin: 0 0 0.5rem;
   color: #68716b;
   font-size: 0.88rem;
 }
 
+/* Đáp ứng màn hình Tablet / iPad: chuyển bố cục từ 2 cột sang 1 cột dọc */
 @media (max-width: 820px) {
+
+  /* Định dạng kiểu dáng cho thành phần giao diện account-columns */
   .account-columns {
     grid-template-columns: 1fr;
   }
 }
 
+/* Đáp ứng màn hình Điện thoại thông minh (Mobile): tối ưu nút bấm to bản, dễ chạm vuốt */
 @media (max-width: 600px) {
+
+  /* Định dạng kiểu dáng cho thành phần giao diện account-page */
   .account-page {
     margin-top: 1rem;
   }
 
+  /* Banner chào mừng trong trang Tài khoản: nền gradient xanh rêu trang nhã */
   .account-hero {
     min-height: 215px;
     padding: 1.7rem 1.4rem;
   }
 
+  /* Banner chào mừng trong trang Tài khoản: nền gradient xanh rêu trang nhã */
   .account-hero__art {
     right: -80px;
     opacity: 0.38;
   }
 
+  /* Định dạng kiểu dáng cho thành phần giao diện account-auth */
   .account-auth {
     margin-top: 1rem;
   }
 
   .account-form__grid,
+  /* Định dạng kiểu dáng cho thành phần giao diện account-stats */
   .account-stats {
     grid-template-columns: 1fr;
   }
 
+  /* Định dạng kiểu dáng cho thành phần giao diện account-form__wide */
   .account-form__wide {
     grid-column: auto;
   }
 
+  /* Định dạng kiểu dáng cho thành phần giao diện account-welcome */
   .account-welcome {
     align-items: flex-start;
     flex-direction: column;
   }
 
+  /* Định dạng kiểu dáng cho thành phần giao diện account-order__header */
   .account-order__header {
     grid-template-columns: 1fr 1fr;
   }
 
+  /* Định dạng kiểu dáng cho thành phần giao diện account-order__status */
   .account-order__status {
     grid-column: 1 / -1;
     justify-self: start;
   }
 
   .account-profile,
+  /* Định dạng kiểu dáng cho thành phần giao diện account-orders */
   .account-orders {
     padding: 1.15rem;
   }
 }
 
+/* Đáp ứng màn hình Điện thoại thông minh (Mobile): tối ưu nút bấm to bản, dễ chạm vuốt */
 @media (max-width: 420px) {
+
   .account-order__items li,
+  /* Định dạng kiểu dáng cho thành phần giao diện account-order__footer */
   .account-order__footer {
     align-items: flex-start;
     flex-direction: column;
     gap: 0.25rem;
   }
 
+  /* Định dạng kiểu dáng cho thành phần giao diện account-orders */
   .account-orders .account-section-heading {
     align-items: flex-start;
     flex-direction: column;
@@ -1836,6 +2067,7 @@ th {
   background: transparent;
 }
 
-.admin-content .admin-catalog > .admin-tabs {
+/* Nút bấm chuyển tab trong trang quản trị */
+.admin-content .admin-catalog>.admin-tabs {
   display: none;
 }

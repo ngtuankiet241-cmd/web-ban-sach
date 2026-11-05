@@ -1,15 +1,12 @@
 (function () {
   "use strict";
 
-  // ==========================================================================
   // FILE DATA.JS - DỮ LIỆU MẪU BAN ĐẦU (SEED DATA)
-  // ==========================================================================
   // Dành cho sinh viên năm nhất dễ hiểu:
   // Vì đồ án này không có cơ sở dữ liệu thật (như MySQL/SQL Server),
   // nên file này đóng vai trò như "dữ liệu tạo sẵn lúc xuất xưởng" của website.
   // Khi người dùng mở web lần đầu, file storage.js sẽ lấy dữ liệu từ file này
   // lưu vào localStorage của trình duyệt để web có sẵn sách, khách hàng, đơn hàng...
-  // ==========================================================================
 
   /**
    * 1. DANH MỤC CÁC THỂ LOẠI SÁCH MẪU

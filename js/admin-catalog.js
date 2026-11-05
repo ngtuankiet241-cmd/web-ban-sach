@@ -667,7 +667,7 @@
         throw new Error("Hãy chọn một loại sách đang hoạt động.");
       }
       if (!code || !title || !author || !Number.isFinite(costPrice) || costPrice <= 0 ||
-          !Number.isInteger(stock) || stock < 0) {
+        !Number.isInteger(stock) || stock < 0) {
         throw new Error("Kiểm tra mã, tên, tác giả, giá nhập và số lượng tồn.");
       }
       if (!image || !validImage(image)) {
